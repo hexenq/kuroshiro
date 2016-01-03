@@ -1,3 +1,5 @@
+![kuroshiro.js](http://www.hexenq.com/kuroshiro/kuroshiro.png)
+
 # kuroshiro.js
 
 [![Build Status](https://travis-ci.org/hexenq/kuroshiro.js.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro.js)

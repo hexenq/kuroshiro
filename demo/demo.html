@@ -5,7 +5,7 @@
     <title>Kuroshiro.js Demo</title>
 </head>
 <body>
-<div id="init">Initiating...</div>
+<div id="init">Initiating... It may take several seconds.</div>
 <div id="demo" style="display: none">
     <label>Original Text:</label>
     <div>
@@ -32,7 +32,7 @@
 </div>
 <script src="bower_components/kuroshiro/dist/browser/kuroshiro.min.js"></script>
 <script>
-    kuroshiro.init({dicPath:'dict/'},function(){
+    kuroshiro.init(function(){
         document.getElementById("init").setAttribute("style","display:none");
         document.getElementById("demo").setAttribute("style","display:block");
     });

@@ -76,8 +76,8 @@ __Arguments__
 
 | Options | Type | Default | Description |
 |---|---|---|---|
-| to | String | 'hiragana' | Target syllabary ['hiragana'|'katakana'|'romaji'] |
-| mode | String | 'normal' | Convert mode ['normal'|'spaced'|'okurigana'|'furigana'] |
+| to | String | 'hiragana' | Target syllabary [`hiragana`,`katakana`,`romaji`] |
+| mode | String | 'normal' | Convert mode [`normal`,`spaced`,`okurigana`,`furigana`] |
 | delimiter_start | String | '(' | Delimiter(Start) |
 | delimiter_end | String | ')' | Delimiter(End) |
 

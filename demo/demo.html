@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kuroshiro.js Demo</title>
+</head>
+<body>
+<div id="init">Initiating...</div>
+<div id="demo" style="display: none">
+    <label>Original Text:</label>
+    <div>
+        <textarea id="oritext" cols="60" rows="8">感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！</textarea>
+    </div>
+    <label>Convert to </label>
+    <select id="to" name="to" tabindex="2">
+        <option value="hiragana" selected="">Hiragana</option>
+        <option value="katakana">Katakana</option>
+        <option value="romaji">Romaji</option>
+    </select>
+    <label>with mode </label>
+    <select id="mode" name="mode" tabindex="1">
+        <option value="normal" selected="">Normal</option>
+        <option value="spaced">Spaced</option>
+        <option value="okurigana">Okurigana</option>
+        <option value="furigana">Furigana</option>
+    </select>
+
+    <button onclick="convert()">convert</button>
+    <div>
+        <p id="output"></p>
+    </div>
+</div>
+<script src="bower_components/kuroshiro/dist/browser/kuroshiro.min.js"></script>
+<script>
+    kuroshiro.init({dicPath:'dict/'},function(){
+        document.getElementById("init").setAttribute("style","display:none");
+        document.getElementById("demo").setAttribute("style","display:block");
+    });
+
+    function convert(){
+        var result = kuroshiro.convert(document.getElementById("oritext").value,{to:document.getElementById("to").value,mode:document.getElementById("mode").value});
+        document.getElementById("output").innerHTML = result;
+    }
+</script>
+</body>
+</html>

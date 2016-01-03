@@ -1,0 +1,12 @@
+{
+  "shadow": "outer",
+  "latedef": false,
+  "eqeqeq": true,
+  "noarg": true,
+  "undef": true,
+  "unused": "vars",
+  "boss": true,
+  "eqnull": true,
+  "browser": true,
+  "node": true
+}

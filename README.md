@@ -11,6 +11,7 @@
 kuroshiro.js is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji
 with furigana and okurigana modes supported. This project is inspired by kuromoji and wanakana.
 
+## Demo
 You can check the demo [here](http://www.hexenq.com/kuroshiro/demo/index.html).
 
 ## Usage

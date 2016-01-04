@@ -11,6 +11,8 @@
 kuroshiro.js is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji
 with furigana and okurigana modes supported. This project is inspired by kuromoji and wanakana.
 
+*Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md).*
+
 ## Demo
 You can check the demo [here](http://www.hexenq.com/kuroshiro/demo/index.html).
 
@@ -55,7 +57,7 @@ Initiate kuroshiro.js. You should call this function once before calling other f
 
 __Arguments__
 
-* `options` - *Optional* An object with options. You can set `dicPath` (Dictionary Path) here.
+* `options` - *Optional* An object with options. You can set `dicPath` (IPA Dictionary Path) here.
 * `callback` - *Optional* A callback which is called when kuroshiro.js has been initiated, or an error occurs.
 
 __Examples__

@@ -1,10 +1,10 @@
 {
   "name": "kuroshiro",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "kuroshiro.js is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
   "main": "./dist/node/kuroshiro.js",
   "scripts": {
-    "test": "mocha --timeout 10000 -R spec --recursive"
+    "test": "mocha --timeout 30000 -R spec --recursive"
   },
   "repository": {
     "type": "git",

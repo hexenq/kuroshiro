@@ -141,8 +141,10 @@ var convert = function(str, options){
                 break;
             case 'hiragana':
                 for(var hi=0;hi<tokens.length;hi++){
-                    if(!hasKatakana(tokens[hi].surface_form)){
+                    if(!hasKatakana(tokens[hi].surface_form) && hasKanji(tokens[hi].surface_form)){
                         tokens[hi].reading = wanakana.toHiragana(tokens[hi].reading);
+                    }else{
+                        tokens[hi].reading = tokens[hi].surface_form;
                     }
                 }
                 if(options.mode === 'normal')

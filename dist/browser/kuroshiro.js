@@ -3037,7 +3037,7 @@ module.exports = ViterbiSearcher;
     };
 
     async.auto = function (tasks, concurrency, callback) {
-        if (!callback) {
+        if (typeof arguments[1] === 'function') {
             // concurrency is optional, shift the args.
             callback = concurrency;
             concurrency = null;
@@ -3054,6 +3054,8 @@ module.exports = ViterbiSearcher;
 
         var results = {};
         var runningTasks = 0;
+
+        var hasError = false;
 
         var listeners = [];
         function addListener(fn) {
@@ -3077,6 +3079,7 @@ module.exports = ViterbiSearcher;
         });
 
         _arrayEach(keys, function (k) {
+            if (hasError) return;
             var task = _isArray(tasks[k]) ? tasks[k]: [tasks[k]];
             var taskCallback = _restParam(function(err, args) {
                 runningTasks--;
@@ -3089,6 +3092,8 @@ module.exports = ViterbiSearcher;
                         safeResults[rkey] = val;
                     });
                     safeResults[k] = args;
+                    hasError = true;
+
                     callback(err, safeResults);
                 }
                 else {
@@ -3308,7 +3313,7 @@ module.exports = ViterbiSearcher;
                 } else if (test.apply(this, args)) {
                     iterator(next);
                 } else {
-                    callback(null);
+                    callback.apply(null, [null].concat(args));
                 }
             });
             iterator(next);
@@ -3456,24 +3461,23 @@ module.exports = ViterbiSearcher;
                 _insert(q, data, true, callback);
             },
             process: function () {
-                if (!q.paused && workers < q.concurrency && q.tasks.length) {
-                    while(workers < q.concurrency && q.tasks.length){
-                        var tasks = q.payload ?
-                            q.tasks.splice(0, q.payload) :
-                            q.tasks.splice(0, q.tasks.length);
+                while(!q.paused && workers < q.concurrency && q.tasks.length){
 
-                        var data = _map(tasks, function (task) {
-                            return task.data;
-                        });
+                    var tasks = q.payload ?
+                        q.tasks.splice(0, q.payload) :
+                        q.tasks.splice(0, q.tasks.length);
 
-                        if (q.tasks.length === 0) {
-                            q.empty();
-                        }
-                        workers += 1;
-                        workersList.push(tasks[0]);
-                        var cb = only_once(_next(q, tasks));
-                        worker(data, cb);
+                    var data = _map(tasks, function (task) {
+                        return task.data;
+                    });
+
+                    if (q.tasks.length === 0) {
+                        q.empty();
                     }
+                    workers += 1;
+                    workersList.push(tasks[0]);
+                    var cb = only_once(_next(q, tasks));
+                    worker(data, cb);
                 }
             },
             length: function () {
@@ -5662,8 +5666,10 @@ var convert = function(str, options){
                 break;
             case 'hiragana':
                 for(var hi=0;hi<tokens.length;hi++){
-                    if(!hasKatakana(tokens[hi].surface_form)){
+                    if(!hasKatakana(tokens[hi].surface_form) && hasKanji(tokens[hi].surface_form)){
                         tokens[hi].reading = wanakana.toHiragana(tokens[hi].reading);
+                    }else{
+                        tokens[hi].reading = tokens[hi].surface_form;
                     }
                 }
                 if(options.mode === 'normal')

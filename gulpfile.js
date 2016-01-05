@@ -83,7 +83,7 @@ gulp.task("copy-dict", function () {
 
 gulp.task("test", function () {
     return gulp.src("./test/**/*.js", { read: false })
-        .pipe(mocha({ timeout: 10000, reporter: "list" }));
+        .pipe(mocha({ timeout: 30000, reporter: "list" }));
 });
 
 
@@ -93,7 +93,7 @@ gulp.task("coverage", function (done) {
         .pipe(istanbul.hookRequire())
         .on("finish", function () {
             gulp.src(["test/**/*.js"])
-                .pipe(mocha({ timeout: 10000, reporter: "list" }))
+                .pipe(mocha({ timeout: 30000, reporter: "list" }))
                 .pipe(istanbul.writeReports())
                 .on("end", done);
         });

@@ -8,7 +8,7 @@
 [![Bower version](https://badge.fury.io/bo/kuroshiro.svg)](https://badge.fury.io/bo/kuroshiro)
 [![dependencies](https://david-dm.org/hexenq/kuroshiro.js.svg)](https://david-dm.org/hexenq/kuroshiro.js)
 
-kuroshiro.js是一个十分方便使用的日语工具，主要针对含有日文汉字的文本，进行到平假名、片假名及罗马字的转换，并支持注音假名、送假名
+kuroshiro.js是一个十分方便使用的日文转换注音工具，主要针对含有日文汉字的文本，进行到平假名、片假名及罗马字的转换，并支持注音假名、送假名
 （旁注音）等注音模式。本项目受到kuromoji和wanakana启发。
 
 *其他语言版本：[English](README.md), [简体中文](README.zh-cn.md).*

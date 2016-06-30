@@ -1398,7 +1398,14 @@ BrowserDictionaryLoader.prototype = Object.create(DictionaryLoader.prototype);
  */
 BrowserDictionaryLoader.prototype.loadArrayBuffer = function (url, callback) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
+    var dir_path = '';
+    var uri = location.pathname.substr(1);
+    if (uri) {
+      var dir = uri.split('/').length;
+      for (var i = 1; i != dir; ++i) dir_path += '../'
+    }
+
+    xhr.open("GET", dir_path + url, true);
     xhr.responseType = "arraybuffer";
     xhr.onload = function () {
         if (this.status !== 200) {

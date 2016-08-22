@@ -321,7 +321,7 @@ var init = function(options, callback){
 
     var dicPath = options.dicPath;
     if(!dicPath){
-        if(isNode) dicPath = require.resolve('kuromoji').replace(/dist.*/,'dist/dict/');
+        if(isNode) dicPath = require.resolve('kuromoji').replace(/src.*/,'dict/');
         else dicPath = 'bower_components/kuroshiro/dist/dict/';
     }
     kuromoji.builder({ dicPath: dicPath }).build(function (err, newtokenizer) {

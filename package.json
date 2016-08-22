@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/hexenq/kuroshiro.js",
   "dependencies": {
-    "kuromoji": "^0.0.5",
+    "kuromoji": "0.1.x",
     "wanakana": "^1.3.7"
   },
   "devDependencies": {

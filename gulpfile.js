@@ -76,7 +76,7 @@ gulp.task("copy-dict", function () {
     if (!fs.existsSync("./dist")) {
         fs.mkdirSync("./dist");
     }
-    gulp.src("./node_modules/kuromoji/dist/dict/**")
+    gulp.src("./node_modules/kuromoji/dict/**")
         .pipe(gulp.dest("./dist/dict/"));
 });
 

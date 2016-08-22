@@ -87,9 +87,28 @@ __参数__
 __示例__
 
 ```js
+// normal (标准模式)
+kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！', {mode:'okurigana', to:'hiragana'});
+// 输出：かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！
+```
+
+```js
+// spaced (空格分组)
+kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！', {mode:'okurigana', to:'hiragana'});
+// 输出：かんじとれ たら て を つなご う 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
+```
+
+```js
+// okurigana (送假名)
 kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！', {mode:'okurigana', to:'hiragana'});
 // 输出: 感(かん)じ取(と)れたら手(て)を繋(つな)ごう、重(かさ)なるのは人生(じんせい)のライン and レミリア最高(さいこう)！
 ```
+
+<pre>
+// furigana (注音假名)
+kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！', {mode:'furigana', to:'hiragana'});
+// 输出: <ruby>感<rp>(</rp><rt>かん</rt><rp>)</rp></ruby>じ<ruby>取<rp>(</rp><rt>と</rt><rp>)</rp></ruby>れたら<ruby>手<rp>(</rp><rt>て</rt><rp>)</rp></ruby>を<ruby>繋<rp>(</rp><rt>つな</rt><rp>)</rp></ruby>ごう、<ruby>重<rp>(</rp><rt>かさ</rt><rp>)</rp></ruby>なるのは<ruby>人生<rp>(</rp><rt>じんせい</rt><rp>)</rp></ruby>のライン and レミリア<ruby>最高<rp>(</rp><rt>さいこう</rt><rp>)</rp></ruby>！
+</pre>
 
 ### toHiragana(str, [options])
 转换指定字符串到平假名。没有`to`参数，其余选项参数与convert()函数方法一样。

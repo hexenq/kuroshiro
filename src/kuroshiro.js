@@ -330,7 +330,7 @@ var init = function(options, callback){
 
         tokenizer = newtokenizer;
         kuroshiro.tokenize = tokenizer.tokenize;
-        callback();
+        if(callback) callback();
     });
 };
 

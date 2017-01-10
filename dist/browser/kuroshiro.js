@@ -9804,8 +9804,15 @@ var init = function(options, callback){
     if(typeof options === 'function'){
         callback = options;
         options = {};
+    }else if(typeof options === 'object'){
+        if (!callback || typeof callback !== "function") {
+            callback = function(){};
+        }
     }else{
-        options = options || {};
+        options = {};
+        if (!callback || typeof callback !== "function") {
+            callback = function(){};
+        }
     }
 
     var dicPath = options.dicPath;
@@ -9840,5 +9847,6 @@ var kuroshiro = {
 };
 
 module.exports = kuroshiro;
+
 },{"kuromoji":17,"wanakana":27}]},{},[29])(29)
 });

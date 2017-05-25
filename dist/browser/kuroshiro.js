@@ -9489,7 +9489,7 @@ d=(h[l++]|h[l++]<<8|h[l++]<<16|h[l++]<<24)>>>0;(a.length&4294967295)!==d&&n(Erro
 },{}],29:[function(require,module,exports){
 /*!
  * kuroshiro.js
- * Copyright(c) 2015 Hexen Qi <hexenq@gmail.com>
+ * Copyright(c) 2015-2017 Hexen Qi <hexenq@gmail.com>
  * MIT Licensed
  */
 
@@ -9630,8 +9630,36 @@ var convert = function(str, options){
                 break;
             case 'hiragana':
                 for(var hi=0;hi<tokens.length;hi++){
-                    if(!hasKatakana(tokens[hi].surface_form) && hasKanji(tokens[hi].surface_form)){
-                        tokens[hi].reading = wanakana.toHiragana(tokens[hi].reading);
+                    if(hasKanji(tokens[hi].surface_form)){
+                        if(!hasKatakana(tokens[hi].surface_form)){
+                            tokens[hi].reading = wanakana.toHiragana(tokens[hi].reading);
+                        }else{
+                            // handle katakana-kanji-mixed tokens
+                            tokens[hi].reading = wanakana.toHiragana(tokens[hi].reading);
+                            var tmp = '';
+                            var hpattern = '';
+                            for(var hc=0;hc<tokens[hi].surface_form.length;hc++){
+                                if(isKanji(tokens[hi].surface_form[hc])){
+                                    hpattern += '(.*)';
+                                }else{
+                                    hpattern += wanakana.isKatakana(tokens[hi].surface_form[hc]) ? wanakana.toHiragana(tokens[hi].surface_form[hc]):tokens[hi].surface_form[hc];
+                                }
+                            }
+                            var hreg = new RegExp(hpattern);
+                            var hmatches = hreg.exec(tokens[hi].reading);
+                            if(hmatches){
+                                var pickKJ = 0;
+                                for(var hc1=0;hc1<tokens[hi].surface_form.length;hc1++){
+                                    if(isKanji(tokens[hi].surface_form[hc1])){
+                                        tmp += hmatches[pickKJ+1];
+                                        pickKJ++;
+                                    }else{
+                                        tmp += tokens[hi].surface_form[hc1];
+                                    }
+                                }
+                                tokens[hi].reading = tmp;
+                            }
+                        }
                     }else{
                         tokens[hi].reading = tokens[hi].surface_form;
                     }
@@ -9658,19 +9686,23 @@ var convert = function(str, options){
                         if(isKanji(tokens[i].surface_form[c])){
                             pattern += '(.*)';
                         }else{
-                            pattern += tokens[i].surface_form[c];
+                            pattern += wanakana.isKatakana(tokens[i].surface_form[c]) ? wanakana.toHiragana(tokens[i].surface_form[c]):tokens[i].surface_form[c];
                         }
                     }
                     var reg = new RegExp(pattern);
                     var matches = reg.exec(tokens[i].reading);
-                    var pickKanji = 0;
-                    for(var c1=0;c1<tokens[i].surface_form.length;c1++){
-                        if(isKanji(tokens[i].surface_form[c1])){
-                            notations.push([tokens[i].surface_form[c1],1,matches[pickKanji+1]]);
-                            pickKanji++;
-                        }else{
-                            notations.push([tokens[i].surface_form[c1],2,wanakana.toHiragana(tokens[i].surface_form[c1])]);
+                    if(matches){
+                        var pickKanji = 0;
+                        for(var c1=0;c1<tokens[i].surface_form.length;c1++){
+                            if(isKanji(tokens[i].surface_form[c1])){
+                                notations.push([tokens[i].surface_form[c1],1,matches[pickKanji+1]]);
+                                pickKanji++;
+                            }else{
+                                notations.push([tokens[i].surface_form[c1],2,wanakana.toHiragana(tokens[i].surface_form[c1])]);
+                            }
                         }
+                    }else{
+                        notations.push([tokens[i].surface_form,1,tokens[i].reading]);
                     }
                     break;
                 case 2:

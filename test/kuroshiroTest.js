@@ -1,5 +1,5 @@
 /*!
- * Copyright(c) 2015 Hexen Qi <hexenq@gmail.com>
+ * Copyright(c) 2015-2017 Hexen Qi <hexenq@gmail.com>
  * MIT Licensed
  */
 var expect = require("chai").expect;
@@ -7,6 +7,8 @@ var kuroshiro = require("../src/kuroshiro.js");
 
 describe("kuroshiro.js Test", function () {
     const EXAMPLE_TEXT = "感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！";
+    const EXAMPLE_TEXT2 = "ブラウン管への愛が足りねぇな";
+    const EXAMPLE_TEXT3 = "関ヶ原の戦い";
 
     before(function(done){
         kuroshiro.init(done);
@@ -21,16 +23,26 @@ describe("kuroshiro.js Test", function () {
         var result = kuroshiro.hasKanji(ori);
         expect(result).to.be.true;
     });
-    it("Kanji to Hiragana", function () {
+    it("Kanji to Hiragana(1)", function () {
         var ori = EXAMPLE_TEXT;
         var result = kuroshiro.convert(ori,{to:'hiragana'});
         expect(result).to.eql('かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！');
+    });
+    it("Kanji to Hiragana(2)", function () {
+        var ori = EXAMPLE_TEXT2;
+        var result = kuroshiro.convert(ori,{to:'hiragana'});
+        expect(result).to.eql('ブラウンかんへのあいがたりねぇな');
+    });
+    it("Kanji to Hiragana(3)", function () {
+        var ori = EXAMPLE_TEXT3;
+        var result = kuroshiro.convert(ori,{to:'hiragana'});
+        expect(result).to.eql('せきがはらのたたかい');
     });
     it("Kanji to Katakana", function () {
         var ori = EXAMPLE_TEXT;
         var result = kuroshiro.convert(ori,{to:'katakana'});
         expect(result).to.eql('カンジトレタラテヲツナゴウ、カサナルノハジンセイノライン and レミリアサイコウ！');
-    })
+    });
     it("Kanji to Romaji", function () {
         var ori = EXAMPLE_TEXT;
         var result = kuroshiro.convert(ori,{to:'romaji'});
@@ -45,16 +57,26 @@ describe("kuroshiro.js Test", function () {
         var ori = EXAMPLE_TEXT;
         var result = kuroshiro.convert(ori,{mode:'spaced', to:'katakana'});
         expect(result).to.eql('カンジトレ タラ テ ヲ ツナゴ ウ 、 カサナル ノ ハ ジンセイ ノ ライン   and   レミ リア サイコウ ！');
-    })
+    });
     it("Kanji to Romaji with spaces", function () {
         var ori = EXAMPLE_TEXT;
         var result = kuroshiro.convert(ori,{mode:'spaced', to:'romaji'});
         expect(result).to.eql('kanjitore tara te wo tsunago u 、 kasanaru no ha jinsei no rain   and   remi ria saikou ！');
     });
-    it("Kanji to Hiragana with okurigana", function () {
+    it("Kanji to Hiragana with okurigana(1)", function () {
         var ori = EXAMPLE_TEXT;
         var result = kuroshiro.convert(ori,{mode:'okurigana', to:'hiragana'});
         expect(result).to.eql('感(かん)じ取(と)れたら手(て)を繋(つな)ごう、重(かさ)なるのは人生(じんせい)のライン and レミリア最高(さいこう)！');
+    });
+    it("Kanji to Hiragana with okurigana(2)", function () {
+        var ori = EXAMPLE_TEXT2;
+        var result = kuroshiro.convert(ori,{mode:'okurigana', to:'hiragana'});
+        expect(result).to.eql('ブラウン管(かん)への愛(あい)が足(た)りねぇな');
+    });
+    it("Kanji to Hiragana with okurigana(3)", function () {
+        var ori = EXAMPLE_TEXT3;
+        var result = kuroshiro.convert(ori,{mode:'okurigana', to:'hiragana'});
+        expect(result).to.eql('関ヶ原(せきがはら)の戦(たたか)い');
     });
     it("Kanji to Katakana with okurigana", function () {
         var ori = EXAMPLE_TEXT;

@@ -1,3 +1,10 @@
+<a name="0.1.5"></a>
+## [0.1.5](https://github.com/hexenq/kuroshiro.js/compare/0.1.4...0.1.5) (2017-06-05)
+
+### Bug Fixes
+
+* fix wrong pairing of kanji and phonetic notation (reported in [#10](https://github.com/hexenq/kuroshiro.js/issues/10))
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/hexenq/kuroshiro.js/compare/0.1.3...0.1.4) (2017-05-25)
 

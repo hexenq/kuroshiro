@@ -9682,23 +9682,32 @@ var convert = function(str, options){
                     break;
                 case 1:
                     var pattern = '';
+                    var isLastTokenKanji = false;
+                    var subs = []; // recognize kanjis and group them
                     for(var c=0;c<tokens[i].surface_form.length;c++){
                         if(isKanji(tokens[i].surface_form[c])){
-                            pattern += '(.*)';
+                            if(!isLastTokenKanji){   // ignore successive kanji tokens (#10)
+                                isLastTokenKanji = true;
+                                pattern += '(.*?)';
+                                subs.push(tokens[i].surface_form[c]);
+                            }else{
+                                subs[subs.length-1] += tokens[i].surface_form[c];
+                            }
                         }else{
+                            isLastTokenKanji = false;
+                            subs.push(tokens[i].surface_form[c]);
                             pattern += wanakana.isKatakana(tokens[i].surface_form[c]) ? wanakana.toHiragana(tokens[i].surface_form[c]):tokens[i].surface_form[c];
                         }
                     }
-                    var reg = new RegExp(pattern);
+                    var reg = new RegExp('^' + pattern + '$');
                     var matches = reg.exec(tokens[i].reading);
                     if(matches){
-                        var pickKanji = 0;
-                        for(var c1=0;c1<tokens[i].surface_form.length;c1++){
-                            if(isKanji(tokens[i].surface_form[c1])){
-                                notations.push([tokens[i].surface_form[c1],1,matches[pickKanji+1]]);
-                                pickKanji++;
+                        var pickKanji = 1;
+                        for(var c1=0;c1<subs.length;c1++){
+                            if(isKanji(subs[c1][0])){
+                                notations.push([subs[c1],1,matches[pickKanji++]]);
                             }else{
-                                notations.push([tokens[i].surface_form[c1],2,wanakana.toHiragana(tokens[i].surface_form[c1])]);
+                                notations.push([subs[c1],2,wanakana.toHiragana(subs[c1])]);
                             }
                         }
                     }else{

@@ -9,6 +9,7 @@ describe("kuroshiro.js Test", function () {
     const EXAMPLE_TEXT = "感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！";
     const EXAMPLE_TEXT2 = "ブラウン管への愛が足りねぇな";
     const EXAMPLE_TEXT3 = "関ヶ原の戦い";
+    const EXAMPLE_TEXT4 = "綺麗な花。面白い映画。面白かったです。";
 
     before(function(done){
         kuroshiro.init(done);
@@ -77,6 +78,11 @@ describe("kuroshiro.js Test", function () {
         var ori = EXAMPLE_TEXT3;
         var result = kuroshiro.convert(ori,{mode:'okurigana', to:'hiragana'});
         expect(result).to.eql('関ヶ原(せきがはら)の戦(たたか)い');
+    });
+    it("Kanji to Hiragana with okurigana(4)", function () {
+        var ori = EXAMPLE_TEXT4;
+        var result = kuroshiro.convert(ori,{mode:'okurigana', to:'hiragana'});
+        expect(result).to.eql('綺麗(きれい)な花(はな)。面白(おもしろ)い映画(えいが)。面白(おもしろ)かったです。');
     });
     it("Kanji to Katakana with okurigana", function () {
         var ori = EXAMPLE_TEXT;

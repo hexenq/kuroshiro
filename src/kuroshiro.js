@@ -1,9 +1,3 @@
-/*!
- * kuroshiro.js
- * Copyright(c) 2015-2017 Hexen Qi <hexenq@gmail.com>
- * MIT Licensed
- */
-
 "use strict";
 
 var kuromoji = require('kuromoji');
@@ -108,7 +102,6 @@ var splitObjArray = function(arr,prop,split){
  * @param {string} [options.mode='normal'] Convert mode ['normal'|'spaced'|'okurigana'|'furigana']
  * @param {string} [options.delimiter_start='('] Delimiter(Start)
  * @param {string} [options.delimiter_end=')'] Delimiter(End)
- * TODO @param {boolean} [options.convertall=false] If convert all characters to target syllabary (by default only kanji will be converted)
  */
 var convert = function(str, options){
     options = options || {};
@@ -369,7 +362,7 @@ var init = function(options, callback){
 
     var dicPath = options.dicPath;
     if(!dicPath){
-        if(isNode) dicPath = require.resolve('kuromoji').replace(/src.*/,'dict/');
+        if(isNode) dicPath = require.resolve('kuromoji').replace(/src(?!.*src).*/,'dict/');
         else dicPath = 'bower_components/kuroshiro/dist/dict/';
     }
     kuromoji.builder({ dicPath: dicPath }).build(function (err, newtokenizer) {

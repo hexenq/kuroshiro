@@ -33,3 +33,4 @@ gulp.1
 # Others
 .DS_Store
 dist/dict
+package-lock.json

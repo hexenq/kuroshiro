@@ -1,3 +1,24 @@
+<a name="0.2.0"></a>
+## [0.2.0](https://github.com/hexenq/kuroshiro.js/compare/0.1.5...0.2.0) (2018-01-24)
+
+### Bug Fixes
+
+* fix it would replace from first 'src' when getting full path of 'kuromoji/dict' ([#19](https://github.com/hexenq/kuroshiro.js/pull/19))
+
+### Usability
+
+* add typescript typings ([#21](https://github.com/hexenq/kuroshiro.js/pull/21))
+
+### Bump deps
+
+* update dependencies
+
+### Miscellaneous
+
+* add README.zh-tw.md
+* modify distribution logic
+* other trivial modifications
+
 <a name="0.1.5"></a>
 ## [0.1.5](https://github.com/hexenq/kuroshiro.js/compare/0.1.4...0.1.5) (2017-06-05)
 

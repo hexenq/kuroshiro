@@ -6,11 +6,10 @@ var fs = require("fs"),
     jshint = require("gulp-jshint"),
     browserify = require("browserify"),
     source = require("vinyl-source-stream"),
-    sourcemaps = require("gulp-sourcemaps"),
     mocha = require("gulp-mocha"),
     istanbul = require("gulp-istanbul"),
     webserver = require('gulp-webserver'),
-    jsdoc = require("gulp-jsdoc"),
+    jsdoc = require("gulp-jsdoc3"),
     uglify = require("gulp-uglify"),
     buffer = require('vinyl-buffer'),
     rename = require('gulp-rename');
@@ -19,8 +18,6 @@ var fs = require("fs"),
 gulp.task("clean", function () {
     return merge(
         gulp.src(["./dist/browser/kuroshiro.js", "./dist/browser/kuroshiro.min.js"])
-            .pipe(clean()),
-        gulp.src("./dist/node/")
             .pipe(clean())
     );
 });
@@ -33,14 +30,6 @@ gulp.task("build", function () {
     if (!fs.existsSync("./dist/browser/")) {
         fs.mkdirSync("./dist/browser/");
     }
-    if (!fs.existsSync("./dist/node/")) {
-        fs.mkdirSync("./dist/node/");
-    }
-
-    gulp.src("./src/**/*.js")
-        .pipe(sourcemaps.init())
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest("./dist/node/"));
 
     var b = browserify({
         entries: ["./src/kuroshiro.js"],
@@ -83,7 +72,8 @@ gulp.task("copy-dict", function () {
 
 gulp.task("test", function () {
     return gulp.src("./test/**/*.js", { read: false })
-        .pipe(mocha({ timeout: 30000, reporter: "list" }));
+        .pipe(mocha({ timeout: 30000, reporter: "list", exit: true }))
+        .on('error', console.error);
 });
 
 

@@ -1,4 +1,4 @@
-![kuroshiro.js](http://www.hexenq.com/kuroshiro/kuroshiro.png)
+![kuroshiro.js](http://hexenq.com/kuroshiro/kuroshiro.png)
 
 # kuroshiro.js
 
@@ -6,50 +6,59 @@
 [![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro.js/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro.js)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
 [![Bower version](https://badge.fury.io/bo/kuroshiro.svg)](https://badge.fury.io/bo/kuroshiro)
-[![dependencies](https://david-dm.org/hexenq/kuroshiro.js.svg)](https://david-dm.org/hexenq/kuroshiro.js)
 
-kuroshiro.js是一个十分方便使用的日文转换注音工具，主要针对含有日文汉字的文本，进行到平假名、片假名及罗马字的转换，并支持注音假名、送假名
+kuroshiro.js是一款十分方便使用的日文转换注音工具，主要针对含有日文汉字的文本，进行到平假名、片假名及罗马字的转换，并支持注音假名、送假名
 （旁注音）等注音模式。本项目受到kuromoji和wanakana启发。
 
-*其他语言版本：[English](README.md), [简体中文](README.zh-cn.md).*
+*其他语言版本：[English](README.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md)。*
 
 ## 演示
-你可以在[这里](http://www.hexenq.com/kuroshiro/demo/index.html)查看在线演示，初始化会有些慢（需要下载字典，16MB左右），请耐心等待。
+你可以在[这里](http://hexenq.com/kuroshiro/demo/index.html)查看在线演示，初始化会有些慢（需要下载字典，16MB左右），请耐心等待。
 
 ## 如何使用
 ### Node.js
 首先使用npm包管理器进行安装:
+```sh
+$ npm install kuroshiro
+```
 
-    npm install kuroshiro
-    
 加载kuroshiro库:
+```js
+// 当使用 JavaScript 时
+const kuroshiro = require("kuroshiro");
+```
+```ts
+// 当使用 TypeScript 时
+import * as kuroshiro from 'kuroshiro';
+```
 
-    var kuroshiro = require("kuroshiro");
-    
 开始使用:
-
-    kuroshiro.init(function (err) {
-        // kuroshiro.js初始化完毕
-        var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
-        console.log(result);
-    });
-    
+```js
+kuroshiro.init(function (err) {
+    // kuroshiro.js初始化完毕
+    var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
+    console.log(result);
+});
+```
 ### 浏览器
 使用Bower包管理器安装:
+```sh
+$ bower install kuroshiro
+```
 
-    bower install kuroshiro
-    
 在HTML中添加:
-
-    <script src="url/to/kuroshiro.js"></script>
+```html
+<script src="url/to/kuroshiro.js"></script>
+```
 
 开始使用:
-                  
-    kuroshiro.init(function (err) {
-      // kuroshiro.js初始化完毕
-      var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
-      console.log(result);
-    });
+```js              
+kuroshiro.init(function (err) {
+    // kuroshiro.js初始化完毕
+    var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
+    console.log(result);
+});
+```
 
 ## API说明
 ### init([options], [callback])

@@ -1,4 +1,4 @@
-![kuroshiro.js](http://www.hexenq.com/kuroshiro/kuroshiro.png)
+![kuroshiro.js](http://hexenq.com/kuroshiro/kuroshiro.png)
 
 # kuroshiro.js
 
@@ -6,50 +6,59 @@
 [![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro.js/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro.js)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
 [![Bower version](https://badge.fury.io/bo/kuroshiro.svg)](https://badge.fury.io/bo/kuroshiro)
-[![dependencies](https://david-dm.org/hexenq/kuroshiro.js.svg)](https://david-dm.org/hexenq/kuroshiro.js)
 
 kuroshiro.js is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji
 with furigana and okurigana modes supported. This project is inspired by kuromoji and wanakana.
 
-*Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md).*
+*Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
 
 ## Demo
-You can check the demo [here](http://www.hexenq.com/kuroshiro/demo/index.html).
+You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
 
 ## Usage
 ### Node.js
 Install with npm package manager:
-
-    npm install kuroshiro
+```sh
+$ npm install kuroshiro
+```
     
 Load the library:
-
-    var kuroshiro = require("kuroshiro");
-    
+```js
+// when using JavaScript
+const kuroshiro = require("kuroshiro");
+```
+```ts
+// when using TypeScript
+import * as kuroshiro from 'kuroshiro';
+```
 Have fun:
-
-    kuroshiro.init(function (err) {
-        // kuroshiro is ready
-        var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
-        console.log(result);
-    });
+```js
+kuroshiro.init(function (err) {
+    // kuroshiro is ready
+    var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
+    console.log(result);
+});
+```
     
 ### Browser
 Install with Bower package manager:
-
-    bower install kuroshiro
+```sh
+$ bower install kuroshiro
+```
     
 In your HTML:
-
-    <script src="url/to/kuroshiro.js"></script>
+```html
+<script src="url/to/kuroshiro.js"></script>
+```
 
 Have fun with scripts below:
-                  
-    kuroshiro.init(function (err) {
-      // kuroshiro is ready
-      var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
-      console.log(result);
-    });
+```js               
+kuroshiro.init(function (err) {
+    // kuroshiro is ready
+    var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
+    console.log(result);
+});
+```
 
 ## API
 ### init([options], [callback])

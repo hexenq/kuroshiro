@@ -1,7 +1,3 @@
-// Type definitions for kuroshiro.js
-// Project: https://github.com/Shadowlauch/kuroshiro.js
-// Definitions by: Lars Naurath <https://github.com/Shadowlauch>
-
 export function init(options?: { dicPath?: string }, callback?: (err?: any) => void): void;
 export function init(callback?: (err?: any) => void): void;
 
@@ -34,4 +30,3 @@ interface ConvertOptions {
     delimiter_start?: string,
     delimiter_end?: string
 }
-

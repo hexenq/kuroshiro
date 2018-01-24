@@ -19,3 +19,10 @@ node_modules
 *.sublime-workspace
 .idea/
 /demo/bower_components
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Others
+.DS_Store
+package-lock.json

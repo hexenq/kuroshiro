@@ -1,3 +1,11 @@
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/hexenq/kuroshiro.js/compare/0.2.0...0.2.1) (2018-01-24)
+
+### Miscellaneous
+
+* fix coverage report problem
+
+
 <a name="0.2.0"></a>
 ## [0.2.0](https://github.com/hexenq/kuroshiro.js/compare/0.1.5...0.2.0) (2018-01-24)
 

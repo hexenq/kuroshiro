@@ -1,6 +1,6 @@
 {
   "name": "kuroshiro",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "kuroshiro.js is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
   "main": "./src/kuroshiro.js",
   "typings": "./src/kuroshiro.d.ts",
@@ -34,10 +34,7 @@
     "url": "https://github.com/hexenq/kuroshiro.js/issues"
   },
   "homepage": "https://github.com/hexenq/kuroshiro.js",
-  "dependencies": {
-    "kuromoji": "0.1.x",
-    "wanakana": "^3.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "browserify": "^15.2.0",
     "chai": "^4.1.2",

@@ -12,7 +12,8 @@ var fs = require("fs"),
     jsdoc = require("gulp-jsdoc3"),
     uglify = require("gulp-uglify"),
     buffer = require('vinyl-buffer'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    babel = require('babel-core/register');
 
 
 gulp.task("clean", function () {
@@ -72,10 +73,15 @@ gulp.task("copy-dict", function () {
 
 gulp.task("test", function () {
     return gulp.src("./test/**/*.js", { read: false })
-        .pipe(mocha({ timeout: 30000, reporter: "list", exit: true }))
-        .on('error', console.error);
+        .pipe(mocha({ timeout: 30000, compilers: { js: babel }, require: ["babel-polyfill"], reporter: "list", exit: true }));
+        //.on('error', console.error);
 });
 
+// gulp.task("test", function () {
+//     return gulp.src("./test/**/*.js", { read: false })
+//         .pipe(mocha({ timeout: 30000, reporter: "list", exit: true }))
+//         .on('error', console.error);
+// });
 
 gulp.task("coverage", function (done) {
     gulp.src(["./src/**/*.js"])

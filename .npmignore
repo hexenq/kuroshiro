@@ -34,3 +34,4 @@ gulp.1
 .DS_Store
 dist/dict
 package-lock.json
+*.map

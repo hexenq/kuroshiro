@@ -6,7 +6,7 @@ before_install:
   - npm install -g gulp
 
 script:
-  - gulp test
+  - gulp
 
 after_script:
   - gulp coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage

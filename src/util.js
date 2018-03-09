@@ -242,5 +242,5 @@ export {
     toRawRomaji,    
 
     // data structure    
-    splitObjArray,
+    splitObjArray
  };

@@ -2,8 +2,8 @@
   "name": "kuroshiro",
   "version": "1.0.0",
   "description": "kuroshiro.js is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
-  "main": "./src/index.js",
-  "typings": "./src/index.d.ts",
+  "main": "./kuroshiro.js",
+  "typings": "./kuroshiro.d.ts",
   "scripts": {
     "test": "node_modules/.bin/gulp test"
   },
@@ -37,8 +37,9 @@
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
+    "babelrc-rollup": "^3.0.0",
     "browserify": "^15.2.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
@@ -50,10 +51,14 @@
     "gulp-jshint": "^2.0.0",
     "gulp-mocha": "^3.0.1",
     "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.0",
     "gulp-webserver": "^0.9.1",
     "jshint": "^2.9.5",
     "mocha": "^5.0.0",
+    "rollup": "^0.56.5",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-uglify": "^3.0.0",
     "run-sequence": "^2.2.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^2.0.0"

@@ -1,9 +1,7 @@
 import {
     getStrType,
-    hasHiragana,
     hasKatakana,
     hasKanji,
-    isHiragana,
     isKatakana,
     isKanji,    
     toRawHiragana,
@@ -18,12 +16,24 @@ function Kuroshiro(){
 
 /**
  * Initiate kuroshiro.js
- *
- * @param {function} [callback] Callback after initiate analyzer
+ * 
+ * @param {Analyzer} analyzer Morphological analyzer
+ * @param {function} [callback] Callback after initiating analyzer
  */
-Kuroshiro.prototype.init = function (analyzer, callback) {    
-    this._analyzer = analyzer;
-    this._analyzer.init(callback);
+Kuroshiro.prototype.init = function (analyzer, callback) {
+    let self = this;
+    if(self._analyzer == null){        
+        analyzer.init(function(err){
+            if(err){
+                return callback(err);
+            }else{
+                self._analyzer = analyzer;
+                return callback();
+            }
+        });
+    }else{
+        callback(new Error("Kuroshiro has already been initialized."));
+    }
 };
 
 /**
@@ -55,15 +65,15 @@ Kuroshiro.prototype.convert = function (str, options, callback) {
             switch (options.to) {
                 case 'katakana':
                     if (options.mode === 'normal')
-                        return callback(splitObjArray(tokens, 'reading'));
+                        return callback(null, splitObjArray(tokens, 'reading'));
                     else
-                        return callback(splitObjArray(tokens, 'reading', ' '));
+                        return callback(null, splitObjArray(tokens, 'reading', ' '));
                     break;
                 case 'romaji':
                     if (options.mode === 'normal')
-                        return callback(toRawRomaji(splitObjArray(tokens, 'reading')));
+                        return callback(null, toRawRomaji(splitObjArray(tokens, 'reading')));
                     else
-                        return callback(toRawRomaji(splitObjArray(tokens, 'reading', ' ')));
+                        return callback(null, toRawRomaji(splitObjArray(tokens, 'reading', ' ')));
                     break;
                 case 'hiragana':
                     for (var hi = 0; hi < tokens.length; hi++) {
@@ -102,9 +112,9 @@ Kuroshiro.prototype.convert = function (str, options, callback) {
                         }
                     }
                     if (options.mode === 'normal')
-                        return callback(splitObjArray(tokens, 'reading'));
+                        return callback(null, splitObjArray(tokens, 'reading'));
                     else
-                        return callback(splitObjArray(tokens, 'reading', ' '));
+                        return callback(null, splitObjArray(tokens, 'reading', ' '));
                     break;
             }
         } else if (options.mode === 'okurigana' || options.mode === 'furigana') {
@@ -183,7 +193,7 @@ Kuroshiro.prototype.convert = function (str, options, callback) {
                             }
                         }
                     }
-                    return callback(result);
+                    return callback(null, result);
                 case 'romaji':
                     if (options.mode === 'okurigana')
                         for (var n2 = 0; n2 < notations.length; n2++) {
@@ -200,7 +210,7 @@ Kuroshiro.prototype.convert = function (str, options, callback) {
                         }
                         result += "</ruby>";
                     }
-                    return callback(result);
+                    return callback(null, result);
                 case 'hiragana':
                     if (options.mode === 'okurigana') {
                         for (var n4 = 0; n4 < notations.length; n4++) {
@@ -219,7 +229,7 @@ Kuroshiro.prototype.convert = function (str, options, callback) {
                             }
                         }
                     }
-                    return callback(result);
+                    return callback(null, result);
             }
         } else {
             return callback(new Error('No such mode...'));
@@ -239,7 +249,7 @@ Kuroshiro.prototype.convert = function (str, options, callback) {
 Kuroshiro.prototype.toHiragana = function (str, options, callback) {
     options = options || {};
     options.to = 'hiragana';
-    return convert(str, options, callback);
+    return this.convert(str, options, callback);
 };
 
 /**
@@ -254,7 +264,7 @@ Kuroshiro.prototype.toHiragana = function (str, options, callback) {
 Kuroshiro.prototype.toKatakana = function (str, options, callback) {
     options = options || {};
     options.to = 'katakana';
-    return convert(str, options, callback);
+    return this.convert(str, options, callback);
 };
 
 /**
@@ -269,7 +279,7 @@ Kuroshiro.prototype.toKatakana = function (str, options, callback) {
 Kuroshiro.prototype.toRomaji = function (str, options, callback) {
     options = options || {};
     options.to = 'romaji';
-    return convert(str, options, callback);
+    return this.convert(str, options, callback);
 };
 
 export default Kuroshiro;

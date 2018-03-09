@@ -55,7 +55,9 @@ Kuroshiro.prototype.convert = function (str, options, callback) {
     options.delimiter_end = options.delimiter_end || ')';
     str = str || '';
 
-    this._analyzer.parse(str, function(tokens){
+    this._analyzer.parse(str, function(err, tokens){
+        if(err) return callback(err);
+
         for (var cr = 0; cr < tokens.length; cr++) {
             if (!tokens[cr].reading)
                 tokens[cr].reading = tokens[cr].surface_form;

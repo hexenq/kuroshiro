@@ -1,24 +1,28 @@
 import { expect } from "chai";
-import kuroshiro from "../kuroshiro";
+import Kuroshiro from "../kuroshiro";
+import { Util } from "../kuroshiro";
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji"; 
 
-describe("kuroshiro.js Test", function () {
+describe("Kuroshiro Test", function () {
     const EXAMPLE_TEXT = "感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！";
     const EXAMPLE_TEXT2 = "ブラウン管への愛が足りねぇな";
     const EXAMPLE_TEXT3 = "関ヶ原の戦い";
     const EXAMPLE_TEXT4 = "綺麗な花。面白い映画。面白かったです。";
 
+    var kuroshiro;
+
     before(function(done){
+        kuroshiro = new Kuroshiro();
         kuroshiro.init(new KuromojiAnalyzer(), done);
     });
     it("Kanji Character Recognition", function () {
         var ori = '公';
-        var result = kuroshiro.isKanji(ori);
+        var result = Util.isKanji(ori);
         expect(result).to.be.true;
     });
     it("Kanji-mixed String Recognition", function () {
         var ori = 'この公園の中で';
-        var result = kuroshiro.hasKanji(ori);
+        var result = Kuroshiro.Util.hasKanji(ori);
         expect(result).to.be.true;
     });
     it("Kanji to Hiragana(1)", function (done) {

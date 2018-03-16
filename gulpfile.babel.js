@@ -12,6 +12,9 @@ import babelrc from "babelrc-rollup";
 import { rollup } from "rollup";
 import uglify from 'rollup-plugin-uglify';
 
+import source from "vinyl-source-stream";
+import buffer from "vinyl-buffer";
+
 gulp.task("lint", () => {
     return gulp.src(["./src/**/*.js"])
         .pipe(jshint())
@@ -23,6 +26,23 @@ gulp.task("clean", () => {
         gulp.src(["./kuroshiro.js", "./kuroshiro.js.map"])
             .pipe(clean())
     );
+});
+
+gulp.task("build-dev", () => {
+    return rollup({
+        input: './src/index.js',
+        plugins: [
+            babel(babelrc())
+        ]
+    })
+        .then(bundle => {
+            return bundle.write({
+                file: './kuroshiro.js',
+                format: 'umd',
+                name: 'kuroshiro',
+                sourcemap: true
+            });
+        })
 });
 
 gulp.task("build", () => {
@@ -70,9 +90,34 @@ gulp.task("webserver", () => {
         }));
 });
 
-gulp.task("jsdoc", () => {
-    gulp.src(["./src/**/*.js"])
-        .pipe(jsdoc("./jsdoc"));
+gulp.task("jsdoc", (done) => {
+    let jsdocConfig = {
+        "tags": {
+            "allowUnknownTags": true
+        },
+        "opts": {
+            "destination": "./docs/",
+            "encoding": "utf8",
+            "recurse": true
+        },
+        "plugins": [
+            "plugins/markdown"
+        ],
+        "templates": {
+            "cleverLinks": false,
+            "monospaceLinks": false,
+            "default": {
+                "outputSourceFiles": true
+            },
+            "path": "ink-docstrap",
+            "theme": "cerulean",
+            "navType": "vertical",
+            "linenums": true,
+            "dateFormat": "MMMM Do YYYY, h:mm:ss a"
+        }
+    };
+    gulp.src(["./src/**/*.js"], { read: false })
+        .pipe(jsdoc(jsdocConfig, done));
 });
 
 gulp.task("watch", () => {

@@ -27,3 +27,4 @@ coverage
 .DS_Store
 package-lock.json
 *.map
+docs

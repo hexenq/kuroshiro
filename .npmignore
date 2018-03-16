@@ -35,3 +35,4 @@ gulp.1
 dist/dict
 package-lock.json
 *.map
+docs

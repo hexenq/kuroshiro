@@ -73,10 +73,10 @@ import kuroshiro from 'kuroshiro'
 kuroshiro.init(
   {
     dicPath: 'path/to/folder/not/processed/by/Wepback'
-  }
+  },
  (err) => {
     if(err){
-       console.error(err)
+       console.error(err);
     } else {
        // kuroshiro is ready
         const result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    

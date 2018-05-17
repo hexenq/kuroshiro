@@ -60,6 +60,31 @@ kuroshiro.init(function (err) {
 });
 ```
 
+### Using a module bundler (e.g. Webpack)
+Install with npm package manager:
+```sh
+$ npm install kuroshiro
+```
+
+Look for the dictionaries (12 files) in `node_modules/kuromoji/dict` and move them to a folder that is not processed by Webpack.
+```js
+import kuroshiro from 'kuroshiro'
+
+kuroshiro.init(
+  {
+    dicPath: 'path/to/folder/not/processed/by/Wepback'
+  },
+ (err) => {
+    if(err){
+       console.error(err);
+    } else {
+       // kuroshiro is ready
+        const result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
+        console.log(result);
+    }
+});
+```
+
 ## API
 ### init([options], [callback])
 Initiate kuroshiro.js. You should call this function once before calling other functions. 

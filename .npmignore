@@ -32,5 +32,6 @@ gulp.1
 
 # Others
 .DS_Store
+.vscode
 dist/dict
 package-lock.json

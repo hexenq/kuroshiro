@@ -1,5 +1,12 @@
+<a name="0.2.3"></a>
+## [0.2.3](https://github.com/hexenq/kuroshiro.js/compare/0.2.2...0.2.3) (2018-05-17)
+
+### Miscellaneous
+
+* update .npmignore file
+
 <a name="0.2.2"></a>
-## [0.2.2](https://github.com/hexenq/kuroshiro.js/compare/0.2.2...0.2.1) (2018-05-17)
+## [0.2.2](https://github.com/hexenq/kuroshiro.js/compare/0.2.1...0.2.2) (2018-05-17)
 
 ### Bug Fixes
 
@@ -11,7 +18,6 @@
 ### Miscellaneous
 
 * fix coverage report problem
-
 
 <a name="0.2.0"></a>
 ## [0.2.0](https://github.com/hexenq/kuroshiro.js/compare/0.1.5...0.2.0) (2018-01-24)

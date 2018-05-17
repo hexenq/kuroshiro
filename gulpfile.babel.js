@@ -57,7 +57,7 @@ gulp.task("build", () => {
             return bundle.write({
                 file: './kuroshiro.js',
                 format: 'umd',
-                name: 'kuroshiro',
+                name: 'Kuroshiro',
                 sourcemap: true
             });
         })

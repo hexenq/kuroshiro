@@ -261,5 +261,3 @@ var Util = {
 Kuroshiro.Util = Util;
 
 export default Kuroshiro;
-
-export { Util };

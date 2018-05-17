@@ -114,8 +114,13 @@ var convert = function(str, options){
 
     var tokens = tokenizer.tokenize(str);
     for(var cr=0;cr<tokens.length;cr++){
-        if(!tokens[cr].reading)
-            tokens[cr].reading = tokens[cr].surface_form;
+        if(!tokens[cr].reading){
+            if(wanakana.isJapanese(tokens[cr].surface_form)){
+                tokens[cr].reading = wanakana.toKatakana(tokens[cr].surface_form);
+            }else{
+                tokens[cr].reading = tokens[cr].surface_form;
+            }            
+        }
     }
 
     if(options.mode === 'normal' || options.mode === 'spaced'){

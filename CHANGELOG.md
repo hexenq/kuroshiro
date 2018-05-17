@@ -1,3 +1,10 @@
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/hexenq/kuroshiro.js/compare/0.2.2...0.2.1) (2018-05-17)
+
+### Bug Fixes
+
+* fix simple character conversion problem ([#28](https://github.com/hexenq/kuroshiro.js/issues/28))
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/hexenq/kuroshiro.js/compare/0.2.0...0.2.1) (2018-01-24)
 

@@ -25,6 +25,7 @@ coverage
 
 # Others
 .DS_Store
+.vscode
 package-lock.json
 *.map
 docs

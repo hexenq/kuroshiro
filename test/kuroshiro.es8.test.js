@@ -1,7 +1,7 @@
+import "babel-polyfill";
 import { expect } from "chai";
 import Kuroshiro from "../kuroshiro";
-import { Util } from "../kuroshiro";
-import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji"; 
+import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
 
 describe("Kuroshiro Test", function () {
     const EXAMPLE_TEXT = "感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！";
@@ -11,13 +11,13 @@ describe("Kuroshiro Test", function () {
 
     var kuroshiro;
 
-    before(function(done){
+    before(async function(){
         kuroshiro = new Kuroshiro();
-        kuroshiro.init(new KuromojiAnalyzer(), done);
+        await kuroshiro.init(new KuromojiAnalyzer());
     });
     it("Kanji Character Recognition", function () {
         var ori = '公';
-        var result = Util.isKanji(ori);
+        var result = Kuroshiro.Util.isKanji(ori);
         expect(result).to.be.true;
     });
     it("Kanji-mixed String Recognition", function () {

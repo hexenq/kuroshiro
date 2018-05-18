@@ -28,19 +28,17 @@ class Kuroshiro {
      * @param {Analyzer} analyzer Morphological analyzer
      * @param {function} [callback] Callback after initiating analyzer
      */
-    init(analyzer, callback) {
+    async init(analyzer) {
         let self = this;
         if (self._analyzer == null) {
-            analyzer.init(function (err) {
-                if (err) {
-                    return callback(err);
-                } else {
-                    self._analyzer = analyzer;
-                    return callback();
-                }
-            });
+            try {
+                await analyzer.init();
+                self._analyzer = analyzer;
+            } catch (err) {
+                throw err;
+            }
         } else {
-            callback(new Error("Kuroshiro has already been initialized."));
+            throw new Error("Kuroshiro has already been initialized.");
         }
     }
 

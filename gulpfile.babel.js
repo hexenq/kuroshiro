@@ -8,9 +8,8 @@ import istanbul from "gulp-istanbul";
 import webserver from "gulp-webserver";
 import jsdoc from "gulp-jsdoc3";
 import babel from "rollup-plugin-babel";
-import babelrc from "babelrc-rollup";
 import { rollup } from "rollup";
-import uglify from 'rollup-plugin-uglify';
+import { uglify } from 'rollup-plugin-uglify';
 
 import source from "vinyl-source-stream";
 import buffer from "vinyl-buffer";
@@ -49,14 +48,41 @@ gulp.task("build", () => {
     return rollup({
         input: './src/index.js',
         plugins: [
-            babel(babelrc()),
+            babel({
+                exclude: 'node_modules/**',
+                babelrc: false,
+                presets: [
+                    ["env",
+                        {
+                            "targets": {
+                                "node": "6",
+                                "browsers": [
+                                    ">0.25%",
+                                    "not ie 11",
+                                    "not op_mini all"
+                                ]
+                            },
+                            "modules": false
+                        }
+                    ]
+                ],
+                plugins: [
+                    'external-helpers', 
+                    ["transform-runtime", {
+                        "helpers": false,
+                        "polyfill": false,
+                        "regenerator": true,
+                        "moduleName": "babel-runtime"
+                    }]
+                ]
+            }),
             uglify()
         ]
     })
         .then(bundle => {
             return bundle.write({
                 file: './kuroshiro.js',
-                format: 'umd',
+                format: 'cjs',
                 name: 'Kuroshiro',
                 sourcemap: true
             });

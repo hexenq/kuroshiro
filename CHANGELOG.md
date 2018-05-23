@@ -1,3 +1,10 @@
+<a name="0.2.4"></a>
+## [0.2.4](https://github.com/hexenq/kuroshiro.js/compare/0.2.3...0.2.4) (2018-05-23)
+
+### Bug Fixes
+
+* fix misparing when kana is between kanji ([#31](https://github.com/hexenq/kuroshiro.js/issues/31))
+
 <a name="0.2.3"></a>
 ## [0.2.3](https://github.com/hexenq/kuroshiro.js/compare/0.2.2...0.2.3) (2018-05-17)
 

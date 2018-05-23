@@ -9261,7 +9261,7 @@ var convert = function(str, options){
                         if(isKanji(tokens[i].surface_form[c])){
                             if(!isLastTokenKanji){   // ignore successive kanji tokens (#10)
                                 isLastTokenKanji = true;
-                                pattern += '(.*?)';
+                                pattern += '(.*)';   // use greedy pattern (#31)
                                 subs.push(tokens[i].surface_form[c]);
                             }else{
                                 subs[subs.length-1] += tokens[i].surface_form[c];

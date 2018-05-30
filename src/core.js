@@ -5,6 +5,7 @@ import {
     hasKanji,
     isHiragana,
     isKatakana,
+    isKana,
     isKanji,
     toRawHiragana,
     toRawKatakana,
@@ -17,6 +18,9 @@ import {
  * @class Kuroshiro
  */
 class Kuroshiro {
+    /**
+     * Constructor
+     */
     constructor() {
         this._analyzer = null;
     }
@@ -25,19 +29,20 @@ class Kuroshiro {
      * Initiate Kuroshiro
      * @memberOf Kuroshiro
      * @instance
-     * @param {Analyzer} analyzer Morphological analyzer
-     * @param {function} [callback] Callback after initiating analyzer
+     * @returns {Promise} Promise object represents the result of initialization
      */
     async init(analyzer) {
-        let self = this;
+        const self = this;
         if (self._analyzer == null) {
             try {
                 await analyzer.init();
                 self._analyzer = analyzer;
-            } catch (err) {
+            }
+            catch (err) {
                 throw err;
             }
-        } else {
+        }
+        else {
             throw new Error("Kuroshiro has already been initialized.");
         }
     }
@@ -51,209 +56,233 @@ class Kuroshiro {
      * @param {string} [options.mode='normal'] Convert mode ['normal'|'spaced'|'okurigana'|'furigana']
      * @param {string} [options.delimiter_start='('] Delimiter(Start)
      * @param {string} [options.delimiter_end=')'] Delimiter(End)
-     * @param {function} [callback] Callback after conversion
+     * @returns {Promise} Promise object represents the result of conversion
      */
-    convert(str, options, callback) {
+    async convert(str, options) {
         options = options || {};
-        options.to = options.to || 'hiragana';
-        options.mode = options.mode || 'normal';
-        //options.convertall = options.convertall || false;
-        options.delimiter_start = options.delimiter_start || '(';
-        options.delimiter_end = options.delimiter_end || ')';
-        str = str || '';
+        options.to = options.to || "hiragana";
+        options.mode = options.mode || "normal";
+        // options.convertall = options.convertall || false;
+        options.delimiter_start = options.delimiter_start || "(";
+        options.delimiter_end = options.delimiter_end || ")";
+        str = str || "";
 
-        this._analyzer.parse(str, function (err, tokens) {
-            if (err) return callback(err);
-
-            for (var cr = 0; cr < tokens.length; cr++) {
-                if (!tokens[cr].reading)
+        const tokens = await this._analyzer.parse(str);
+        for (let cr = 0; cr < tokens.length; cr++) {
+            if (!tokens[cr].reading) {
+                if (isKana(tokens[cr].surface_form)) {
+                    tokens[cr].reading = toRawKatakana(tokens[cr].surface_form);
+                }
+                else {
                     tokens[cr].reading = tokens[cr].surface_form;
-            }
-
-            if (options.mode === 'normal' || options.mode === 'spaced') {
-                switch (options.to) {
-                    case 'katakana':
-                        if (options.mode === 'normal')
-                            return callback(null, splitObjArray(tokens, 'reading'));
-                        else
-                            return callback(null, splitObjArray(tokens, 'reading', ' '));
-                        break;
-                    case 'romaji':
-                        if (options.mode === 'normal')
-                            return callback(null, toRawRomaji(splitObjArray(tokens, 'reading')));
-                        else
-                            return callback(null, toRawRomaji(splitObjArray(tokens, 'reading', ' ')));
-                        break;
-                    case 'hiragana':
-                        for (var hi = 0; hi < tokens.length; hi++) {
-                            if (hasKanji(tokens[hi].surface_form)) {
-                                if (!hasKatakana(tokens[hi].surface_form)) {
-                                    tokens[hi].reading = toRawHiragana(tokens[hi].reading);
-                                } else {
-                                    // handle katakana-kanji-mixed tokens
-                                    tokens[hi].reading = toRawHiragana(tokens[hi].reading);
-                                    var tmp = '';
-                                    var hpattern = '';
-                                    for (var hc = 0; hc < tokens[hi].surface_form.length; hc++) {
-                                        if (isKanji(tokens[hi].surface_form[hc])) {
-                                            hpattern += '(.*)';
-                                        } else {
-                                            hpattern += isKatakana(tokens[hi].surface_form[hc]) ? toRawHiragana(tokens[hi].surface_form[hc]) : tokens[hi].surface_form[hc];
-                                        }
-                                    }
-                                    var hreg = new RegExp(hpattern);
-                                    var hmatches = hreg.exec(tokens[hi].reading);
-                                    if (hmatches) {
-                                        var pickKJ = 0;
-                                        for (var hc1 = 0; hc1 < tokens[hi].surface_form.length; hc1++) {
-                                            if (isKanji(tokens[hi].surface_form[hc1])) {
-                                                tmp += hmatches[pickKJ + 1];
-                                                pickKJ++;
-                                            } else {
-                                                tmp += tokens[hi].surface_form[hc1];
-                                            }
-                                        }
-                                        tokens[hi].reading = tmp;
-                                    }
-                                }
-                            } else {
-                                tokens[hi].reading = tokens[hi].surface_form;
-                            }
-                        }
-                        if (options.mode === 'normal')
-                            return callback(null, splitObjArray(tokens, 'reading'));
-                        else
-                            return callback(null, splitObjArray(tokens, 'reading', ' '));
-                        break;
                 }
-            } else if (options.mode === 'okurigana' || options.mode === 'furigana') {
-                var notations = []; //[basic,basic_type[1=kanji,2=hiragana(katakana),3=others],notation]
-                for (var i = 0; i < tokens.length; i++) {
-                    tokens[i].reading = toRawHiragana(tokens[i].reading);
+            }
+        }
 
-                    var strType = getStrType(tokens[i].surface_form);
-                    switch (strType) {
-                        case 0:
-                            notations.push([tokens[i].surface_form, 1, tokens[i].reading]);
-                            break;
-                        case 1:
-                            var pattern = '';
-                            var isLastTokenKanji = false;
-                            var subs = []; // recognize kanjis and group them
-                            for (var c = 0; c < tokens[i].surface_form.length; c++) {
-                                if (isKanji(tokens[i].surface_form[c])) {
-                                    if (!isLastTokenKanji) {   // ignore successive kanji tokens (#10)
-                                        isLastTokenKanji = true;
-                                        pattern += '(.*?)';
-                                        subs.push(tokens[i].surface_form[c]);
-                                    } else {
-                                        subs[subs.length - 1] += tokens[i].surface_form[c];
-                                    }
-                                } else {
-                                    isLastTokenKanji = false;
-                                    subs.push(tokens[i].surface_form[c]);
-                                    pattern += isKatakana(tokens[i].surface_form[c]) ? toRawHiragana(tokens[i].surface_form[c]) : tokens[i].surface_form[c];
-                                }
-                            }
-                            var reg = new RegExp('^' + pattern + '$');
-                            var matches = reg.exec(tokens[i].reading);
-                            if (matches) {
-                                var pickKanji = 1;
-                                for (var c1 = 0; c1 < subs.length; c1++) {
-                                    if (isKanji(subs[c1][0])) {
-                                        notations.push([subs[c1], 1, matches[pickKanji++]]);
-                                    } else {
-                                        notations.push([subs[c1], 2, toRawHiragana(subs[c1])]);
-                                    }
-                                }
-                            } else {
-                                notations.push([tokens[i].surface_form, 1, tokens[i].reading]);
-                            }
-                            break;
-                        case 2:
-                            for (var c2 = 0; c2 < tokens[i].surface_form.length; c2++) {
-                                notations.push([tokens[i].surface_form[c2], 2, tokens[i].reading[c2]]);
-                            }
-                            break;
-                        case 3:
-                            for (var c3 = 0; c3 < tokens[i].surface_form.length; c3++) {
-                                notations.push([tokens[i].surface_form[c3], 3, tokens[i].surface_form[c3]]);
-                            }
-                            break;
+        if (options.mode === "normal" || options.mode === "spaced") {
+            switch (options.to) {
+                case "katakana":
+                    if (options.mode === "normal") {
+                        return splitObjArray(tokens, "reading");
                     }
-                }
-                var result = '';
-                switch (options.to) {
-                    case 'katakana':
-                        if (options.mode === 'okurigana') {
-                            for (var n0 = 0; n0 < notations.length; n0++) {
-                                if (notations[n0][1] !== 1) {
-                                    result += notations[n0][0];
-                                } else {
-                                    result += notations[n0][0] + options.delimiter_start + toRawKatakana(notations[n0][2]) + options.delimiter_end;
+                    return splitObjArray(tokens, "reading", " ");
+                case "romaji":
+                    if (options.mode === "normal") {
+                        return toRawRomaji(splitObjArray(tokens, "reading"));
+                    }
+                    return toRawRomaji(splitObjArray(tokens, "reading", " "));
+                case "hiragana":
+                    for (let hi = 0; hi < tokens.length; hi++) {
+                        if (hasKanji(tokens[hi].surface_form)) {
+                            if (!hasKatakana(tokens[hi].surface_form)) {
+                                tokens[hi].reading = toRawHiragana(tokens[hi].reading);
+                            }
+                            else {
+                                // handle katakana-kanji-mixed tokens
+                                tokens[hi].reading = toRawHiragana(tokens[hi].reading);
+                                let tmp = "";
+                                let hpattern = "";
+                                for (let hc = 0; hc < tokens[hi].surface_form.length; hc++) {
+                                    if (isKanji(tokens[hi].surface_form[hc])) {
+                                        hpattern += "(.*)";
+                                    }
+                                    else {
+                                        hpattern += isKatakana(tokens[hi].surface_form[hc]) ? toRawHiragana(tokens[hi].surface_form[hc]) : tokens[hi].surface_form[hc];
+                                    }
                                 }
-                            }
-                        } else { //furigana
-                            for (var n1 = 0; n1 < notations.length; n1++) {
-                                if (notations[n1][1] !== 1) {
-                                    result += notations[n1][0];
-                                } else {
-                                    result += "<ruby>" + notations[n1][0] + "<rp>" + options.delimiter_start + "</rp><rt>" + toRawKatakana(notations[n1][2]) + "</rt><rp>" + options.delimiter_end + "</rp></ruby>";
-                                }
-                            }
-                        }
-                        return callback(null, result);
-                    case 'romaji':
-                        if (options.mode === 'okurigana')
-                            for (var n2 = 0; n2 < notations.length; n2++) {
-                                if (notations[n2][1] !== 1) {
-                                    result += notations[n2][0];
-                                } else {
-                                    result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][2]) + options.delimiter_end;
-                                }
-                            }
-                        else { //furigana
-                            result += "<ruby>";
-                            for (var n3 = 0; n3 < notations.length; n3++) {
-                                result += notations[n3][0] + "<rp>" + options.delimiter_start + "</rp><rt>" + toRawRomaji(notations[n3][2]) + "</rt><rp>" + options.delimiter_end + "</rp>";
-                            }
-                            result += "</ruby>";
-                        }
-                        return callback(null, result);
-                    case 'hiragana':
-                        if (options.mode === 'okurigana') {
-                            for (var n4 = 0; n4 < notations.length; n4++) {
-                                if (notations[n4][1] !== 1) {
-                                    result += notations[n4][0];
-                                } else {
-                                    result += notations[n4][0] + options.delimiter_start + notations[n4][2] + options.delimiter_end;
-                                }
-                            }
-                        } else { //furigana
-                            for (var n5 = 0; n5 < notations.length; n5++) {
-                                if (notations[n5][1] !== 1) {
-                                    result += notations[n5][0];
-                                } else {
-                                    result += "<ruby>" + notations[n5][0] + "<rp>" + options.delimiter_start + "</rp><rt>" + notations[n5][2] + "</rt><rp>" + options.delimiter_end + "</rp></ruby>";
+                                const hreg = new RegExp(hpattern);
+                                const hmatches = hreg.exec(tokens[hi].reading);
+                                if (hmatches) {
+                                    let pickKJ = 0;
+                                    for (let hc1 = 0; hc1 < tokens[hi].surface_form.length; hc1++) {
+                                        if (isKanji(tokens[hi].surface_form[hc1])) {
+                                            tmp += hmatches[pickKJ + 1];
+                                            pickKJ++;
+                                        }
+                                        else {
+                                            tmp += tokens[hi].surface_form[hc1];
+                                        }
+                                    }
+                                    tokens[hi].reading = tmp;
                                 }
                             }
                         }
-                        return callback(null, result);
-                }
-            } else {
-                return callback(new Error('No such mode...'));
+                        else {
+                            tokens[hi].reading = tokens[hi].surface_form;
+                        }
+                    }
+                    if (options.mode === "normal") {
+                        return splitObjArray(tokens, "reading");
+                    }
+                    return splitObjArray(tokens, "reading", " ");
+                default:
+                    throw new Error("Unknown option.to param");
             }
-        });
+        }
+        else if (options.mode === "okurigana" || options.mode === "furigana") {
+            const notations = []; // [basic,basic_type[1=kanji,2=hiragana(katakana),3=others],notation]
+            for (let i = 0; i < tokens.length; i++) {
+                tokens[i].reading = toRawHiragana(tokens[i].reading);
+
+                const strType = getStrType(tokens[i].surface_form);
+                switch (strType) {
+                    case 0:
+                        notations.push([tokens[i].surface_form, 1, tokens[i].reading]);
+                        break;
+                    case 1:
+                        let pattern = "";
+                        let isLastTokenKanji = false;
+                        const subs = []; // recognize kanjis and group them
+                        for (let c = 0; c < tokens[i].surface_form.length; c++) {
+                            if (isKanji(tokens[i].surface_form[c])) {
+                                if (!isLastTokenKanji) { // ignore successive kanji tokens (#10)
+                                    isLastTokenKanji = true;
+                                    pattern += "(.*)";
+                                    subs.push(tokens[i].surface_form[c]);
+                                }
+                                else {
+                                    subs[subs.length - 1] += tokens[i].surface_form[c];
+                                }
+                            }
+                            else {
+                                isLastTokenKanji = false;
+                                subs.push(tokens[i].surface_form[c]);
+                                pattern += isKatakana(tokens[i].surface_form[c]) ? toRawHiragana(tokens[i].surface_form[c]) : tokens[i].surface_form[c];
+                            }
+                        }
+                        const reg = new RegExp(`^${pattern}$`);
+                        const matches = reg.exec(tokens[i].reading);
+                        if (matches) {
+                            let pickKanji = 1;
+                            for (let c1 = 0; c1 < subs.length; c1++) {
+                                if (isKanji(subs[c1][0])) {
+                                    notations.push([subs[c1], 1, matches[pickKanji++]]);
+                                }
+                                else {
+                                    notations.push([subs[c1], 2, toRawHiragana(subs[c1])]);
+                                }
+                            }
+                        }
+                        else {
+                            notations.push([tokens[i].surface_form, 1, tokens[i].reading]);
+                        }
+                        break;
+                    case 2:
+                        for (let c2 = 0; c2 < tokens[i].surface_form.length; c2++) {
+                            notations.push([tokens[i].surface_form[c2], 2, tokens[i].reading[c2]]);
+                        }
+                        break;
+                    case 3:
+                        for (let c3 = 0; c3 < tokens[i].surface_form.length; c3++) {
+                            notations.push([tokens[i].surface_form[c3], 3, tokens[i].surface_form[c3]]);
+                        }
+                        break;
+                    default:
+                        throw new Error("Unknown strType");
+                }
+            }
+            let result = "";
+            switch (options.to) {
+                case "katakana":
+                    if (options.mode === "okurigana") {
+                        for (let n0 = 0; n0 < notations.length; n0++) {
+                            if (notations[n0][1] !== 1) {
+                                result += notations[n0][0];
+                            }
+                            else {
+                                result += notations[n0][0] + options.delimiter_start + toRawKatakana(notations[n0][2]) + options.delimiter_end;
+                            }
+                        }
+                    }
+                    else { // furigana
+                        for (let n1 = 0; n1 < notations.length; n1++) {
+                            if (notations[n1][1] !== 1) {
+                                result += notations[n1][0];
+                            }
+                            else {
+                                result += `<ruby>${notations[n1][0]}<rp>${options.delimiter_start}</rp><rt>${toRawKatakana(notations[n1][2])}</rt><rp>${options.delimiter_end}</rp></ruby>`;
+                            }
+                        }
+                    }
+                    return result;
+                case "romaji":
+                    if (options.mode === "okurigana") {
+                        for (let n2 = 0; n2 < notations.length; n2++) {
+                            if (notations[n2][1] !== 1) {
+                                result += notations[n2][0];
+                            }
+                            else {
+                                result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][2]) + options.delimiter_end;
+                            }
+                        }
+                    }
+                    else { // furigana
+                        result += "<ruby>";
+                        for (let n3 = 0; n3 < notations.length; n3++) {
+                            result += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][2])}</rt><rp>${options.delimiter_end}</rp>`;
+                        }
+                        result += "</ruby>";
+                    }
+                    return result;
+                case "hiragana":
+                    if (options.mode === "okurigana") {
+                        for (let n4 = 0; n4 < notations.length; n4++) {
+                            if (notations[n4][1] !== 1) {
+                                result += notations[n4][0];
+                            }
+                            else {
+                                result += notations[n4][0] + options.delimiter_start + notations[n4][2] + options.delimiter_end;
+                            }
+                        }
+                    }
+                    else { // furigana
+                        for (let n5 = 0; n5 < notations.length; n5++) {
+                            if (notations[n5][1] !== 1) {
+                                result += notations[n5][0];
+                            }
+                            else {
+                                result += `<ruby>${notations[n5][0]}<rp>${options.delimiter_start}</rp><rt>${notations[n5][2]}</rt><rp>${options.delimiter_end}</rp></ruby>`;
+                            }
+                        }
+                    }
+                    return result;
+                default:
+                    throw new Error("Unknown option.to param");
+            }
+        }
+        else {
+            throw new Error("No such mode...");
+        }
     }
 }
 
-var Util = {
-    hasHiragana: hasHiragana,
-    hasKatakana: hasKatakana,
-    hasKanji: hasKanji,
-    isHiragana: isHiragana,
-    isKatakana: isKatakana,
-    isKanji: isKanji
+const Util = {
+    hasHiragana,
+    hasKatakana,
+    hasKanji,
+    isHiragana,
+    isKatakana,
+    isKanji
 };
 
 Kuroshiro.Util = Util;

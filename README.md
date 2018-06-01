@@ -8,12 +8,22 @@
 [![Bower version](https://badge.fury.io/bo/kuroshiro.svg)](https://badge.fury.io/bo/kuroshiro)
 
 kuroshiro.js is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji
-with furigana and okurigana modes supported. This project is inspired by kuromoji and wanakana.
+with furigana and okurigana modes supported.
 
 *Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
 
+**⚠ Attention: The `1.x` version of `kuroshiro` is still in alpha and some improvements could be made. For production, it's recommended to use 0.2.x version.**
+
 ## Demo
 You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
+
+## Attention 
+
+This project is still in early alpha and a lot of improvements could be made.
+
+Also please note that we will not be responsible for any devious usage of the app. In its current state this project is more a technical demo of how to stream videos using WebRTC and the Media Source Extensions API than a really usable and full-featured software.
+
+With that in mind, if you want to make a PR to improve the app you are very welcome!
 
 ## Usage
 ### Node.js
@@ -57,6 +67,31 @@ kuroshiro.init(function (err) {
     // kuroshiro is ready
     var result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
     console.log(result);
+});
+```
+
+### Using a module bundler (e.g. Webpack)
+Install with npm package manager:
+```sh
+$ npm install kuroshiro
+```
+
+Look for the dictionaries (12 files) in `node_modules/kuromoji/dict` and move them to a folder that is not processed by Webpack.
+```js
+import kuroshiro from 'kuroshiro'
+
+kuroshiro.init(
+  {
+    dicPath: 'path/to/folder/not/processed/by/Wepback'
+  },
+ (err) => {
+    if(err){
+       console.error(err);
+    } else {
+       // kuroshiro is ready
+        const result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
+        console.log(result);
+    }
 });
 ```
 
@@ -151,6 +186,10 @@ Check if input has katakana.
 
 ### hasKanji(input)
 Check if input has kanji.
+
+## Inspired By
+- kuromoji
+- wanakana
 
 ## License
 MIT

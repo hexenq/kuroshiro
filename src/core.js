@@ -2,6 +2,7 @@ import {
     getStrType,
     hasHiragana,
     hasKatakana,
+    hasKana,
     hasKanji,
     isHiragana,
     isKatakana,
@@ -279,9 +280,11 @@ class Kuroshiro {
 const Util = {
     hasHiragana,
     hasKatakana,
+    hasKana,
     hasKanji,
     isHiragana,
     isKatakana,
+    isKana,
     isKanji
 };
 

@@ -1,29 +1,20 @@
-![kuroshiro.js](http://hexenq.com/kuroshiro/kuroshiro.png)
+![kuroshiro](http://hexenq.com/kuroshiro/kuroshiro.png)
 
-# kuroshiro.js
+# kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.js.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro.js)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro.js/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro.js)
+[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
+[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
 [![Bower version](https://badge.fury.io/bo/kuroshiro.svg)](https://badge.fury.io/bo/kuroshiro)
 
-kuroshiro.js is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji
-with furigana and okurigana modes supported.
+kuroshiro is a japanese language utility mainly for converting japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.
 
-*Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
+*Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
 
 **⚠ Attention: The `1.x` version of `kuroshiro` is still in alpha and some improvements could be made. For production, it's recommended to use 0.2.x version.**
 
 ## Demo
 You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
-
-## Attention 
-
-This project is still in early alpha and a lot of improvements could be made.
-
-Also please note that we will not be responsible for any devious usage of the app. In its current state this project is more a technical demo of how to stream videos using WebRTC and the Media Source Extensions API than a really usable and full-featured software.
-
-With that in mind, if you want to make a PR to improve the app you are very welcome!
 
 ## Usage
 ### Node.js
@@ -186,6 +177,9 @@ Check if input has katakana.
 
 ### hasKanji(input)
 Check if input has kanji.
+
+## Contributing
+Please check [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Inspired By
 - kuromoji

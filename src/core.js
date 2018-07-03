@@ -1,13 +1,15 @@
 import {
     getStrType,
-    hasHiragana,
-    hasKatakana,
-    hasKana,
-    hasKanji,
     isHiragana,
     isKatakana,
     isKana,
     isKanji,
+    isJapanese,
+    hasHiragana,
+    hasKatakana,
+    hasKana,
+    hasKanji,
+    hasJapanese,
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,
@@ -70,13 +72,18 @@ class Kuroshiro {
 
         const tokens = await this._analyzer.parse(str);
         for (let cr = 0; cr < tokens.length; cr++) {
-            if (!tokens[cr].reading) {
-                if (isKana(tokens[cr].surface_form)) {
-                    tokens[cr].reading = toRawKatakana(tokens[cr].surface_form);
+            if (hasJapanese(tokens[cr].surface_form)) {
+                if (!tokens[cr].reading) {
+                    if (tokens[cr].surface_form.split().every(isKana)) {
+                        tokens[cr].reading = toRawKatakana(tokens[cr].surface_form);
+                    }
+                    else {
+                        tokens[cr].reading = tokens[cr].surface_form;
+                    }
                 }
-                else {
-                    tokens[cr].reading = tokens[cr].surface_form;
-                }
+            }
+            else {
+                tokens[cr].reading = tokens[cr].surface_form;
             }
         }
 
@@ -278,14 +285,16 @@ class Kuroshiro {
 }
 
 const Util = {
+    isHiragana,
+    isKatakana,
+    isKana,
+    isKanji,
+    isJapanese,
     hasHiragana,
     hasKatakana,
     hasKana,
     hasKanji,
-    isHiragana,
-    isKatakana,
-    isKana,
-    isKanji
+    hasJapanese
 };
 
 Kuroshiro.Util = Util;

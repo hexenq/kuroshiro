@@ -47,6 +47,16 @@ const isKanji = function (ch) {
 };
 
 /**
+ * Check if given char is a Japanese
+ *
+ * @param {string} ch Given char
+ * @return {boolean} if given char is a Japanese
+ */
+const isJapanese = function (ch) {
+    return isKana(ch) || isKanji(ch);
+};
+
+/**
  * Check if given string has hiragana
  *
  * @param {string} str Given string
@@ -94,6 +104,19 @@ const hasKana = function (str) {
 const hasKanji = function (str) {
     for (let i = 0; i < str.length; i++) {
         if (isKanji(str[i])) return true;
+    }
+    return false;
+};
+
+/**
+ * Check if given string has Japanese
+ *
+ * @param {string} str Given string
+ * @return {boolean} if given string has Japanese
+ */
+const hasJapanese = function (str) {
+    for (let i = 0; i < str.length; i++) {
+        if (isJapanese(str[i])) return true;
     }
     return false;
 };
@@ -488,10 +511,12 @@ export {
     isKatakana,
     isKana,
     isKanji,
+    isJapanese,
     hasHiragana,
     hasKatakana,
     hasKana,
     hasKanji,
+    hasJapanese,
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,

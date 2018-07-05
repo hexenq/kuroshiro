@@ -81,6 +81,9 @@ class Kuroshiro {
                         tokens[cr].reading = tokens[cr].surface_form;
                     }
                 }
+                else if (hasHiragana(tokens[cr].reading)) {
+                    tokens[cr].reading = toRawKatakana(tokens[cr].reading);
+                }
             }
             else {
                 tokens[cr].reading = tokens[cr].surface_form;

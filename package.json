@@ -1,6 +1,6 @@
 {
     "name": "kuroshiro",
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-rc.1",
     "description": "kuroshiro is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
     "main": "lib/index.js",
     "module": "src/index.js",
@@ -14,8 +14,8 @@
         "clean": "rimraf lib dist",
         "build": "npm run build:cjs && npm run build:umd && npm run build:umd:min",
         "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
-        "build:umd": "cross-env BABEL_ENV=umd NODE_ENV=development browserify src/index.js -s Kuroshiro -o dist/Kuroshiro.js -t [ babelify ]",
-        "build:umd:min": "cross-env BABEL_ENV=umd NODE_ENV=production browserify src/index.js -s Kuroshiro -g uglifyify -o dist/Kuroshiro.min.js -t [ babelify ]"
+        "build:umd": "cross-env BABEL_ENV=umd NODE_ENV=development browserify src/index.js -s Kuroshiro -o dist/kuroshiro.js -t [ babelify ]",
+        "build:umd:min": "cross-env BABEL_ENV=umd NODE_ENV=production browserify src/index.js -s Kuroshiro -g uglifyify -o dist/kuroshiro.min.js -t [ babelify ]"
     },
     "repository": {
         "type": "git",

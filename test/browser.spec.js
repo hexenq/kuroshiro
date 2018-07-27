@@ -13,7 +13,7 @@ describe("Kuroshiro Browser Test", () => {
     beforeAll(async () => {
         kuroshiro = new Kuroshiro();
         await kuroshiro.init(new KuromojiAnalyzer({
-            dicPath: "node_modules/kuroshiro-analyzer-kuromoji/node_modules/kuromoji/dict/" // TODO fix dicPath
+            dictPath: "node_modules/kuroshiro-analyzer-kuromoji/node_modules/kuromoji/dict/" // TODO fix dictPath
         }));
     });
     it("Util Test", () => {

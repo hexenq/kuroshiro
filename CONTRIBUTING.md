@@ -1,12 +1,14 @@
 # Contributing to Kuroshiro
-We love your input! We want to make contributing to this project as easy and transparent as possible, whether it's:
+All kinds of contributions are welcome, whether it's:
 
 - Reporting a bug
 - Discussing the current state of the code
 - Submitting a fix
+- Submitting new analyzer plugins or fixes of them
 - Proposing new features
+- Help translating the documents
 
-## Code organization
+## Code Organization
 
 | Files | Description |
 |---|---|
@@ -23,7 +25,7 @@ To contribute, fork the library and install dependencies. You need
 [nvm](https://github.com/creationix/nvm)
 
 ```bash
-git clone https://github.com/hexenq/kuroshiro
+git clone https://github.com/<your-username>/kuroshiro
 npm install
 npm run test
 ```
@@ -53,8 +55,8 @@ npm run test
 2. If you cloned a while ago, get the latest changes from upstream:
 
    ```bash
-   git checkout <dev-branch>
-   git pull upstream <dev-branch>
+   git checkout <your-dev-branch>
+   git pull upstream dev
    ```
 
 3. Create a new topic branch (off the main project development branch) to
@@ -63,29 +65,34 @@ npm run test
    ```bash
    git checkout -b <topic-branch-name>
    ```
+4. Make sure the tests are robust and passed. And refine the documents if needed.
 
-4. Commit your changes in logical chunks.      Use Git's
+5. Commit your changes in logical chunks.      Use Git's
    [interactive rebase](https://help.github.com/articles/interactive-rebase)
    feature to tidy up your commits before making them public.
 
-5. Locally merge (or rebase) the upstream development branch into your topic branch:
+6. Locally merge (or rebase) the upstream development branch into your topic branch:
 
    ```bash
-   git pull [--rebase] upstream <dev-branch>
+   git pull [--rebase] upstream dev
    ```
 
-6. Push your topic branch up to your fork:
+7. Push your topic branch up to your fork:
 
    ```bash
    git push origin <topic-branch-name>
    ```
 
-7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
+8. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
     with a clear title and description.
 
 ## Code Style
 
-This repository uses eslint to maintain code style and consistency, and to avoid style arguments.
+This repository uses `eslint` to maintain code style and consistency. `airbnb-base` and some additional rules are used as a guideline.
+
+## How to submit new analyzer plugins
+
+There is a sample/seed repository [kuroshiro-analyzer-seed](https://github.com/hexenq/kuroshiro-analyzer-seed) for you. Check it out.
 
 ## License
 

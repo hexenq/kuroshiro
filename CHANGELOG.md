@@ -1,11 +1,11 @@
-<a name="1.0.0-alpha.1"></a>
-## [1.0.0-alpha.1](https://github.com/hexenq/kuroshiro/compare/0.2.4...1.0.0-alpha.1) (2018-06-10)
+<a name="1.0.0-rc.1"></a>
+## [1.0.0-rc.1](https://github.com/hexenq/kuroshiro/compare/0.2.4...1.0.0-rc.1) (2018-07-26)
 
 ### BREAKING CHANGE 
 
 * Seperate morphological analyzer from phonetic notation logic to enable the new feature listed below
 * Embrace ES8/ES2017 to use async/await functions
-* Source code use ES6 Module instead of CommonJS
+* Use ES6 Module instead of CommonJS
 * Refactor project structure
 
 ### Feature
@@ -18,7 +18,9 @@
 
 ### Miscellaneous
 
-* Update README
+* Add CONTRIBUTING.md
+* Add README.jp.md
+* Update documents
 
 <a name="0.2.4"></a>
 ## [0.2.4](https://github.com/hexenq/kuroshiro/compare/0.2.3...0.2.4) (2018-05-23)

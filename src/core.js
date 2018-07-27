@@ -18,11 +18,11 @@ import {
 
 /**
  * Kuroshiro Class
- * @class Kuroshiro
  */
 class Kuroshiro {
     /**
      * Constructor
+     * @constructs Kuroshiro
      */
     constructor() {
         this._analyzer = null;
@@ -52,7 +52,8 @@ class Kuroshiro {
 
     /**
      * Convert given string to target syllabary with options available
-     *
+     * @memberOf Kuroshiro
+     * @instance
      * @param {string} str Given String
      * @param {Object} [options] JSON object which have key-value pairs settings
      * @param {string} [options.to='hiragana'] Target syllabary ['hiragana'|'katakana'|'romaji']

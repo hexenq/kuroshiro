@@ -59,7 +59,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
 
 ### ブラウザ
-`dist/kuroshiro.min.js`を導入して、またはHTMLに:
+`dist/kuroshiro.min.js`を導入し、そしてHTMLに:
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
 ```

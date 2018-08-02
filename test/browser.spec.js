@@ -12,9 +12,7 @@ describe("Kuroshiro Browser Test", () => {
 
     beforeAll(async () => {
         kuroshiro = new Kuroshiro();
-        await kuroshiro.init(new KuromojiAnalyzer({
-            dictPath: "node_modules/kuroshiro-analyzer-kuromoji/node_modules/kuromoji/dict/" // TODO fix dictPath
-        }));
+        await kuroshiro.init(new KuromojiAnalyzer());
     });
     it("Util Test", () => {
         const ori = "公";

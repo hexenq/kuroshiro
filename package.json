@@ -1,7 +1,7 @@
 {
     "name": "kuroshiro",
     "version": "1.0.0-rc.1",
-    "description": "kuroshiro is a japanese language utility mainly for converting Kanji-mixed sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
+    "description": "kuroshiro is a japanese language utility mainly for converting japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
     "main": "lib/index.js",
     "module": "src/index.js",
     "scripts": {
@@ -29,6 +29,7 @@
         "kanji",
         "hiragana",
         "katakana",
+        "kana",
         "romaji",
         "furigana",
         "okurigana",
@@ -61,7 +62,7 @@
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.12.0",
         "jest": "^23.0.1",
-        "kuroshiro-analyzer-kuromoji": "^0.5.0",
+        "kuroshiro-analyzer-kuromoji": "^1.0.0",
         "uglifyify": "^5.0.0"
     }
 }

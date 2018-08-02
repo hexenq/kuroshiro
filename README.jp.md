@@ -5,12 +5,10 @@
 [![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
 [![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
-[![Bower version](https://badge.fury.io/bo/kuroshiro.svg)](https://badge.fury.io/bo/kuroshiro)
-
 
 日本語文をローマ字や仮名なとに変換できるライブラリです。フリガナ・送り仮名の機能も搭載します。
 
-*ほかの言語：[English](README.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md)。*
+*ほかの言語：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md)。*
 
 ## デモ
 オンラインデモは[こちら](http://hexenq.com/kuroshiro/demo/index.html)です。初期化は少し時間がかかります、少々待ちください。

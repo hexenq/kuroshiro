@@ -21,6 +21,7 @@ kuroshiro.js是一款十分方便使用的日文转换注音工具，主要针�
     
 ## 解析器插件
 *在开始工作之前，请先确认各插件的环境兼容性*
+
 | 解析器 | Node.js支持 | 浏览器支持 | 仓库 | 开发者 |
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|

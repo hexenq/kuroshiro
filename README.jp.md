@@ -20,6 +20,7 @@
     
 ## 形態素解析器プラグイン
 *始まる前にプラグインの適合性をチェックしてください*
+
 | 解析器 | Node.js サポート | ブラウザ サポート | レポジトリ | 開発者 |
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|

@@ -20,6 +20,7 @@ You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
     
 ## Ready-made Analyzer Plugins
 *You should check the environment compatibility of each analyzer before you start working with them*
+
 | Analyzer | Node.js Support| Browser Support | Plugin Repo | Developer |
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|

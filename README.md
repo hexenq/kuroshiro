@@ -114,7 +114,7 @@ const kuroshiro = new Kuroshiro();
 
 ### Instance Medthods
 #### init(analyzer)
-Initiate kuroshiro.js with an instance of analyzer. You can make use of the [Ready-made Analyzers](#ready-made-analyzer-plugins) listed above. And please refer to documentation of analyzers for analyzer initialization instructions
+Initiate kuroshiro with an instance of analyzer. You can make use of the [Ready-made Analyzers](#ready-made-analyzer-plugins) listed above. And please refer to documentation of analyzers for analyzer initialization instructions
 
 __Arguments__
 

@@ -6,7 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
 
-kuroshiro is a japanese language utility mainly for converting japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.
+kuroshiro is a Japanese language utility mainly for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.
 
 *Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
 

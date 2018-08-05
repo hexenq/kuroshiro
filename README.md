@@ -28,7 +28,7 @@ You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
 |Yahoo Web API|✓|✓|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
 
 ## Usage
-### Node.js
+### Node.js (or using a module bundler (e.g. Webpack))
 Install with npm package manager:
 ```sh
 $ npm install kuroshiro
@@ -38,7 +38,7 @@ Load the library:
 
 *Support both ES6 Module `import` and CommonJS `require`*
 ```js
-import * as Kuroshiro from "kuroshiro";
+import Kuroshiro from "kuroshiro";
 ```
 
 Instantiate:
@@ -46,8 +46,14 @@ Instantiate:
 const kuroshiro = new Kuroshiro();
 ```
 
-Initiate kuroshiro with an instance of analyzer:
+Initialize kuroshiro with an instance of analyzer (You could check the [apidoc](#init(analyzer)) for more information):
 ```js
+// For this example, you should npm install and import the kuromoji analyzer first
+import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
+
+// ...
+
+// Initialize
 // Here uses async/await, you could also use Promise
 await kuroshiro.init(new KuromojiAnalyzer());
 ```
@@ -58,9 +64,14 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
     
 ### Browser
-Add `kuroshiro.min.js` in `dist` to your frontend project, and in your HTML:
+Add `dist/kuroshiro.min.js` to your frontend project (you may first build it from source with `npm run build` after `npm install`), and in your HTML:
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
+```
+
+For this example, you should also include `kuroshiro-analyzer-kuromoji.min.js` which you could get from [kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)
+```html
+<script src="url/to/kuroshiro-analyzer-kuromoji.min.js"></script>
 ```
 
 Instantiate:
@@ -68,40 +79,15 @@ Instantiate:
 var kuroshiro = new Kuroshiro();
 ```
 
-Initiate kuroshiro with an instance of analyzer, then convert what you want:
+Initialize kuroshiro with an instance of analyzer, then convert what you want:
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
     .then(function(result){
         console.log(result);
     })
-```
-
-### Using a module bundler (e.g. Webpack)
-Install with npm package manager:
-```sh
-$ npm install kuroshiro
-```
-
-Look for the dictionaries (12 files) in `node_modules/kuromoji/dict` and move them to a folder that is not processed by Webpack.
-```js
-import kuroshiro from 'kuroshiro'
-
-kuroshiro.init(
-  {
-    dicPath: 'path/to/folder/not/processed/by/Wepback'
-  },
- (err) => {
-    if(err){
-       console.error(err);
-    } else {
-       // kuroshiro is ready
-        const result = kuroshiro.convert('感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');    
-        console.log(result);
-    }
-});
 ```
 
 ## API
@@ -114,7 +100,7 @@ const kuroshiro = new Kuroshiro();
 
 ### Instance Medthods
 #### init(analyzer)
-Initiate kuroshiro with an instance of analyzer. You can make use of the [Ready-made Analyzers](#ready-made-analyzer-plugins) listed above. And please refer to documentation of analyzers for analyzer initialization instructions
+Initialize kuroshiro with an instance of analyzer. You should first import an analyzer and initialize it. You can make use of the [Ready-made Analyzers](#ready-made-analyzer-plugins) listed above. And please refer to documentation of analyzers for analyzer initialization instructions
 
 __Arguments__
 

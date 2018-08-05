@@ -1,3 +1,10 @@
+<a name="1.0.0-rc.2"></a>
+## [1.0.0-rc.2](https://github.com/hexenq/kuroshiro/compare/1.0.0-rc.1...1.0.0-rc.2) (2018-08-05)
+
+### Miscellaneous
+
+* Update docs
+
 <a name="1.0.0-rc.1"></a>
 ## [1.0.0-rc.1](https://github.com/hexenq/kuroshiro/compare/0.2.4...1.0.0-rc.1) (2018-07-26)
 

@@ -29,7 +29,7 @@ kuroshiro是一款十分方便使用的日文轉換注音工具，主要針對�
 |Yahoo Web API|✓|✓|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
 
 ## 如何使用
-### Node.js
+### Node.js (或使用Webpack等打包工具時)
 首先使用npm包管理器進行安裝:
 ```sh
 $ npm install kuroshiro
@@ -39,7 +39,7 @@ $ npm install kuroshiro
 
 *同時支持ES6 Module `import` 和 CommonJS `require`*
 ```js
-import * as Kuroshiro from "kuroshiro";
+import Kuroshiro from "kuroshiro";
 ```
 
 實例化:
@@ -47,8 +47,14 @@ import * as Kuroshiro from "kuroshiro";
 const kuroshiro = new Kuroshiro();
 ```
 
-使用一個解析器實例來初始化kuroshiro:
+使用一個解析器實例來初始化kuroshiro (請參考[API說明](#init(analyzer))):
 ```js
+// 在這個示例中，首先npm install並import導入kuromoji解析器
+import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
+
+// ...
+
+// 初始化
 // 這裡使用了async/await, 你同樣也可以使用Promise
 await kuroshiro.init(new KuromojiAnalyzer());
 ```
@@ -59,9 +65,14 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
 
 ### 瀏覽器
-將`dist`中的`kuroshiro.min.js`加入到你的工程，並在HTML中加入:
+將`dist`中的`kuroshiro.min.js`加入到你的工程 (你需要先後執行`npm install`和`npm run build`，以把它構建出來)，並在HTML中加入:
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
+```
+
+在這個示例中, 你還需要引入`kuroshiro-analyzer-kuromoji.min.js`。具體獲取方法請參考[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)
+```html
+<script src="url/to/kuroshiro-analyzer-kuromoji.min.js"></script>
 ```
 
 實例化:
@@ -71,7 +82,7 @@ var kuroshiro = new Kuroshiro();
 
 使用一個解析器實例來初始化kuroshiro，然後進行轉換操作:
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
@@ -90,7 +101,7 @@ const kuroshiro = new Kuroshiro();
 
 ### 實例方法
 #### init(analyzer)
-使用一個解析器實例來初始化kuroshiro。你可以使用上面提到的已實現的[解析器插件](#解析器插件)。關於解析器的初始化方法請參照相應解析器的文檔說明。
+使用一個解析器實例來初始化kuroshiro。你需要首先導入並初始化一個解析器。你可以使用上面提到的已實現的[解析器插件](#解析器插件)。關於解析器的初始化方法請參照相應解析器的文檔說明。
 
 __參數__
 

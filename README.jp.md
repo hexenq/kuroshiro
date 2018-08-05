@@ -28,7 +28,7 @@ kuroshiroは日本語文をローマ字や仮名なとに変換できるライ�
 |Yahoo Web API|✓|✓|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
 
 ## 使い方
-### Node.js
+### Node.js (又はWebpackなどのモジュールバンドラを使ってる時)
 npmでインストール:
 ```sh
 $ npm install kuroshiro
@@ -38,7 +38,7 @@ kuroshiroをロードします:
 
 *ES6 Module `import` と CommonJS `require`、どちらでもOK*
 ```js
-import * as Kuroshiro from "kuroshiro";
+import Kuroshiro from "kuroshiro";
 ```
 
 インスタンス化します:
@@ -46,9 +46,15 @@ import * as Kuroshiro from "kuroshiro";
 const kuroshiro = new Kuroshiro();
 ```
 
-形態素解析器のインスタンスを引数にしてkuroshiroを初期化する:
+形態素解析器のインスタンスを引数にしてkuroshiroを初期化する ([API説明](#init(analyzer))を参考にしてください):
 ```js
-// 这里使用了async/await, 你同样也可以使用Promise
+// この例では，まずnpm installとimportを通じてkuromojiの形態素解析器を導入します
+import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
+
+// ...
+
+// 初期化
+// ここでasync/awaitを使ってますが, Promiseも使えます
 await kuroshiro.init(new KuromojiAnalyzer());
 ```
 
@@ -58,9 +64,14 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
 
 ### ブラウザ
-`dist/kuroshiro.min.js`を導入し、そしてHTMLに:
+`dist/kuroshiro.min.js`を導入し (その前に`npm install`と`npm run build`を通じて`kuroshiro.min.js`を生成します)、そしてHTMLに:
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
+```
+
+この例では`kuroshiro-analyzer-kuromoji.min.js`の導入は必要です。詳しくは[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)を参考にしてください
+```html
+<script src="url/to/kuroshiro-analyzer-kuromoji.min.js"></script>
 ```
 
 インスタンス化します:
@@ -70,7 +81,7 @@ var kuroshiro = new Kuroshiro();
 
 形態素解析器のインスタンスを引数にしてkuroshiroを初期化するから，変換を実行します:
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
@@ -89,7 +100,7 @@ const kuroshiro = new Kuroshiro();
 
 ### インスタンス関数
 #### init(analyzer)
-形態素解析器のインスタンスを引数にしてkuroshiroを初期化する。前述の[形態素解析器プラグイン](#形態素解析器プラグイン)を利用できます。形態素解析器の初期化方法は各自のドキュメントを参照してください。
+形態素解析器のインスタンスを引数にしてkuroshiroを初期化する。先に形態素解析器の導入と初期化は必要です。前述の[形態素解析器プラグイン](#形態素解析器プラグイン)を利用できます。形態素解析器の初期化方法は各自のドキュメントを参照してください。
 
 __引数__
 

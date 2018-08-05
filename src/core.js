@@ -29,7 +29,7 @@ class Kuroshiro {
     }
 
     /**
-     * Initiate Kuroshiro
+     * Initialize Kuroshiro
      * @memberOf Kuroshiro
      * @instance
      * @returns {Promise} Promise object represents the result of initialization

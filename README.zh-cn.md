@@ -29,7 +29,7 @@ kuroshiro是一款十分方便使用的日文转换注音工具，主要针对�
 |Yahoo Web API|✓|✓|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
 
 ## 如何使用
-### Node.js
+### Node.js (或使用Webpack等打包工具时)
 首先使用npm包管理器进行安装:
 ```sh
 $ npm install kuroshiro
@@ -39,7 +39,7 @@ $ npm install kuroshiro
 
 *同时支持ES6 Module `import` 和 CommonJS `require`*
 ```js
-import * as Kuroshiro from "kuroshiro";
+import Kuroshiro from "kuroshiro";
 ```
 
 实例化:
@@ -47,8 +47,14 @@ import * as Kuroshiro from "kuroshiro";
 const kuroshiro = new Kuroshiro();
 ```
 
-使用一个解析器实例来初始化kuroshiro:
+使用一个解析器实例来初始化kuroshiro (请参考[API说明](#init(analyzer))):
 ```js
+// 在这个示例中，首先npm install并import导入kuromoji解析器
+import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
+
+// ...
+
+// 初始化
 // 这里使用了async/await, 你同样也可以使用Promise
 await kuroshiro.init(new KuromojiAnalyzer());
 ```
@@ -59,9 +65,14 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
 
 ### 浏览器
-将`dist`中的`kuroshiro.min.js`加入到你的工程，并在HTML中加入:
+将`dist/kuroshiro.min.js`加入到你的工程 (你需要先后执行`npm install`和`npm run build`，以把它构建出来)，并在HTML中加入:
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
+```
+
+在这个示例中, 你还需要引入`kuroshiro-analyzer-kuromoji.min.js`。具体获取方法请参考[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)
+```html
+<script src="url/to/kuroshiro-analyzer-kuromoji.min.js"></script>
 ```
 
 实例化:
@@ -71,7 +82,7 @@ var kuroshiro = new Kuroshiro();
 
 使用一个解析器实例来初始化kuroshiro，然后进行转换操作:
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
@@ -90,7 +101,7 @@ const kuroshiro = new Kuroshiro();
 
 ### 实例方法
 #### init(analyzer)
-使用一个解析器实例来初始化kuroshiro。你可以使用上面提到的已实现的[解析器插件](#解析器插件)。关于解析器的初始化方法请参照相应解析器的文档说明。
+使用一个解析器实例来初始化kuroshiro。你需要首先导入并初始化一个解析器。你可以使用上面提到的已实现的[解析器插件](#解析器插件)。关于解析器的初始化方法请参照相应解析器的文档说明。
 
 __参数__
 

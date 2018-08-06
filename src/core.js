@@ -12,8 +12,7 @@ import {
     hasJapanese,
     toRawHiragana,
     toRawKatakana,
-    toRawRomaji,
-    splitObjArray
+    toRawRomaji
 } from "./util";
 
 /**
@@ -95,14 +94,14 @@ class Kuroshiro {
             switch (options.to) {
                 case "katakana":
                     if (options.mode === "normal") {
-                        return splitObjArray(tokens, "reading");
+                        return tokens.map(token => token.reading).join("");
                     }
-                    return splitObjArray(tokens, "reading", " ");
+                    return tokens.map(token => token.reading).join(" ");
                 case "romaji":
                     if (options.mode === "normal") {
-                        return toRawRomaji(splitObjArray(tokens, "reading"));
+                        return tokens.map(token => toRawRomaji(token.reading)).join("");
                     }
-                    return toRawRomaji(splitObjArray(tokens, "reading", " "));
+                    return tokens.map(token => toRawRomaji(token.reading)).join(" ");
                 case "hiragana":
                     for (let hi = 0; hi < tokens.length; hi++) {
                         if (hasKanji(tokens[hi].surface_form)) {
@@ -144,9 +143,9 @@ class Kuroshiro {
                         }
                     }
                     if (options.mode === "normal") {
-                        return splitObjArray(tokens, "reading");
+                        return tokens.map(token => token.reading).join("");
                     }
-                    return splitObjArray(tokens, "reading", " ");
+                    return tokens.map(token => token.reading).join(" ");
                 default:
                     throw new Error("Unknown option.to param");
             }

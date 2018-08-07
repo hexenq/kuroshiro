@@ -14,7 +14,7 @@ kuroshiro is a Japanese language library for converting Japanese sentence to Hir
 You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
 
 ## Breaking Change in 1.x
-- Seperate morphological analyzer from phonetic notation logic to make it possible that we can use different morphological analyzers (ready-made or customized)
+- Seperate morphological analyzer from phonetic notation logic to make it possible that we can use different morphological analyzers ([ready-made](#ready-made-analyzer-plugins) or [customized](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins))
 - Embrace ES8/ES2017 to use async/await functions
 - Use ES6 Module instead of CommonJS
     

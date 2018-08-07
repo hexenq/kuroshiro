@@ -1,3 +1,14 @@
+<a name="1.0.0"></a>
+## [1.0.0](https://github.com/hexenq/kuroshiro/compare/1.0.0-rc.2...1.0.0) (2018-08-07)
+
+### Bump deps
+
+* Update `kuroshiro-analyzer-kuromoji` to version ^1.1.0
+
+### Miscellaneous
+
+* Update docs
+
 <a name="1.0.0-rc.2"></a>
 ## [1.0.0-rc.2](https://github.com/hexenq/kuroshiro/compare/1.0.0-rc.1...1.0.0-rc.2) (2018-08-05)
 

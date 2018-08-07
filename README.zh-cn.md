@@ -15,7 +15,7 @@ kuroshiro是一款十分方便使用的日文转换注音工具，主要针对�
 你可以在[这里](http://hexenq.com/kuroshiro/demo/index.html)查看在线演示，初始化会有些慢（需要下载字典，16MB左右），请耐心等待。
 
 ## 1.x版本的重大变化
-- 从注音逻辑中分离语素解析器部分，使得我们可以使用不同的语素解析器（预定义的或自定义的）
+- 从注音逻辑中分离语素解析器部分，使得我们可以使用不同的语素解析器（[预定义的](#解析器插件)或[自定义的](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)）
 - 拥抱ES8/ES2017以使用async/await方法
 - 使用ES6 Module取代CommonJS
     

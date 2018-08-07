@@ -1,4 +1,5 @@
 import {
+    ROMANIZATION_SYSTEM,
     getStrType,
     isHiragana,
     isKatakana,
@@ -12,7 +13,10 @@ import {
     hasJapanese,
     toRawHiragana,
     toRawKatakana,
-    toRawRomaji
+    toRawRomaji,
+    kanaToHiragna,
+    kanaToKatakana,
+    kanaToRomaji
 } from "./util";
 
 /**
@@ -54,21 +58,34 @@ class Kuroshiro {
      * @memberOf Kuroshiro
      * @instance
      * @param {string} str Given String
-     * @param {Object} [options] JSON object which have key-value pairs settings
-     * @param {string} [options.to='hiragana'] Target syllabary ['hiragana'|'katakana'|'romaji']
-     * @param {string} [options.mode='normal'] Convert mode ['normal'|'spaced'|'okurigana'|'furigana']
-     * @param {string} [options.delimiter_start='('] Delimiter(Start)
-     * @param {string} [options.delimiter_end=')'] Delimiter(End)
+     * @param {Object} [options] Settings Object
+     * @param {string} [options.to="hiragana"] Target syllabary ["hiragana"|"katakana"|"romaji"]
+     * @param {string} [options.mode="normal"] Convert mode ["normal"|"spaced"|"okurigana"|"furigana"]
+     * @param {string} [options.romajiSystem="hepburn"] Romanization System ["nippon"|"passport"|"hepburn"]
+     * @param {string} [options.delimiter_start="("] Delimiter(Start)
+     * @param {string} [options.delimiter_end=")"] Delimiter(End)
      * @returns {Promise} Promise object represents the result of conversion
      */
     async convert(str, options) {
         options = options || {};
         options.to = options.to || "hiragana";
         options.mode = options.mode || "normal";
-        // options.convertall = options.convertall || false;
+        options.romajiSystem = options.romajiSystem || ROMANIZATION_SYSTEM.HEPBURN;
         options.delimiter_start = options.delimiter_start || "(";
         options.delimiter_end = options.delimiter_end || ")";
         str = str || "";
+
+        if (["hiragana", "katakana", "romaji"].indexOf(options.to) === -1) {
+            throw new Error("Invalid Target Syllabary.");
+        }
+
+        if (["normal", "spaced", "okurigana", "furigana"].indexOf(options.mode) === -1) {
+            throw new Error("Invalid Conversion Mode.");
+        }
+
+        if (Object.values(ROMANIZATION_SYSTEM).indexOf(options.romajiSystem) === -1) {
+            throw new Error("Invalid Romanization System.");
+        }
 
         const tokens = await this._analyzer.parse(str);
         for (let cr = 0; cr < tokens.length; cr++) {
@@ -99,9 +116,9 @@ class Kuroshiro {
                     return tokens.map(token => token.reading).join(" ");
                 case "romaji":
                     if (options.mode === "normal") {
-                        return tokens.map(token => toRawRomaji(token.reading)).join("");
+                        return tokens.map(token => toRawRomaji(token.reading, options.romajiSystem)).join("");
                     }
-                    return tokens.map(token => toRawRomaji(token.reading)).join(" ");
+                    return tokens.map(token => toRawRomaji(token.reading, options.romajiSystem)).join(" ");
                 case "hiragana":
                     for (let hi = 0; hi < tokens.length; hi++) {
                         if (hasKanji(tokens[hi].surface_form)) {
@@ -151,7 +168,7 @@ class Kuroshiro {
             }
         }
         else if (options.mode === "okurigana" || options.mode === "furigana") {
-            const notations = []; // [basic,basic_type[1=kanji,2=hiragana(katakana),3=others],notation]
+            const notations = []; // [basic,basic_type[1=kanji,2=kana,3=others],notation]
             for (let i = 0; i < tokens.length; i++) {
                 tokens[i].reading = toRawHiragana(tokens[i].reading);
 
@@ -243,14 +260,14 @@ class Kuroshiro {
                                 result += notations[n2][0];
                             }
                             else {
-                                result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][2]) + options.delimiter_end;
+                                result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][2], options.romajiSystem) + options.delimiter_end;
                             }
                         }
                     }
                     else { // furigana
                         result += "<ruby>";
                         for (let n3 = 0; n3 < notations.length; n3++) {
-                            result += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][2])}</rt><rp>${options.delimiter_end}</rp>`;
+                            result += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][2], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
                         }
                         result += "</ruby>";
                     }
@@ -278,11 +295,8 @@ class Kuroshiro {
                     }
                     return result;
                 default:
-                    throw new Error("Unknown option.to param");
+                    throw new Error("Invalid Target Syllabary.");
             }
-        }
-        else {
-            throw new Error("No such mode...");
         }
     }
 }
@@ -297,7 +311,10 @@ const Util = {
     hasKatakana,
     hasKana,
     hasKanji,
-    hasJapanese
+    hasJapanese,
+    kanaToHiragna,
+    kanaToKatakana,
+    kanaToRomaji
 };
 
 Kuroshiro.Util = Util;

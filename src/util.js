@@ -1,6 +1,7 @@
 const KATAKANA_HIRAGANA_SHIFT = "\u3041".charCodeAt(0) - "\u30a1".charCodeAt(0);
 const HIRAGANA_KATAKANA_SHIFT = "\u30a1".charCodeAt(0) - "\u3041".charCodeAt(0);
 const ROMANIZATION_SYSTEM = {
+    NIPPON: "nippon",
     PASSPORT: "passport",
     HEPBURN: "hepburn"
 };
@@ -125,6 +126,12 @@ const hasJapanese = function (str) {
     return false;
 };
 
+/**
+ * Convert kana to hiragana
+ *
+ * @param {string} str Given string
+ * @return {string} Hiragana string
+ */
 const toRawHiragana = function (str) {
     return [...str].map((ch) => {
         if (ch > "\u30a0" && ch < "\u30f7") {
@@ -134,6 +141,12 @@ const toRawHiragana = function (str) {
     }).join("");
 };
 
+/**
+ * Convert kana to katakana
+ *
+ * @param {string} str Given string
+ * @return {string} Katakana string
+ */
 const toRawKatakana = function (str) {
     return [...str].map((ch) => {
         if (ch > "\u3040" && ch < "\u3097") {
@@ -154,6 +167,403 @@ const toRawRomaji = function (str, system) {
     system = system || ROMANIZATION_SYSTEM.HEPBURN;
 
     const romajiSystem = {
+        nippon: {
+            // 数字と記号
+            "１": "1",
+            "２": "2",
+            "３": "3",
+            "４": "4",
+            "５": "5",
+            "６": "6",
+            "７": "7",
+            "８": "8",
+            "９": "9",
+            "０": "0",
+            "！": "!",
+            "“": "\"",
+            "”": "\"",
+            "＃": "#",
+            "＄": "$",
+            "％": "%",
+            "＆": "&",
+            "’": "'",
+            "（": "(",
+            "）": ")",
+            "＝": "=",
+            "～": "~",
+            "｜": "|",
+            "＠": "@",
+            "‘": "`",
+            "＋": "+",
+            "＊": "*",
+            "；": ";",
+            "：": ":",
+            "＜": "<",
+            "＞": ">",
+            "、": ",",
+            "。": ".",
+            "／": "/",
+            "？": "?",
+            "＿": "_",
+            "・": "･",
+            "「": "\"",
+            "」": "\"",
+            "｛": "{",
+            "｝": "}",
+            "￥": "\\",
+            "＾": "^",
+
+            // 直音-清音(ア～ノ)
+            あ: "a",
+            い: "i",
+            う: "u",
+            え: "e",
+            お: "o",
+            ア: "a",
+            イ: "i",
+            ウ: "u",
+            エ: "e",
+            オ: "o",
+
+            か: "ka",
+            き: "ki",
+            く: "ku",
+            け: "ke",
+            こ: "ko",
+            カ: "ka",
+            キ: "ki",
+            ク: "ku",
+            ケ: "ke",
+            コ: "ko",
+
+            さ: "sa",
+            し: "si",
+            す: "su",
+            せ: "se",
+            そ: "so",
+            サ: "sa",
+            シ: "si",
+            ス: "su",
+            セ: "se",
+            ソ: "so",
+
+            た: "ta",
+            ち: "ti",
+            つ: "tu",
+            て: "te",
+            と: "to",
+            タ: "ta",
+            チ: "ti",
+            ツ: "tu",
+            テ: "te",
+            ト: "to",
+
+            な: "na",
+            に: "ni",
+            ぬ: "nu",
+            ね: "ne",
+            の: "no",
+            ナ: "na",
+            ニ: "ni",
+            ヌ: "nu",
+            ネ: "ne",
+            ノ: "no",
+
+            // 直音-清音(ハ～ヲ)
+            は: "ha",
+            ひ: "hi",
+            ふ: "hu",
+            へ: "he",
+            ほ: "ho",
+            ハ: "ha",
+            ヒ: "hi",
+            フ: "hu",
+            ヘ: "he",
+            ホ: "ho",
+
+            ま: "ma",
+            み: "mi",
+            む: "mu",
+            め: "me",
+            も: "mo",
+            マ: "ma",
+            ミ: "mi",
+            ム: "mu",
+            メ: "me",
+            モ: "mo",
+
+            や: "ya",
+            ゆ: "yu",
+            よ: "yo",
+            ヤ: "ya",
+            ユ: "yu",
+            ヨ: "yo",
+
+            ら: "ra",
+            り: "ri",
+            る: "ru",
+            れ: "re",
+            ろ: "ro",
+            ラ: "ra",
+            リ: "ri",
+            ル: "ru",
+            レ: "re",
+            ロ: "ro",
+
+            わ: "wa",
+            ゐ: "wi",
+            ゑ: "we",
+            を: "wo",
+            ワ: "wa",
+            ヰ: "wi",
+            ヱ: "we",
+            ヲ: "wo",
+
+            // 直音-濁音(ガ～ボ)、半濁音(パ～ポ)
+            が: "ga",
+            ぎ: "gi",
+            ぐ: "gu",
+            げ: "ge",
+            ご: "go",
+            ガ: "ga",
+            ギ: "gi",
+            グ: "gu",
+            ゲ: "ge",
+            ゴ: "go",
+
+            ざ: "za",
+            じ: "zi",
+            ず: "zu",
+            ぜ: "ze",
+            ぞ: "zo",
+            ザ: "za",
+            ジ: "zi",
+            ズ: "zu",
+            ゼ: "ze",
+            ゾ: "zo",
+
+            だ: "da",
+            ぢ: "di",
+            づ: "du",
+            で: "de",
+            ど: "do",
+            ダ: "da",
+            ヂ: "di",
+            ヅ: "du",
+            デ: "de",
+            ド: "do",
+
+            ば: "ba",
+            び: "bi",
+            ぶ: "bu",
+            べ: "be",
+            ぼ: "bo",
+            バ: "ba",
+            ビ: "bi",
+            ブ: "bu",
+            ベ: "be",
+            ボ: "bo",
+
+            ぱ: "pa",
+            ぴ: "pi",
+            ぷ: "pu",
+            ぺ: "pe",
+            ぽ: "po",
+            パ: "pa",
+            ピ: "pi",
+            プ: "pu",
+            ペ: "pe",
+            ポ: "po",
+
+            // 拗音-清音(キャ～リョ)
+            きゃ: "kya",
+            きゅ: "kyu",
+            きょ: "kyo",
+            しゃ: "sya",
+            しゅ: "syu",
+            しょ: "syo",
+            ちゃ: "tya",
+            ちゅ: "tyu",
+            ちょ: "tyo",
+            にゃ: "nya",
+            にゅ: "nyu",
+            にょ: "nyo",
+            ひゃ: "hya",
+            ひゅ: "hyu",
+            ひょ: "hyo",
+            みゃ: "mya",
+            みゅ: "myu",
+            みょ: "myo",
+            りゃ: "rya",
+            りゅ: "ryu",
+            りょ: "ryo",
+            キャ: "kya",
+            キュ: "kyu",
+            キョ: "kyo",
+            シャ: "sya",
+            シュ: "syu",
+            ショ: "syo",
+            チャ: "tya",
+            チュ: "tyu",
+            チョ: "tyo",
+            ニャ: "nya",
+            ニュ: "nyu",
+            ニョ: "nyo",
+            ヒャ: "hya",
+            ヒュ: "hyu",
+            ヒョ: "hyo",
+            ミャ: "mya",
+            ミュ: "myu",
+            ミョ: "myo",
+            リャ: "rya",
+            リュ: "ryu",
+            リョ: "ryo",
+
+            // 拗音-濁音(ギャ～ビョ)、半濁音(ピャ～ピョ)、合拗音(クヮ、グヮ)
+            ぎゃ: "gya",
+            ぎゅ: "gyu",
+            ぎょ: "gyo",
+            じゃ: "zya",
+            じゅ: "zyu",
+            じょ: "zyo",
+            ぢゃ: "dya",
+            ぢゅ: "dyu",
+            ぢょ: "dyo",
+            びゃ: "bya",
+            びゅ: "byu",
+            びょ: "byo",
+            ぴゃ: "pya",
+            ぴゅ: "pyu",
+            ぴょ: "pyo",
+            くゎ: "kwa",
+            ぐゎ: "gwa",
+            ギャ: "gya",
+            ギュ: "gyu",
+            ギョ: "gyo",
+            ジャ: "zya",
+            ジュ: "zyu",
+            ジョ: "zyo",
+            ヂャ: "dya",
+            ヂュ: "dyu",
+            ヂョ: "dyo",
+            ビャ: "bya",
+            ビュ: "byu",
+            ビョ: "byo",
+            ピャ: "pya",
+            ピュ: "pyu",
+            ピョ: "pyo",
+            クヮ: "kwa",
+            グヮ: "gwa",
+
+            // 小書きの仮名、符号
+            ぁ: "a",
+            ぃ: "i",
+            ぅ: "u",
+            ぇ: "e",
+            ぉ: "o",
+            ゃ: "ya",
+            ゅ: "yu",
+            ょ: "yo",
+            ゎ: "wa",
+            ァ: "a",
+            ィ: "i",
+            ゥ: "u",
+            ェ: "e",
+            ォ: "o",
+            ャ: "ya",
+            ュ: "yu",
+            ョ: "yo",
+            ヮ: "wa",
+            ヵ: "ka",
+            ヶ: "ke",
+            ん: "n",
+            ン: "n",
+            // ー: "",
+            "　": " ",
+
+            // 外来音(イェ～グォ)
+            いぇ: "ye",
+            // うぃ: "",
+            // うぇ: "",
+            // うぉ: "",
+            きぇ: "kye",
+            // くぁ: "",
+            くぃ: "kwi",
+            くぇ: "kwe",
+            くぉ: "kwo",
+            // ぐぁ: "",
+            ぐぃ: "gwi",
+            ぐぇ: "gwe",
+            ぐぉ: "gwo",
+            イェ: "ye",
+            // ウィ: "",
+            // ウェ: "",
+            // ウォ: "",
+            // ヴ: "",
+            // ヴァ: "",
+            // ヴィ: "",
+            // ヴェ: "",
+            // ヴォ: "",
+            // ヴュ: "",
+            // ヴョ: "",
+            キェ: "kya",
+            // クァ: "",
+            クィ: "kwi",
+            クェ: "kwe",
+            クォ: "kwo",
+            // グァ: "",
+            グィ: "gwi",
+            グェ: "gwe",
+            グォ: "gwo",
+
+            // 外来音(シェ～フョ)
+            しぇ: "sye",
+            じぇ: "zye",
+            すぃ: "swi",
+            ずぃ: "zwi",
+            ちぇ: "tye",
+            つぁ: "twa",
+            つぃ: "twi",
+            つぇ: "twe",
+            つぉ: "two",
+            // てぃ: "ti",
+            // てゅ: "tyu",
+            // でぃ: "di",
+            // でゅ: "dyu",
+            // とぅ: "tu",
+            // どぅ: "du",
+            にぇ: "nye",
+            ひぇ: "hye",
+            ふぁ: "hwa",
+            ふぃ: "hwi",
+            ふぇ: "hwe",
+            ふぉ: "hwo",
+            ふゅ: "hwyu",
+            ふょ: "hwyo",
+            シェ: "sye",
+            ジェ: "zye",
+            スィ: "swi",
+            ズィ: "zwi",
+            チェ: "tye",
+            ツァ: "twa",
+            ツィ: "twi",
+            ツェ: "twe",
+            ツォ: "two",
+            // ティ: "ti",
+            // テュ: "tyu",
+            // ディ: "di",
+            // デュ: "dyu",
+            // トゥ: "tu",
+            // ドゥ: "du",
+            ニェ: "nye",
+            ヒェ: "hye",
+            ファ: "hwa",
+            フィ: "hwi",
+            フェ: "hwe",
+            フォ: "hwo",
+            フュ: "hwyu",
+            フョ: "hwyo"
+        },
         passport: {
             // 数字と記号
             "１": "1",
@@ -954,7 +1364,6 @@ const toRawRomaji = function (str, system) {
     const reg_xtsu = /っ|ッ/gm;
 
     let pnt = 0;
-    const max = str.length;
     let ch;
     let r;
     let result = "";
@@ -964,6 +1373,31 @@ const toRawRomaji = function (str, system) {
         str = str.replace(/ー/gm, "");
     }
 
+    // [NIPPON|HEPBURN] 撥音の特殊表記 a、i、u、e、o、y
+    if (system === ROMANIZATION_SYSTEM.NIPPON || system === ROMANIZATION_SYSTEM.HEPBURN) {
+        const reg_hatu = new RegExp(/.(?<=ん|ン)(あ|い|う|え|お|ア|イ|ウ|エ|オ|ぁ|ぃ|ぅ|ぇ|ぉ|ァ|ィ|ゥ|ェ|ォ|や|ゆ|よ|ヤ|ユ|ヨ|ゃ|ゅ|ょ|ャ|ュ|ョ)/g);
+        let match;
+        const indices = [];
+        while ((match = reg_hatu.exec(str)) !== null) {
+            indices.push(match.index + 1);
+        }
+        if (indices.length !== 0) {
+            let mStr = "";
+            for (let i = 0; i < indices.length; i++) {
+                if (i === 0) {
+                    mStr += `${str.slice(0, indices[i])}'`;
+                }
+                else {
+                    mStr += `${str.slice(indices[i - 1], indices[i])}'`;
+                }
+            }
+            mStr += str.slice(indices[indices.length - 1]);
+            console.log(mStr);
+            str = mStr;
+        }
+    }
+
+    const max = str.length;
     while (pnt <= max) {
         if (r = romajiSystem[system][str.substring(pnt, pnt + 2)]) {
             result += r;
@@ -983,21 +1417,11 @@ const toRawRomaji = function (str, system) {
 
     result = result.replace(reg_xtsu, "tsu");
 
-    // [PASSPORT|HEPBURN] 撥音の特殊表記
+    // [PASSPORT|HEPBURN] 撥音の特殊表記 b、m、p
     if (system === ROMANIZATION_SYSTEM.PASSPORT || system === ROMANIZATION_SYSTEM.HEPBURN) {
         result = result.replace(/nm/gm, "mm");
         result = result.replace(/nb/gm, "mb");
         result = result.replace(/np/gm, "mp");
-    }
-
-    // [HEPBURN] 撥音の特殊表記 他
-    if (system === ROMANIZATION_SYSTEM.HEPBURN) {
-        result = result.replace(/na/gm, "n'a");
-        result = result.replace(/ni/gm, "n'i");
-        result = result.replace(/nu/gm, "n'u");
-        result = result.replace(/ne/gm, "n'e");
-        result = result.replace(/no/gm, "n'o");
-        result = result.replace(/ny/gm, "n'y");
     }
 
     // [PASSPORT] 長音省略 他の場合
@@ -1005,6 +1429,15 @@ const toRawRomaji = function (str, system) {
         result = result.replace(/uu/gm, "u");
         result = result.replace(/ou/gm, "o");
         result = result.replace(/oo(?!$)/gm, "o");
+    }
+
+    // [NIPPON] 長音変換
+    if (system === ROMANIZATION_SYSTEM.NIPPON) {
+        result = result.replace(/aー/gm, "â");
+        result = result.replace(/iー/gm, "î");
+        result = result.replace(/uー/gm, "û");
+        result = result.replace(/eー/gm, "ê");
+        result = result.replace(/oー/gm, "ô");
     }
 
     // [HEPBURN] 長音変換
@@ -1019,7 +1452,13 @@ const toRawRomaji = function (str, system) {
     return result;
 };
 
-const getStrType = function (str) { // 0 for pure kanji,1 for kanji-hira(kana)-mixed,2 for pure hira(kana),3 for others
+/**
+ * Get the type of given string
+ *
+ * @param {string} str Given string
+ * @return {number} Type number. 0 for pure kanji, 1 for kanji-kana-mixed, 2 for pure kana, 3 for others
+ */
+const getStrType = function (str) {
     let hasKJ = false;
     let hasHK = false;
     for (let i = 0; i < str.length; i++) {
@@ -1034,6 +1473,37 @@ const getStrType = function (str) { // 0 for pure kanji,1 for kanji-hira(kana)-m
     else if (hasKJ) return 0;
     else if (hasHK) return 2;
     return 3;
+};
+
+/**
+ * Convert kana to hiragana
+ *
+ * @param {string} str Given string
+ * @return {string} Hiragana string
+ */
+const kanaToHiragna = function (str) {
+    return toRawHiragana(str);
+};
+
+/**
+ * Convert kana to katakana
+ *
+ * @param {string} str Given string
+ * @return {string} Katakana string
+ */
+const kanaToKatakana = function (str) {
+    return toRawKatakana(str);
+};
+
+/**
+ * Convert kana to romaji
+ *
+ * @param {string} str Given string
+ * @param {string} system To which romanization system the given string is converted. ["nippon"|"passport"|"hepburn"]
+ * @return {string} Romaji string
+ */
+const kanaToRomaji = function (str, system) {
+    return toRawRomaji(str, system);
 };
 
 export {
@@ -1052,5 +1522,8 @@ export {
     hasJapanese,
     toRawHiragana,
     toRawKatakana,
-    toRawRomaji
+    toRawRomaji,
+    kanaToHiragna,
+    kanaToKatakana,
+    kanaToRomaji
 };

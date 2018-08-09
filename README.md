@@ -15,6 +15,13 @@ kuroshiro is a Japanese language library for converting Japanese sentence to Hir
 ## Demo
 You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
 
+## Feature
+- Japanese Sentence => Hiragana, Katakana or Romaji
+- Furigana and okurigana supported
+- 🆕Multiple morphological analyzers supported
+- 🆕Multiple romanization system supported
+- Useful Japanese utils
+
 ## Breaking Change in 1.x
 - Seperate morphological analyzer from phonetic notation logic to make it possible that we can use different morphological analyzers ([ready-made](#ready-made-analyzer-plugins) or [customized](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins))
 - Embrace ES8/ES2017 to use async/await functions
@@ -120,14 +127,17 @@ Convert given string to target syllabary with options available
 __Arguments__
 
 * `str` - A String to be converted.
-* `options` - *Optional* kuroshiro has several convert options as below.
+* `options` - *Optional* kuroshiro has several convert options as below. `romajiSystem` is only applied when the value of param `to` is `romaji`
 
 | Options | Type | Default | Description |
 |---|---|---|---|
-| to | String | 'hiragana' | Target syllabary [`hiragana`,`katakana`,`romaji`] |
-| mode | String | 'normal' | Convert mode [`normal`,`spaced`,`okurigana`,`furigana`] |
-| delimiter_start | String | '(' | Delimiter(Start) |
-| delimiter_end | String | ')' | Delimiter(End) |
+| to | String | "hiragana" | Target syllabary [`hiragana`, `katakana`, `romaji`] |
+| mode | String | "normal" | Convert mode [`normal`, `spaced`, `okurigana`, `furigana`] |
+| romajiSystem<sup>*</sup> | String | "hepburn" | Romanization system [`nippon`, `passport`, `hepburn`] |
+| delimiter_start | String | "(" | Delimiter(Start) |
+| delimiter_end | String | ")" | Delimiter(End) |
+
+**: For more about `romajiSystem`, check [Romanization System](#Romanization-System)*
 
 __Examples__
 
@@ -158,37 +168,55 @@ await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人�
 ### Utils
 __Examples__
 ```js
-Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ"));
 ```
-#### isHiragana(input)
-Check if input is hiragana.
+#### isHiragana(char)
+Check if input char is hiragana.
 
-#### isKatakana(input)
-Check if input is katakana.
+#### isKatakana(char)
+Check if input char is katakana.
 
-#### isKana(input)
-Check if input is kana.
+#### isKana(char)
+Check if input char is kana.
 
-#### isKanji(input)
-Check if input is kanji.
+#### isKanji(char)
+Check if input char is kanji.
 
-#### isJapanese(input)
-Check if input is Japanese.
+#### isJapanese(char)
+Check if input char is Japanese.
 
-#### hasHiragana(input)
-Check if input has hiragana.
+#### hasHiragana(str)
+Check if input string has hiragana.
 
-#### hasKatakana(input)
-Check if input has katakana.
+#### hasKatakana(str)
+Check if input string has katakana.
 
-#### hasKana(input)
-Check if input has kana.
+#### hasKana(str)
+Check if input string has kana.
 
-#### hasKanji(input)
-Check if input has kanji.
+#### hasKanji(str)
+Check if input string has kanji.
 
-#### hasJapanese(input)
-Check if input has Japanese.
+#### hasJapanese(str)
+Check if input string has Japanese.
+
+#### kanaToHiragna(str)
+Convert input kana string to hiragana.
+
+#### kanaToKatakana(str)
+Convert input kana string to katakana.
+
+#### kanaToRomaji(str, system)
+Convert input kana string to romaji. Param `system` accepts `"nippon"`, `"passport"`, `"hepburn"`
+
+## Romanization System
+kuroshiro supports three kinds of romanization systems.
+
+`nippon`: Nippon-shiki romanization. Refer to [ISO 3602 Strict](http://www.age.ne.jp/x/nrs/iso3602/iso3602.html).
+
+`passport`: Passport-shiki romanization. Refer to [Japanese romanization table](https://www.ezairyu.mofa.go.jp/passport/hebon.html) published by Ministry of Foreign Affairs of Japan.
+
+`hepburn`: Hepburn romanization. Refer to [BS 4812 : 1972](https://archive.is/PiJ4).
 
 ## Contributing
 Please check [CONTRIBUTING](CONTRIBUTING.md).

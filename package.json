@@ -1,6 +1,6 @@
 {
     "name": "kuroshiro",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "kuroshiro is a Japanese language library for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
     "main": "lib/index.js",
     "module": "src/index.js",

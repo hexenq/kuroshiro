@@ -1375,7 +1375,7 @@ const toRawRomaji = function (str, system) {
 
     // [NIPPON|HEPBURN] 撥音の特殊表記 a、i、u、e、o、y
     if (system === ROMANIZATION_SYSTEM.NIPPON || system === ROMANIZATION_SYSTEM.HEPBURN) {
-        const reg_hatu = new RegExp(/.(?<=ん|ン)(あ|い|う|え|お|ア|イ|ウ|エ|オ|ぁ|ぃ|ぅ|ぇ|ぉ|ァ|ィ|ゥ|ェ|ォ|や|ゆ|よ|ヤ|ユ|ヨ|ゃ|ゅ|ょ|ャ|ュ|ョ)/g);
+        const reg_hatu = new RegExp(/(ん|ン)(?=あ|い|う|え|お|ア|イ|ウ|エ|オ|ぁ|ぃ|ぅ|ぇ|ぉ|ァ|ィ|ゥ|ェ|ォ|や|ゆ|よ|ヤ|ユ|ヨ|ゃ|ゅ|ょ|ャ|ュ|ョ)/g);
         let match;
         const indices = [];
         while ((match = reg_hatu.exec(str)) !== null) {

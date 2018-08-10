@@ -66,6 +66,9 @@
         "kuroshiro-analyzer-kuromoji": "^1.1.0",
         "uglifyify": "^5.0.0"
     },
+    "engines": {
+        "node": ">=6.0.0"
+    },
     "browserify": {
         "transform": [
             [

@@ -83,7 +83,8 @@ class Kuroshiro {
             throw new Error("Invalid Conversion Mode.");
         }
 
-        if (Object.values(ROMANIZATION_SYSTEM).indexOf(options.romajiSystem) === -1) {
+        const ROMAJI_SYSTEMS = Object.keys(ROMANIZATION_SYSTEM).map(e => ROMANIZATION_SYSTEM[e]);
+        if (ROMAJI_SYSTEMS.indexOf(options.romajiSystem) === -1) {
             throw new Error("Invalid Romanization System.");
         }
 

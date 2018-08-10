@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
 [![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
+[![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
+[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
 
 kuroshiro是一款十分方便使用的日文转换注音工具，主要针对日文文本，进行到平假名、片假名及罗马字的转换，并支持注音假名、送假名
 （旁注音）等注音模式。
@@ -13,6 +15,13 @@ kuroshiro是一款十分方便使用的日文转换注音工具，主要针对�
 
 ## 演示
 你可以在[这里](http://hexenq.com/kuroshiro/demo/index.html)查看在线演示，初始化会有些慢（需要下载字典，16MB左右），请耐心等待。
+
+## 特性
+- 日文文本 => 平假名、片假名、罗马字
+- 支持注音假名和送假名
+- 🆕支持多种语素解析器
+- 🆕支持多种罗马字体系
+- 实用日语工具
 
 ## 1.x版本的重大变化
 - 从注音逻辑中分离语素解析器部分，使得我们可以使用不同的语素解析器（[预定义的](#解析器插件)或[自定义的](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)）
@@ -125,8 +134,11 @@ __参数__
 |---|---|---|---|
 | to | String | 'hiragana' | 目标音节文字<br />`hiragana` (平假名),<br />`katakana` (片假名),<br />`romaji` (罗马字) |
 | mode | String | 'normal' | 转换模式<br />`normal` (标准模式),<br />`spaced` (空格分组),<br />`okurigana` (送假名),<br />`furigana` (注音假名) |
+| romajiSystem<sup>*</sup> | String | "hepburn" | 罗马字体系<br />`nippon` (日本式),<br />`passport` (护照式),<br />`hepburn` (平文式) |
 | delimiter_start | String | '(' | 分隔符 (起始) |
 | delimiter_end | String | ')' | 分隔符 (结束) |
+
+**: `romajiSystem`参数仅当`to`参数设置为`romaji`时生效。有关这一参数的更多信息, 请见 [罗马字体系](#罗马字体系)*
 
 __示例__
 
@@ -157,37 +169,56 @@ kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生の�
 ### 实用工具
 __示例__
 ```js
-Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ"));
 ```
-#### isHiragana(input)
-判断input是否是平假名。
+#### isHiragana(char)
+判断输入字符是否是平假名。
 
-#### isKatakana(input)
-判断input是否是片假名。
+#### isKatakana(char)
+判断输入字符是否是片假名。
 
-#### isKana(input)
-判断input是否是假名。
+#### isKana(char)
+判断输入字符是否是假名。
 
-#### isKanji(input)
-判断input是否是日文汉字。
+#### isKanji(char)
+判断输入字符是否是日文汉字。
 
-#### isJapanese(input)
-判断input是否是日文。
+#### isJapanese(char)
+判断输入字符是否是日文。
 
-#### hasHiragana(input)
-检查input中是否含有平假名。
+#### hasHiragana(str)
+检查输入字符串中是否含有平假名。
 
-#### hasKatakana(input)
-检查input中是否含有片假名。
+#### hasKatakana(str)
+检查输入字符串中是否含有片假名。
 
-#### hasKana(input)
-检查input中是否含有假名。
+#### hasKana(str)
+检查输入字符串中是否含有假名。
 
-#### hasKanji(input)
-检查input中是否含有日文汉字。
+#### hasKanji(str)
+检查输入字符串中是否含有日文汉字。
 
-#### hasJapanese(input)
-检查input中是否含有日文。
+#### hasJapanese(str)
+检查输入字符串中是否含有日文。
+
+#### kanaToHiragna(str)
+转换输入假名字符串至平假名。
+
+#### kanaToKatakana(str)
+转换输入假名字符串至片假名。
+
+#### kanaToRomaji(str, system)
+转换输入假名字符串至罗马字。参数`system`可选值为`"nippon"`, `"passport"`, `"hepburn"` (默认值: "hepburn")
+
+## 罗马字体系
+kuroshiro支持三种罗马字体系。
+
+`nippon`: 日本式罗马字。参照 [ISO 3602 Strict](http://www.age.ne.jp/x/nrs/iso3602/iso3602.html)。
+
+`passport`: 护照式罗马字。 参照日本外务省发布的 [日文罗马字对照表](https://www.ezairyu.mofa.go.jp/passport/hebon.html)。
+
+`hepburn`: 平文罗马字。参照 [BS 4812 : 1972](https://archive.is/PiJ4)。
+
 
 ## 贡献
 请查阅文档 [CONTRIBUTING](CONTRIBUTING.md).

@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
 [![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
+[![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
+[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
 
 kuroshiroは日本語文をローマ字や仮名なとに変換できるライブラリです。フリガナ・送り仮名の機能も搭載します。
 
@@ -12,6 +14,13 @@ kuroshiroは日本語文をローマ字や仮名なとに変換できるライ�
 
 ## デモ
 オンラインデモは[こちら](http://hexenq.com/kuroshiro/demo/index.html)です。初期化は少し時間がかかります、少々待ちください。
+
+## 特徴
+- 日本語文 => ひらがな、カタカナ、ローマ字
+- フリガナ、送り仮名サポート
+- 🆕複数の形態素解析器をサポート
+- 🆕複数のローマ字表記法をサポート
+- 実用ツール付き
 
 ## バッジョン1.xでの重大な変更
 - 形態素解析器がルビロジックから分離される。それゆえ、様々な形態素解析器（[レディーメイド](#形態素解析器プラグイン)も[カスタマイズ](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)も）を利用できることになります。
@@ -124,8 +133,11 @@ __引数__
 |---|---|---|---|
 | to | String | 'hiragana' | 目標音節文字<br />`hiragana` (ひらがな),<br />`katakana` (カタカナ),<br />`romaji` (ローマ字) |
 | mode | String | 'normal' | 変換モード<br />`normal` (一般),<br />`spaced` (スペースで組み分け),<br />`okurigana` (送り仮名),<br />`furigana` (フリガナ) |
+| romajiSystem<sup>*</sup> | String | "hepburn" | ローマ字<br />`nippon` (日本式),<br />`passport` (パスポート式)),<br />`hepburn` (ヘボン式) |
 | delimiter_start | String | '(' | 区切り文字 (始め) |
 | delimiter_end | String | ')' | 区切り文字 (終り) |
+
+**: 引数`romajiSystem`は引数`to`が`romaji`に設定されてる場合にのみ有効です。詳細については, [ローマ字表記法](#ローマ字表記法)を参考にしてください。*
 
 __例__
 
@@ -156,37 +168,55 @@ kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生の�
 ### 実用ツール
 __例__
 ```js
-Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ"));
 ```
-#### isHiragana(input)
-inputはひらがなかどうかを判断します。
+#### isHiragana(char)
+入力文字はひらがなかどうかを判断します。
 
-#### isKatakana(input)
-inputはカタカナかどうかを判断します。
+#### isKatakana(char)
+入力文字はカタカナかどうかを判断します。
 
-#### isKana(input)
-inputは仮名かどうかを判断します。
+#### isKana(char)
+入力文字は仮名かどうかを判断します。
 
-#### isKanji(input)
-inputは漢字かどうかを判断します。
+#### isKanji(char)
+入力文字は漢字かどうかを判断します。
 
-#### isJapanese(input)
-inputは日本語かどうかを判断します。
+#### isJapanese(char)
+入力文字は日本語かどうかを判断します。
 
-#### hasHiragana(input)
-inputにひらがながあるかどうかを確認する。
+#### hasHiragana(str)
+入力文字列にひらがながあるかどうかを確認する。
 
-#### hasKatakana(input)
-inputにカタカナがあるかどうかを確認する。
+#### hasKatakana(str)
+入力文字列にカタカナがあるかどうかを確認する。
 
-#### hasKana(input)
-inputに仮名があるかどうかを確認する。
+#### hasKana(str)
+入力文字列に仮名があるかどうかを確認する。
 
-#### hasKanji(input)
-inputに漢字があるかどうかを確認する。
+#### hasKanji(str)
+入力文字列に漢字があるかどうかを確認する。
 
-#### hasJapanese(input)
-inputに日本語があるかどうかを確認する。
+#### hasJapanese(str)
+入力文字列に日本語があるかどうかを確認する。
+
+#### kanaToHiragna(str)
+入力仮名文字列をひらがなへ変換します。
+
+#### kanaToKatakana(str)
+入力仮名文字列をカタカナへ変換します。
+
+#### kanaToRomaji(str, system)
+入力仮名文字列をローマ字へ変換します。引数`system`の指定可能値は`"nippon"`, `"passport"`, `"hepburn"` (デフォルト値: "hepburn")
+
+## ローマ字表記法
+kuroshiroは三種類のローマ字表記法をサポートします。
+
+`nippon`: 日本式ローマ字。[ISO 3602 Strict](http://www.age.ne.jp/x/nrs/iso3602/iso3602.html) を参照。
+
+`passport`: パスポート式ローマ字。 日本外務省が発表した [ヘボン式ローマ字綴方表](https://www.ezairyu.mofa.go.jp/passport/hebon.html) を参照。
+
+`hepburn`: ヘボン式ローマ字。[BS 4812 : 1972](https://archive.is/PiJ4) を参照。
 
 ## 貢献したい方
 [CONTRIBUTING](CONTRIBUTING.md) を参考にしてみてください。

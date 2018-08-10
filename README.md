@@ -19,7 +19,7 @@ You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
 - Japanese Sentence => Hiragana, Katakana or Romaji
 - Furigana and okurigana supported
 - 🆕Multiple morphological analyzers supported
-- 🆕Multiple romanization system supported
+- 🆕Multiple romanization systems supported
 - Useful Japanese utils
 
 ## Breaking Change in 1.x
@@ -137,7 +137,7 @@ __Arguments__
 | delimiter_start | String | "(" | Delimiter(Start) |
 | delimiter_end | String | ")" | Delimiter(End) |
 
-**: For more about `romajiSystem`, check [Romanization System](#Romanization-System)*
+**: Param `romajiSystem` is only applied when the value of param `to` is `romaji`. For more about it, check [Romanization System](#Romanization-System)*
 
 __Examples__
 
@@ -207,7 +207,7 @@ Convert input kana string to hiragana.
 Convert input kana string to katakana.
 
 #### kanaToRomaji(str, system)
-Convert input kana string to romaji. Param `system` accepts `"nippon"`, `"passport"`, `"hepburn"`
+Convert input kana string to romaji. Param `system` accepts `"nippon"`, `"passport"`, `"hepburn"` (Default: "hepburn")
 
 ## Romanization System
 kuroshiro supports three kinds of romanization systems.

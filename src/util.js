@@ -1392,7 +1392,6 @@ const toRawRomaji = function (str, system) {
                 }
             }
             mStr += str.slice(indices[indices.length - 1]);
-            console.log(mStr);
             str = mStr;
         }
     }

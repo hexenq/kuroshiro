@@ -5,6 +5,10 @@
 
 * Add support for multiple romanization systems
 
+### Test
+
+* Update test specification
+
 ### Miscellaneous
 
 * Update docs

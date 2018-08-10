@@ -19,15 +19,104 @@ describe("Kuroshiro Node Test", () => {
         kuroshiro = new Kuroshiro();
         await kuroshiro.init(new KuromojiAnalyzer());
     });
+    it("Repeated Initialization", async (done) => {
+        try {
+            await kuroshiro.init(new KuromojiAnalyzer());
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Wrong Parameter - Invalid Target Syllabary", async (done) => {
+        const ori = EXAMPLE_TEXT;
+        try {
+            const result = await kuroshiro.convert(ori, { to: "xxxx" });
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Wrong Parameter - Invalid Conversion Mode", async (done) => {
+        const ori = EXAMPLE_TEXT;
+        try {
+            const result = await kuroshiro.convert(ori, { to: "hiragana", mode: "xxxx" });
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Wrong Parameter - Invalid Romanization System", async (done) => {
+        const ori = EXAMPLE_TEXT;
+        try {
+            const result = await kuroshiro.convert(ori, { to: "hiragana", romajiSystem: "xxxx" });
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Kana Character Recognition", () => {
+        const ori = "こ";
+        const result = Kuroshiro.Util.isKana(ori);
+        expect(result).toBeTruthy();
+    });
     it("Kanji Character Recognition", () => {
         const ori = "公";
         const result = Kuroshiro.Util.isKanji(ori);
+        expect(result).toBeTruthy();
+    });
+    it("Kana-mixed String Recognition", () => {
+        const ori = "この公園の中で";
+        const result = Kuroshiro.Util.hasKana(ori);
         expect(result).toBeTruthy();
     });
     it("Kanji-mixed String Recognition", () => {
         const ori = "この公園の中で";
         const result = Kuroshiro.Util.hasKanji(ori);
         expect(result).toBeTruthy();
+    });
+    it("Kana to Hiragana", () => {
+        const ori = "サカナ";
+        const result = Kuroshiro.Util.kanaToHiragna(ori);
+        expect(result).toEqual("さかな");
+    });
+    it("Kana to Katakana", () => {
+        const ori = "さかな";
+        const result = Kuroshiro.Util.kanaToKatakana(ori);
+        expect(result).toEqual("サカナ");
+    });
+    it("Kana to Romaji (nippon-shiki)", () => {
+        const ori = "サポート";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "nippon");
+        expect(result).toEqual("sapôto");
+    });
+    it("Kana to Romaji (passport-shiki)", () => {
+        const ori = "サポート";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "passport");
+        expect(result).toEqual("sapoto");
+    });
+    it("Kana to Romaji (hepburn-shiki)(1)", () => {
+        const ori = "サポート";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
+        expect(result).toEqual("sapōto");
+    });
+    it("Kana to Romaji (hepburn-shiki)(2)", () => {
+        const ori = "ナンバ";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
+        expect(result).toEqual("namba");
+    });
+    it("Kana to Romaji (hepburn-shiki)(3)", () => {
+        const ori = "まんえんいか";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
+        expect(result).toEqual("man'en'ika");
+    });
+    it("Kana to Romaji (hepburn-shiki)(4)", () => {
+        const ori = "まっちゃ";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
+        expect(result).toEqual("matcha");
     });
     it("Kanji to Hiragana(1)", async () => {
         const ori = EXAMPLE_TEXT;
@@ -58,6 +147,11 @@ describe("Kuroshiro Node Test", () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { to: "romaji" });
         expect(result).toEqual("kanjitoretarateotsunagou,kasanarunohajinseinorain and remiriasaikou!");
+    });
+    it("Kanji to Romaji with passport-shiki romaji system", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "passport" });
+        expect(result).toEqual("kanjitoretarateotsunagou,kasanarunohajinseinorain and remiriasaiko!");
     });
     it("Kanji to Hiragana with spaces", async () => {
         const ori = EXAMPLE_TEXT;

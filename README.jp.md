@@ -55,7 +55,7 @@ import Kuroshiro from "kuroshiro";
 const kuroshiro = new Kuroshiro();
 ```
 
-形態素解析器のインスタンスを引数にしてkuroshiroを初期化する ([API説明](#init(analyzer))を参考にしてください):
+形態素解析器のインスタンスを引数にしてkuroshiroを初期化する ([API説明](#initanalyzer)を参考にしてください):
 ```js
 // この例では，まずnpm installとimportを通じてkuromojiの形態素解析器を導入します
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";

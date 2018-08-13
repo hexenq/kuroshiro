@@ -55,7 +55,7 @@ Instantiate:
 const kuroshiro = new Kuroshiro();
 ```
 
-Initialize kuroshiro with an instance of analyzer (You could check the [apidoc](#init(analyzer)) for more information):
+Initialize kuroshiro with an instance of analyzer (You could check the [apidoc](#initanalyzer) for more information):
 ```js
 // For this example, you should npm install and import the kuromoji analyzer first
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
@@ -137,7 +137,7 @@ __Arguments__
 | delimiter_start | String | "(" | Delimiter(Start) |
 | delimiter_end | String | ")" | Delimiter(End) |
 
-**: Param `romajiSystem` is only applied when the value of param `to` is `romaji`. For more about it, check [Romanization System](#Romanization-System)*
+**: Param `romajiSystem` is only applied when the value of param `to` is `romaji`. For more about it, check [Romanization System](#romanization-system)*
 
 __Examples__
 

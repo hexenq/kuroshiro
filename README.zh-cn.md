@@ -56,7 +56,7 @@ import Kuroshiro from "kuroshiro";
 const kuroshiro = new Kuroshiro();
 ```
 
-使用一个解析器实例来初始化kuroshiro (请参考[API说明](#init(analyzer))):
+使用一个解析器实例来初始化kuroshiro (请参考[API说明](#initanalyzer)):
 ```js
 // 在这个示例中，首先npm install并import导入kuromoji解析器
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";

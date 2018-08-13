@@ -19,15 +19,104 @@ describe("Kuroshiro Node Test", () => {
         kuroshiro = new Kuroshiro();
         await kuroshiro.init(new KuromojiAnalyzer());
     });
+    it("Repeated Initialization", async (done) => {
+        try {
+            await kuroshiro.init(new KuromojiAnalyzer());
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Wrong Parameter - Invalid Target Syllabary", async (done) => {
+        const ori = EXAMPLE_TEXT;
+        try {
+            const result = await kuroshiro.convert(ori, { to: "xxxx" });
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Wrong Parameter - Invalid Conversion Mode", async (done) => {
+        const ori = EXAMPLE_TEXT;
+        try {
+            const result = await kuroshiro.convert(ori, { to: "hiragana", mode: "xxxx" });
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Wrong Parameter - Invalid Romanization System", async (done) => {
+        const ori = EXAMPLE_TEXT;
+        try {
+            const result = await kuroshiro.convert(ori, { to: "hiragana", romajiSystem: "xxxx" });
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Kana Character Recognition", () => {
+        const ori = "こ";
+        const result = Kuroshiro.Util.isKana(ori);
+        expect(result).toBeTruthy();
+    });
     it("Kanji Character Recognition", () => {
         const ori = "公";
         const result = Kuroshiro.Util.isKanji(ori);
+        expect(result).toBeTruthy();
+    });
+    it("Kana-mixed String Recognition", () => {
+        const ori = "この公園の中で";
+        const result = Kuroshiro.Util.hasKana(ori);
         expect(result).toBeTruthy();
     });
     it("Kanji-mixed String Recognition", () => {
         const ori = "この公園の中で";
         const result = Kuroshiro.Util.hasKanji(ori);
         expect(result).toBeTruthy();
+    });
+    it("Kana to Hiragana", () => {
+        const ori = "サカナ";
+        const result = Kuroshiro.Util.kanaToHiragna(ori);
+        expect(result).toEqual("さかな");
+    });
+    it("Kana to Katakana", () => {
+        const ori = "さかな";
+        const result = Kuroshiro.Util.kanaToKatakana(ori);
+        expect(result).toEqual("サカナ");
+    });
+    it("Kana to Romaji (nippon-shiki)", () => {
+        const ori = "サポート";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "nippon");
+        expect(result).toEqual("sapôto");
+    });
+    it("Kana to Romaji (passport-shiki)", () => {
+        const ori = "サポート";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "passport");
+        expect(result).toEqual("sapoto");
+    });
+    it("Kana to Romaji (hepburn-shiki)(1)", () => {
+        const ori = "サポート";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
+        expect(result).toEqual("sapōto");
+    });
+    it("Kana to Romaji (hepburn-shiki)(2)", () => {
+        const ori = "ナンバ";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
+        expect(result).toEqual("namba");
+    });
+    it("Kana to Romaji (hepburn-shiki)(3)", () => {
+        const ori = "まんえんいか";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
+        expect(result).toEqual("man'en'ika");
+    });
+    it("Kana to Romaji (hepburn-shiki)(4)", () => {
+        const ori = "まっちゃ";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
+        expect(result).toEqual("matcha");
     });
     it("Kanji to Hiragana(1)", async () => {
         const ori = EXAMPLE_TEXT;
@@ -57,7 +146,12 @@ describe("Kuroshiro Node Test", () => {
     it("Kanji to Romaji", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { to: "romaji" });
-        expect(result).toEqual("kanjitoretaratewotsunagou,kasanarunohajinseinorain and remiriasaikou!");
+        expect(result).toEqual("kanjitoretarateotsunagou,kasanarunohajinseinorain and remiriasaikou!");
+    });
+    it("Kanji to Romaji with passport-shiki romaji system", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "passport" });
+        expect(result).toEqual("kanjitoretarateotsunagou,kasanarunohajinseinorain and remiriasaiko!");
     });
     it("Kanji to Hiragana with spaces", async () => {
         const ori = EXAMPLE_TEXT;
@@ -72,7 +166,7 @@ describe("Kuroshiro Node Test", () => {
     it("Kanji to Romaji with spaces", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { mode: "spaced", to: "romaji" });
-        expect(result).toEqual("kanjitore tara te wo tsunago u , kasanaru no ha jinsei no rain   and   remi ria saikou !");
+        expect(result).toEqual("kanjitore tara te o tsunago u , kasanaru no ha jinsei no rain   and   remi ria saikou !");
     });
     it("Kanji to Hiragana with okurigana(1)", async () => {
         const ori = EXAMPLE_TEXT;
@@ -127,6 +221,6 @@ describe("Kuroshiro Node Test", () => {
     it("Kanji to Romaji with furigana", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { mode: "furigana", to: "romaji" });
-        expect(result).toEqual("<ruby>感<rp>(</rp><rt>kan</rt><rp>)</rp>じ<rp>(</rp><rt>ji</rt><rp>)</rp>取<rp>(</rp><rt>to</rt><rp>)</rp>れ<rp>(</rp><rt>re</rt><rp>)</rp>た<rp>(</rp><rt>ta</rt><rp>)</rp>ら<rp>(</rp><rt>ra</rt><rp>)</rp>手<rp>(</rp><rt>te</rt><rp>)</rp>を<rp>(</rp><rt>wo</rt><rp>)</rp>繋<rp>(</rp><rt>tsuna</rt><rp>)</rp>ご<rp>(</rp><rt>go</rt><rp>)</rp>う<rp>(</rp><rt>u</rt><rp>)</rp>、<rp>(</rp><rt>,</rt><rp>)</rp>重<rp>(</rp><rt>kasa</rt><rp>)</rp>な<rp>(</rp><rt>na</rt><rp>)</rp>る<rp>(</rp><rt>ru</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>は<rp>(</rp><rt>ha</rt><rp>)</rp>人生<rp>(</rp><rt>jinsei</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>ラ<rp>(</rp><rt>ra</rt><rp>)</rp>イ<rp>(</rp><rt>i</rt><rp>)</rp>ン<rp>(</rp><rt>n</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>a<rp>(</rp><rt>a</rt><rp>)</rp>n<rp>(</rp><rt>n</rt><rp>)</rp>d<rp>(</rp><rt>d</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>レ<rp>(</rp><rt>re</rt><rp>)</rp>ミ<rp>(</rp><rt>mi</rt><rp>)</rp>リ<rp>(</rp><rt>ri</rt><rp>)</rp>ア<rp>(</rp><rt>a</rt><rp>)</rp>最高<rp>(</rp><rt>saikou</rt><rp>)</rp>！<rp>(</rp><rt>!</rt><rp>)</rp></ruby>");
+        expect(result).toEqual("<ruby>感<rp>(</rp><rt>kan</rt><rp>)</rp>じ<rp>(</rp><rt>ji</rt><rp>)</rp>取<rp>(</rp><rt>to</rt><rp>)</rp>れ<rp>(</rp><rt>re</rt><rp>)</rp>た<rp>(</rp><rt>ta</rt><rp>)</rp>ら<rp>(</rp><rt>ra</rt><rp>)</rp>手<rp>(</rp><rt>te</rt><rp>)</rp>を<rp>(</rp><rt>o</rt><rp>)</rp>繋<rp>(</rp><rt>tsuna</rt><rp>)</rp>ご<rp>(</rp><rt>go</rt><rp>)</rp>う<rp>(</rp><rt>u</rt><rp>)</rp>、<rp>(</rp><rt>,</rt><rp>)</rp>重<rp>(</rp><rt>kasa</rt><rp>)</rp>な<rp>(</rp><rt>na</rt><rp>)</rp>る<rp>(</rp><rt>ru</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>は<rp>(</rp><rt>ha</rt><rp>)</rp>人生<rp>(</rp><rt>jinsei</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>ラ<rp>(</rp><rt>ra</rt><rp>)</rp>イ<rp>(</rp><rt>i</rt><rp>)</rp>ン<rp>(</rp><rt>n</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>a<rp>(</rp><rt>a</rt><rp>)</rp>n<rp>(</rp><rt>n</rt><rp>)</rp>d<rp>(</rp><rt>d</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>レ<rp>(</rp><rt>re</rt><rp>)</rp>ミ<rp>(</rp><rt>mi</rt><rp>)</rp>リ<rp>(</rp><rt>ri</rt><rp>)</rp>ア<rp>(</rp><rt>a</rt><rp>)</rp>最高<rp>(</rp><rt>saikou</rt><rp>)</rp>！<rp>(</rp><rt>!</rt><rp>)</rp></ruby>");
     });
 });

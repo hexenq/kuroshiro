@@ -218,6 +218,8 @@ kuroshiroは三種類のローマ字表記法をサポートします。
 
 `hepburn`: ヘボン式ローマ字。[BS 4812 : 1972](https://archive.is/PiJ4) を参照。
 
+各種ローマ字表の比較は[こちら](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm)を参考にしてください。
+
 ## 貢献したい方
 [CONTRIBUTING](CONTRIBUTING.md) を参考にしてみてください。
 

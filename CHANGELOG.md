@@ -1,9 +1,13 @@
 <a name="1.1.0"></a>
-## [1.1.0](https://github.com/hexenq/kuroshiro/compare/1.0.0...1.1.0) (2018-08-10)
+## [1.1.0](https://github.com/hexenq/kuroshiro/compare/1.0.0...1.1.0) (2018-08-13)
 
 ### Feature
 
 * Add support for multiple romanization systems
+
+### Bug Fixes
+
+* Add `babel-runtime` dependency which used by commonjs distribution
 
 ### Test
 

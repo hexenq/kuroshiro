@@ -1,86 +1,89 @@
 {
-    "name": "kuroshiro",
-    "version": "1.1.0",
-    "description": "kuroshiro is a Japanese language library for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
-    "main": "lib/index.js",
-    "module": "src/index.js",
-    "scripts": {
-        "lint": "eslint src test",
-        "lint:fix": "eslint --fix src test --ext .js",
-        "jest": "jest --verbose",
-        "jest:watch": "npm run jest -- --watch",
-        "jest:coverage": "jest --verbose --coverage",
-        "test": "npm run lint && npm run jest",
-        "clean": "rimraf lib dist",
-        "build": "npm run build:cjs && npm run build:umd && npm run build:umd:min",
-        "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
-        "build:umd": "cross-env BABEL_ENV=umd NODE_ENV=development browserify src/index.js -s Kuroshiro -o dist/kuroshiro.js -t [ babelify ]",
-        "build:umd:min": "cross-env BABEL_ENV=umd NODE_ENV=production browserify src/index.js -s Kuroshiro -g uglifyify -o dist/kuroshiro.min.js -t [ babelify ]"
+  "name": "kuroshiro",
+  "version": "1.1.0",
+  "description": "kuroshiro is a Japanese language library for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.",
+  "main": "lib/index.js",
+  "module": "src/index.js",
+  "scripts": {
+    "lint": "eslint src test",
+    "lint:fix": "eslint --fix src test --ext .js",
+    "jest": "jest --verbose",
+    "jest:watch": "npm run jest -- --watch",
+    "jest:coverage": "jest --verbose --coverage",
+    "test": "npm run lint && npm run jest",
+    "clean": "rimraf lib dist",
+    "build": "npm run build:cjs && npm run build:umd && npm run build:umd:min",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
+    "build:umd": "cross-env BABEL_ENV=umd NODE_ENV=development browserify src/index.js -s Kuroshiro -o dist/kuroshiro.js -t [ babelify ]",
+    "build:umd:min": "cross-env BABEL_ENV=umd NODE_ENV=production browserify src/index.js -s Kuroshiro -g uglifyify -o dist/kuroshiro.min.js -t [ babelify ]"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hexenq/kuroshiro.git"
+  },
+  "keywords": [
+    "Japanese",
+    "language",
+    "convert",
+    "converter",
+    "kanji",
+    "hiragana",
+    "katakana",
+    "kana",
+    "romaji",
+    "furigana",
+    "okurigana",
+    "library",
+    "utility",
+    "tool",
+    "hepburn"
+  ],
+  "author": {
+    "name": "Hexen Qi",
+    "email": "hexenq@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hexenq/kuroshiro/issues"
+  },
+  "homepage": "https://github.com/hexenq/kuroshiro",
+  "dependencies": {
+    "babel-runtime": "^6.26.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.3",
+    "babel-jest": "^23.0.1",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "browserify": "^15.2.0",
+    "coveralls": "^3.0.0",
+    "cross-env": "^5.1.6",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "jest": "^23.0.1",
+    "kuroshiro-analyzer-kuromoji": "^1.1.0",
+    "uglifyify": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=6.5.0"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify"
+      ]
+    ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
     },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/hexenq/kuroshiro.git"
-    },
-    "keywords": [
-        "Japanese",
-        "language",
-        "convert",
-        "converter",
-        "kanji",
-        "hiragana",
-        "katakana",
-        "kana",
-        "romaji",
-        "furigana",
-        "okurigana",
-        "library",
-        "utility",
-        "tool"
-    ],
-    "author": {
-        "name": "Hexen Qi",
-        "email": "hexenq@gmail.com"
-    },
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/hexenq/kuroshiro/issues"
-    },
-    "homepage": "https://github.com/hexenq/kuroshiro",
-    "dependencies": {},
-    "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-core": "^6.26.0",
-        "babel-eslint": "^8.2.3",
-        "babel-jest": "^23.0.1",
-        "babel-plugin-add-module-exports": "^0.2.1",
-        "babel-plugin-transform-runtime": "^6.23.0",
-        "babel-preset-env": "^1.6.1",
-        "babelify": "^8.0.0",
-        "browserify": "^15.2.0",
-        "coveralls": "^3.0.0",
-        "cross-env": "^5.1.6",
-        "eslint": "^4.19.1",
-        "eslint-config-airbnb-base": "^12.1.0",
-        "eslint-plugin-import": "^2.12.0",
-        "jest": "^23.0.1",
-        "kuroshiro-analyzer-kuromoji": "^1.1.0",
-        "uglifyify": "^5.0.0"
-    },
-    "engines": {
-        "node": ">=6.0.0"
-    },
-    "browserify": {
-        "transform": [
-            [
-                "babelify"
-            ]
-        ]
-    },
-    "jest": {
-        "transform": {
-            "^.+\\.jsx?$": "babel-jest"
-        },
-        "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.jsx?$",
-        "testURL": "http://localhost"
-    }
+    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.jsx?$",
+    "testURL": "http://localhost"
+  }
 }

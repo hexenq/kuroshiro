@@ -219,6 +219,7 @@ kuroshiro支持三種羅馬字體系。
 
 `hepburn`: 平文羅馬字。參照 [BS 4812 : 1972](https://archive.is/PiJ4)。
 
+想快速了解這些羅馬字體系的不同，可參考這個實用的[網頁](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm)。
 
 ## 貢獻
 請查閱文檔 [CONTRIBUTING](CONTRIBUTING.md).

@@ -218,6 +218,8 @@ kuroshiro supports three kinds of romanization systems.
 
 `hepburn`: Hepburn romanization. Refer to [BS 4812 : 1972](https://archive.is/PiJ4).
 
+There is a useful [webpage](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm) for you to check the difference between these romanization systems.
+
 ## Contributing
 Please check [CONTRIBUTING](CONTRIBUTING.md).
 

@@ -1,4 +1,4 @@
-![kuroshiro](http://hexenq.com/kuroshiro/kuroshiro.png)
+![kuroshiro](https://kuroshiro.org/kuroshiro.png)
 
 # kuroshiro
 
@@ -13,7 +13,7 @@ kuroshiro is a Japanese language library for converting Japanese sentence to Hir
 *Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
 
 ## Demo
-You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
+You can check the demo [here](https://kuroshiro.org/#demo).
 
 ## Feature
 - Japanese Sentence => Hiragana, Katakana or Romaji

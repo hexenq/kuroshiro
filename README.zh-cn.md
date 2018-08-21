@@ -1,4 +1,4 @@
-![kuroshiro](http://hexenq.com/kuroshiro/kuroshiro.png)
+![kuroshiro](https://kuroshiro.org/kuroshiro.png)
 
 # kuroshiro
 
@@ -14,7 +14,7 @@ kuroshiro是一款十分方便使用的日文转换注音工具，主要针对�
 *其他说明语言：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md)。*
 
 ## 演示
-你可以在[这里](http://hexenq.com/kuroshiro/demo/index.html)查看在线演示，初始化会有些慢（需要下载字典，16MB左右），请耐心等待。
+你可以在[这里](https://kuroshiro.org/#demo)查看在线演示。
 
 ## 特性
 - 日文文本 => 平假名、片假名、罗马字

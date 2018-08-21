@@ -13,7 +13,214 @@ kuroshiro is a Japanese language library for converting Japanese sentence to Hir
 *Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
 
 ## Demo
-You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
+*This demo utilizes Yahoo-WebAPI analyzer.*
+<style>    
+    #demoArea {
+        font-size: 16pt;
+    }
+    .submitBtn {
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    margin: 0.6em 0 0.5em 0;
+    padding: 0 1.5em;
+    border: 1px solid rgba(211,211,211,1);
+    -webkit-border-radius: 0.2em;
+    border-radius: 0.2em;
+    font: normal normal bold 1em/1.5em Arial, Helvetica, sans-serif;
+    color: rgba(114,114,114,1);
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    white-space: nowrap;
+    background: rgba(234,234,234,1);
+    -webkit-box-shadow: 0 0 1px 1px rgba(255,255,255,0.8) , 0 1px 0 0 rgba(0,0,0,0.298039) ;
+    box-shadow: 0 0 1px 1px rgba(255,255,255,0.8) , 0 1px 0 0 rgba(0,0,0,0.298039) ;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8) ;
+    -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+    -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+    -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+    transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+    }
+
+    .submitBtn:hover {
+    cursor: pointer;
+    border: 1px solid rgba(178,178,178,1);
+    color: rgba(76,76,76,1);
+    -webkit-box-shadow: 0 0 1px 1px rgba(255,255,255,0.8) inset, 0 1px 0 0 rgba(0,0,0,0.298039) ;
+    box-shadow: 0 0 1px 1px rgba(255,255,255,0.8) inset, 0 1px 0 0 rgba(0,0,0,0.298039) ;
+    }
+
+    .submitBtn:active {
+    position: relative;
+    cursor: default;
+    top: 1px;
+    border: 1px solid rgba(211,211,211,1);
+    color: rgba(114,114,114,1);
+    background: rgba(247,247,247,1);
+    -webkit-box-shadow: 0 0 1px 1px rgba(255,255,255,0.8) inset, 0 1px 0 0 rgba(0,0,0,0.298039) inset;
+    box-shadow: 0 0 1px 1px rgba(255,255,255,0.8) inset, 0 1px 0 0 rgba(0,0,0,0.298039) inset;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    }
+
+    select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0 !important;
+    background: #eaeaea;
+    background-image: none;
+    }
+    /* Custom Select */
+    .select {
+    vertical-align: bottom;
+    position: relative;
+    display: inline-block;
+    width: 5em;
+    height: 1.4em;
+    line-height: 1em;
+    background: #eaeaea;
+    overflow: hidden;
+    border-radius: .25em;
+    }
+    select {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0 0 0 .5em;
+    color: #727272;
+    cursor: pointer;
+    }
+    select::-ms-expand {
+    display: none;
+    }
+    /* Arrow */
+    .select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: .3em .3em .2em;
+    background: #eaeaea;
+    pointer-events: none;
+    font-size: .6em;
+    color: #727272;
+    }
+    /* Transition */
+    .select:hover::after {
+    color: #727272;
+    }
+    .select::after {
+    -webkit-transition: .25s all ease;
+    -o-transition: .25s all ease;
+    transition: .25s all ease;
+    }
+
+    .option {
+        display: inline-block;
+        margin-right: 1em;
+    }
+</style>
+<div id="demoArea">
+    <label>Original Text:</label>
+    <div>
+        <textarea id="oritext" style="width:100%;border-radius: .2em;" rows="8">感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！</textarea>
+    </div>
+    <div class="option">
+        <label>To </label>
+        <div class="select">
+            <select id="to" name="to" tabindex="2">
+                <option value="hiragana" selected="">Hiragana</option>
+                <option value="katakana">Katakana</option>
+                <option value="romaji">Romaji</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="option">
+        <label> Mode </label>
+        <div class="select">
+            <select id="mode" name="mode" tabindex="1">
+                <option value="normal" selected="">Normal</option>
+                <option value="spaced">Spaced</option>
+                <option value="okurigana">Okurigana</option>
+                <option value="furigana">Furigana</option>
+            </select>
+        </div>
+    </div>    
+    <div id="romajiOption" class="option" style="display:none">
+        <label> Romaji System </label>
+        <div class="select">
+            <select id="romajiSystem" name="romajiSystem" tabindex="3">
+                <option value="nippon" selected="">Nippon</option>
+                <option value="passport">Passport</option>
+                <option value="hepburn">Hepburn</option>
+            </select>
+        </div>
+    </div>    
+    <br />
+    <button id="convertBtn" class="submitBtn" onclick="convert()">convert</button>
+    <div>
+        <p id="output"></p>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded',function() {
+        document.getElementById('to').onchange=function(evt){
+            if(evt.target.value == "romaji"){
+                document.getElementById("romajiOption").setAttribute("style","display:inline-block");
+            }else{
+                document.getElementById("romajiOption").setAttribute("style","display:none");
+            }
+        };
+    },false);
+    
+    function convert(){
+        document.getElementById("convertBtn").textContent="converting...";
+        document.getElementById("convertBtn").disabled=true;
+        fetch("https://api.kuroshiro.org/convert",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify({
+                str: document.getElementById("oritext").value,
+                to:document.getElementById("to").value,
+                mode:document.getElementById("mode").value,
+                romajiSystem:document.getElementById("romajiSystem").value
+            })
+        })
+            .then((resp)=>{
+                if(resp.ok){
+                    return resp.json();
+                }else if(resp.status == 429){
+                    document.getElementById("output").innerHTML = "<p>Error:</p>" + "Too many request. Please try again later.";
+                    throw new Error("Too many request");
+                }else{
+                    document.getElementById("output").innerHTML = "<p>Error:</p>" + "Something wrong. Please try again later.";
+                    throw new Error("Something wrong");
+                }
+            })
+            .then((result)=>{
+                document.getElementById("output").innerHTML = "<p>Result:</p>" + result.result;
+                document.getElementById("convertBtn").textContent="convert";
+                document.getElementById("convertBtn").disabled=false;
+            })
+            .catch((err)=>{
+                console.error(err);
+                document.getElementById("output").innerHTML = "<p>Error:</p>" + "Something wrong. Please try again later.";
+                document.getElementById("convertBtn").textContent="convert";
+                document.getElementById("convertBtn").disabled=false;
+            })
+    }
+</script>
 
 ## Feature
 - Japanese Sentence => Hiragana, Katakana or Romaji
@@ -30,11 +237,11 @@ You can check the demo [here](http://hexenq.com/kuroshiro/demo/index.html).
 ## Ready-made Analyzer Plugins
 *You should check the environment compatibility of each analyzer before you start working with them*
 
-| Analyzer | Node.js Support| Browser Support | Plugin Repo | Developer |
-|---|---|---|---|---|
-|Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
-|Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✓|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+| Analyzer      | Node.js Support | Browser Support | Plugin Repo                                                                                  | Developer                             |
+| ------------- | --------------- | --------------- | -------------------------------------------------------------------------------------------- | ------------------------------------- |
+| Kuromoji      | ✓               | ✓               | [kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)         | [Hexen Qi](https://github.com/hexenq) |
+| Mecab         | ✓               | ✗               | [kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)               | [Hexen Qi](https://github.com/hexenq) |
+| Yahoo Web API | ✓               | ✓               | [kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi) | [Hexen Qi](https://github.com/hexenq) |
 
 ## Usage
 ### Node.js (or using a module bundler (e.g. Webpack))
@@ -129,13 +336,13 @@ __Arguments__
 * `str` - A String to be converted.
 * `options` - *Optional* kuroshiro has several convert options as below. `romajiSystem` is only applied when the value of param `to` is `romaji`
 
-| Options | Type | Default | Description |
-|---|---|---|---|
-| to | String | "hiragana" | Target syllabary [`hiragana`, `katakana`, `romaji`] |
-| mode | String | "normal" | Convert mode [`normal`, `spaced`, `okurigana`, `furigana`] |
-| romajiSystem<sup>*</sup> | String | "hepburn" | Romanization system [`nippon`, `passport`, `hepburn`] |
-| delimiter_start | String | "(" | Delimiter(Start) |
-| delimiter_end | String | ")" | Delimiter(End) |
+| Options                  | Type   | Default    | Description                                                |
+| ------------------------ | ------ | ---------- | ---------------------------------------------------------- |
+| to                       | String | "hiragana" | Target syllabary [`hiragana`, `katakana`, `romaji`]        |
+| mode                     | String | "normal"   | Convert mode [`normal`, `spaced`, `okurigana`, `furigana`] |
+| romajiSystem<sup>*</sup> | String | "hepburn"  | Romanization system [`nippon`, `passport`, `hepburn`]      |
+| delimiter_start          | String | "("        | Delimiter(Start)                                           |
+| delimiter_end            | String | ")"        | Delimiter(End)                                             |
 
 **: Param `romajiSystem` is only applied when the value of param `to` is `romaji`. For more about it, check [Romanization System](#romanization-system)*
 

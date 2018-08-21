@@ -13,7 +13,7 @@ kuroshiroは日本語文をローマ字や仮名なとに変換できるライ�
 *ほかの言語：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md)。*
 
 ## デモ
-オンラインデモは[こちら](http://hexenq.com/kuroshiro/demo/index.html)です。初期化は少し時間がかかります、少々待ちください。
+オンラインデモは[こちら](https://kuroshiro.org/#demo)です。
 
 ## 特徴
 - 日本語文 => ひらがな、カタカナ、ローマ字

@@ -14,7 +14,7 @@ kuroshiro是一款十分方便使用的日文轉換注音工具，主要針對�
 *其他說明語言：[English](README.md), [日本語](README.jp.md), [簡體中文](README.zh-cn.md), [繁體中文](README.zh-tw.md)。*
 
 ## 演示
-你可以在[這裡](http://hexenq.com/kuroshiro/demo/index.html)查看在線演示，初始化會有些慢（需要下載字典，16MB左右），請耐心等待。
+你可以在[這裡](https://kuroshiro.org/#demo)查看在線演示。
 
 ## 特性
 - 日文文本 => 平假名、片假名、羅馬字

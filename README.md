@@ -1,4 +1,4 @@
-![kuroshiro](http://hexenq.com/kuroshiro/kuroshiro.png)
+![kuroshiro](https://kuroshiro.org/kuroshiro.png)
 
 # kuroshiro
 

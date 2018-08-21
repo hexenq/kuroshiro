@@ -25,6 +25,12 @@ coverage
 dist/*
 lib/*
 
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
 # Others
 .DS_Store
 package-lock.json

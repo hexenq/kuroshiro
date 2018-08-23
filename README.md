@@ -131,7 +131,7 @@ kuroshiro is a Japanese language library for converting Japanese sentence to Hir
 <div id="demoArea">
     <label>Original Text:</label>
     <div>
-        <textarea id="oritext" style="width:100%;border-radius: .2em;" rows="8">感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！</textarea>
+        <textarea id="oritext" style="width:100%;border-radius: .2em;font-size: 1em;" rows="8">感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！</textarea>
     </div>
     <div class="option">
         <label>To </label>

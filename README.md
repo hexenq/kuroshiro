@@ -96,6 +96,7 @@ kuroshiro is a Japanese language library for converting Japanese sentence to Hir
     padding: 0 0 0 .5em;
     color: #727272;
     cursor: pointer;
+    font-size: 0.8em;
     }
     select::-ms-expand {
     display: none;

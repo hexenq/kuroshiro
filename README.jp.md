@@ -133,7 +133,7 @@ __引数__
 |---|---|---|---|
 | to | String | 'hiragana' | 目標音節文字<br />`hiragana` (ひらがな),<br />`katakana` (カタカナ),<br />`romaji` (ローマ字) |
 | mode | String | 'normal' | 変換モード<br />`normal` (一般),<br />`spaced` (スペースで組み分け),<br />`okurigana` (送り仮名),<br />`furigana` (フリガナ) |
-| romajiSystem<sup>*</sup> | String | "hepburn" | ローマ字<br />`nippon` (日本式),<br />`passport` (パスポート式)),<br />`hepburn` (ヘボン式) |
+| romajiSystem<sup>*</sup> | String | "hepburn" | ローマ字<br />`nippon` (日本式),<br />`passport` (パスポート式),<br />`hepburn` (ヘボン式) |
 | delimiter_start | String | '(' | 区切り文字 (始め) |
 | delimiter_end | String | ')' | 区切り文字 (終り) |
 

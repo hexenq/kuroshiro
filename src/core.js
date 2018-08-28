@@ -38,11 +38,13 @@ class Kuroshiro {
      * @returns {Promise} Promise object represents the result of initialization
      */
     async init(analyzer) {
-        const self = this;
-        if (self._analyzer == null) {
+        if (!analyzer || typeof analyzer !== "object" || typeof analyzer.init !== "function" || typeof analyzer.parse !== "function") {
+            throw new Error("Invalid initialization parameter.");
+        }
+        else if (this._analyzer == null) {
             try {
                 await analyzer.init();
-                self._analyzer = analyzer;
+                this._analyzer = analyzer;
             }
             catch (err) {
                 throw err;

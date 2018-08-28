@@ -5,7 +5,52 @@
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
 import Kuroshiro from "../src";
 
-describe("Kuroshiro Node Test", () => {
+describe("Kuroshiro Node Initialization Test", () => {
+    let kuroshiro;
+
+    beforeAll(async () => {
+        kuroshiro = new Kuroshiro();
+    });
+    it("Invalid Initialization Parameter(1)", async (done) => {
+        try {
+            await kuroshiro.init();
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Invalid Initialization Parameter(2)", async (done) => {
+        try {
+            await kuroshiro.init("param");
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Invalid Initialization Parameter(3)", async (done) => {
+        try {
+            await kuroshiro.init({});
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+    it("Repeated Initialization", async (done) => {
+        try {
+            await kuroshiro.init(new KuromojiAnalyzer());
+            await kuroshiro.init(new KuromojiAnalyzer());
+            done("SHOULD NOT BE HERE");
+        }
+        catch (err) {
+            done();
+        }
+    });
+});
+
+describe("Kuroshiro Node Funtional Test", () => {
     const EXAMPLE_TEXT = "感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！";
     const EXAMPLE_TEXT2 = "ブラウン管への愛が足りねぇな";
     const EXAMPLE_TEXT3 = "関ヶ原の戦い";
@@ -19,16 +64,7 @@ describe("Kuroshiro Node Test", () => {
         kuroshiro = new Kuroshiro();
         await kuroshiro.init(new KuromojiAnalyzer());
     });
-    it("Repeated Initialization", async (done) => {
-        try {
-            await kuroshiro.init(new KuromojiAnalyzer());
-            done("SHOULD NOT BE HERE");
-        }
-        catch (err) {
-            done();
-        }
-    });
-    it("Wrong Parameter - Invalid Target Syllabary", async (done) => {
+    it("Convert - Wrong Parameter - Invalid Target Syllabary", async (done) => {
         const ori = EXAMPLE_TEXT;
         try {
             const result = await kuroshiro.convert(ori, { to: "xxxx" });
@@ -38,7 +74,7 @@ describe("Kuroshiro Node Test", () => {
             done();
         }
     });
-    it("Wrong Parameter - Invalid Conversion Mode", async (done) => {
+    it("Convert - Wrong Parameter - Invalid Conversion Mode", async (done) => {
         const ori = EXAMPLE_TEXT;
         try {
             const result = await kuroshiro.convert(ori, { to: "hiragana", mode: "xxxx" });
@@ -48,7 +84,7 @@ describe("Kuroshiro Node Test", () => {
             done();
         }
     });
-    it("Wrong Parameter - Invalid Romanization System", async (done) => {
+    it("Convert - Wrong Parameter - Invalid Romanization System", async (done) => {
         const ori = EXAMPLE_TEXT;
         try {
             const result = await kuroshiro.convert(ori, { to: "hiragana", romajiSystem: "xxxx" });

@@ -1396,6 +1396,7 @@ const toRawRomaji = function (str, system) {
         }
     }
 
+    // [ALL] kana to roman chars
     const max = str.length;
     while (pnt <= max) {
         if (r = romajiSystem[system][str.substring(pnt, pnt + 2)]) {
@@ -1421,13 +1422,6 @@ const toRawRomaji = function (str, system) {
         result = result.replace(/nm/gm, "mm");
         result = result.replace(/nb/gm, "mb");
         result = result.replace(/np/gm, "mp");
-    }
-
-    // [PASSPORT] 長音省略 他の場合
-    if (system === ROMANIZATION_SYSTEM.PASSPORT) {
-        result = result.replace(/uu/gm, "u");
-        result = result.replace(/ou/gm, "o");
-        result = result.replace(/oo(?!$)/gm, "o");
     }
 
     // [NIPPON] 長音変換
@@ -1475,6 +1469,51 @@ const getStrType = function (str) {
 };
 
 /**
+ * Patch tokens for conversion
+ * @param {Object} tokens Given tokens
+ * @return {Object} Patched tokens
+ */
+const patchTokens = function (tokens) {
+    // patch for 助動詞"う" after 動詞
+    for (let i = 0; i < tokens.length; i++) {
+        if (tokens[i].pos && tokens[i].pos === "助動詞" && (tokens[i].surface_form === "う" || tokens[i].surface_form === "ウ")) {
+            if (i - 1 >= 0 && tokens[i - 1].pos && tokens[i - 1].pos === "動詞") {
+                tokens[i - 1].surface_form += "う";
+                if (tokens[i - 1].pronunciation) {
+                    tokens[i - 1].pronunciation += "ー";
+                }
+                else {
+                    tokens[i - 1].pronunciation = `${tokens[i - 1].reading}ー`;
+                }
+                tokens[i - 1].reading += "ウ";
+                tokens.splice(i, 1);
+                i--;
+            }
+        }
+    }
+
+    // patch for "っ" at the tail of 動詞、形容詞
+    for (let j = 0; j < tokens.length; j++) {
+        if (tokens[j].pos && (tokens[j].pos === "動詞" || tokens[j].pos === "形容詞") && tokens[j].surface_form.length > 1 && (tokens[j].surface_form[tokens[j].surface_form.length - 1] === "っ" || tokens[j].surface_form[tokens[j].surface_form.length - 1] === "ッ")) {
+            if (j + 1 < tokens.length && tokens[j + 1].pos && (tokens[j + 1].pos === "動詞" || tokens[j + 1].pos === "助動詞")) {
+                tokens[j].surface_form += tokens[j + 1].surface_form;
+                if (tokens[j].pronunciation) {
+                    tokens[j].pronunciation += tokens[j + 1].pronunciation;
+                }
+                else {
+                    tokens[j].pronunciation = `${tokens[j].reading}${tokens[j + 1].reading}`;
+                }
+                tokens[j].reading += tokens[j + 1].reading;
+                tokens.splice(j + 1, 1);
+                j--;
+            }
+        }
+    }
+
+    return tokens;
+};
+
+/**
  * Convert kana to hiragana
  *
  * @param {string} str Given string
@@ -1509,6 +1548,7 @@ export {
     // language
     ROMANIZATION_SYSTEM,
     getStrType,
+    patchTokens,
     isHiragana,
     isKatakana,
     isKana,

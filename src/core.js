@@ -1,6 +1,7 @@
 import {
     ROMANIZATION_SYSTEM,
     getStrType,
+    patchTokens,
     isHiragana,
     isKatakana,
     isKana,
@@ -90,7 +91,8 @@ class Kuroshiro {
             throw new Error("Invalid Romanization System.");
         }
 
-        const tokens = await this._analyzer.parse(str);
+        const rawTokens = await this._analyzer.parse(str);
+        const tokens = patchTokens(rawTokens);
         for (let cr = 0; cr < tokens.length; cr++) {
             if (hasJapanese(tokens[cr].surface_form)) {
                 if (!tokens[cr].reading) {
@@ -119,9 +121,9 @@ class Kuroshiro {
                     return tokens.map(token => token.reading).join(" ");
                 case "romaji":
                     if (options.mode === "normal") {
-                        return tokens.map(token => toRawRomaji(token.reading, options.romajiSystem)).join("");
+                        return tokens.map(token => toRawRomaji(token.pronunciation || token.reading, options.romajiSystem)).join("");
                     }
-                    return tokens.map(token => toRawRomaji(token.reading, options.romajiSystem)).join(" ");
+                    return tokens.map(token => toRawRomaji(token.pronunciation || token.reading, options.romajiSystem)).join(" ");
                 case "hiragana":
                     for (let hi = 0; hi < tokens.length; hi++) {
                         if (hasKanji(tokens[hi].surface_form)) {
@@ -171,14 +173,12 @@ class Kuroshiro {
             }
         }
         else if (options.mode === "okurigana" || options.mode === "furigana") {
-            const notations = []; // [basic,basic_type[1=kanji,2=kana,3=others],notation]
+            const notations = []; // [basic, basic_type[1=kanji,2=kana,3=others], notation, pronunciation]
             for (let i = 0; i < tokens.length; i++) {
-                tokens[i].reading = toRawHiragana(tokens[i].reading);
-
                 const strType = getStrType(tokens[i].surface_form);
                 switch (strType) {
                     case 0:
-                        notations.push([tokens[i].surface_form, 1, tokens[i].reading]);
+                        notations.push([tokens[i].surface_form, 1, toRawHiragana(tokens[i].reading), tokens[i].pronunciation || tokens[i].reading]);
                         break;
                     case 1:
                         let pattern = "";
@@ -202,30 +202,31 @@ class Kuroshiro {
                             }
                         }
                         const reg = new RegExp(`^${pattern}$`);
-                        const matches = reg.exec(tokens[i].reading);
+                        const matches = reg.exec(toRawHiragana(tokens[i].reading));
                         if (matches) {
                             let pickKanji = 1;
                             for (let c1 = 0; c1 < subs.length; c1++) {
                                 if (isKanji(subs[c1][0])) {
-                                    notations.push([subs[c1], 1, matches[pickKanji++]]);
+                                    notations.push([subs[c1], 1, matches[pickKanji], toRawKatakana(matches[pickKanji])]);
+                                    pickKanji += 1;
                                 }
                                 else {
-                                    notations.push([subs[c1], 2, toRawHiragana(subs[c1])]);
+                                    notations.push([subs[c1], 2, toRawHiragana(subs[c1]), toRawKatakana(subs[c1])]);
                                 }
                             }
                         }
                         else {
-                            notations.push([tokens[i].surface_form, 1, tokens[i].reading]);
+                            notations.push([tokens[i].surface_form, 1, toRawHiragana(tokens[i].reading), tokens[i].pronunciation || tokens[i].reading]);
                         }
                         break;
                     case 2:
                         for (let c2 = 0; c2 < tokens[i].surface_form.length; c2++) {
-                            notations.push([tokens[i].surface_form[c2], 2, tokens[i].reading[c2]]);
+                            notations.push([tokens[i].surface_form[c2], 2, toRawHiragana(tokens[i].reading[c2]), (tokens[i].pronunciation && tokens[i].pronunciation[c2]) || tokens[i].reading[c2]]);
                         }
                         break;
                     case 3:
                         for (let c3 = 0; c3 < tokens[i].surface_form.length; c3++) {
-                            notations.push([tokens[i].surface_form[c3], 3, tokens[i].surface_form[c3]]);
+                            notations.push([tokens[i].surface_form[c3], 3, tokens[i].surface_form[c3], tokens[i].surface_form[c3]]);
                         }
                         break;
                     default:
@@ -263,14 +264,14 @@ class Kuroshiro {
                                 result += notations[n2][0];
                             }
                             else {
-                                result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][2], options.romajiSystem) + options.delimiter_end;
+                                result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][3], options.romajiSystem) + options.delimiter_end;
                             }
                         }
                     }
                     else { // furigana
                         result += "<ruby>";
                         for (let n3 = 0; n3 < notations.length; n3++) {
-                            result += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][2], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
+                            result += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
                         }
                         result += "</ruby>";
                     }

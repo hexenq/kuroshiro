@@ -1,3 +1,19 @@
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/hexenq/kuroshiro/compare/1.1.1...1.1.2) (2018-10-19)
+
+### Bug Fixes
+
+* fix conversion bug when handling chōon with passport-shiki romanization ([#47](https://github.com/hexenq/kuroshiro/issues/47))
+* fix kanji->romaji conversion bug when using nippon-shiki/hepburn-shiki romanization ([#46](https://github.com/hexenq/kuroshiro/issues/46))
+
+### Test
+
+* Update test specification
+
+### Miscellaneous
+
+* Update docs, add notice for romaji conversion
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/hexenq/kuroshiro/compare/1.1.0...1.1.1) (2018-08-28)
 

@@ -220,6 +220,15 @@ kuroshiroは三種類のローマ字表記法をサポートします。
 
 各種ローマ字表の比較は[こちら](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm)を参考にしてください。
 
+### ローマ字変換のお知らせ
+フリガナは音声を正確にあらわしていないため、__フリガナ__ を __ローマ字__ に完全自動的に変換することは不可能です。（[なぜフリガナではダメなのか？](https://green.adam.ne.jp/roomazi/onamae.html#naze)を参照）
+
+そのゆえ、`nippon`、`hepburn`のローマ字表記法を使って、フリガナ（仮名）-> ローマ字 変換を行うとき、kuroshiroは長音の処理を実行しません。（`passport`表記法そのものが長音を無視します）
+
+*例えば`nippon`、` passport`、 `hepburn`のローマ字表記法を使って フリガナ->ローマ字 変換を行うと、それぞれ"kousi"、 "koshi"、 "koushi"が得られます。*
+
+フリガナモードを使うかどうかにかかわらず、漢字->ローマ字の変換はこの仕組みに影響を与えられないです。
+
 ## 貢献したい方
 [CONTRIBUTING](CONTRIBUTING.md) を参考にしてみてください。
 

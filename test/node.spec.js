@@ -4,6 +4,7 @@
 
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
 import Kuroshiro from "../src";
+import { patchTokens } from "../src/util";
 
 describe("Kuroshiro Node Initialization Test", () => {
     let kuroshiro;
@@ -94,6 +95,11 @@ describe("Kuroshiro Node Funtional Test", () => {
             done();
         }
     });
+    it("Token Patch", () => {
+        const tokens = JSON.parse("[{\"surface_form\":\"綺麗\",\"pos\":\"名詞\",\"reading\":\"きれい\"},{\"surface_form\":\"な\",\"pos\":\"助動詞\"},{\"surface_form\":\"花\",\"pos\":\"名詞\",\"reading\":\"ハナ\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"面白い\",\"pos\":\"形容詞\",\"reading\":\"オモシロイ\"},{\"surface_form\":\"映画\",\"pos\":\"名詞\",\"reading\":\"エイガ\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"面白かっ\",\"pos\":\"形容詞\",\"reading\":\"オモシロカッ\"},{\"surface_form\":\"た\",\"pos\":\"助動詞\",\"reading\":\"タ\"},{\"surface_form\":\"です\",\"pos\":\"助動詞\",\"reading\":\"デス\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"繋ご\",\"pos\":\"動詞\",\"reading\":\"ツナゴ\"},{\"surface_form\":\"う\",\"pos\":\"助動詞\",\"reading\":\"ウ\"},{\"surface_form\":\"うp\",\"pos\":\"名詞\"}]");
+        const result = patchTokens(tokens);
+        expect(result).toHaveLength(12);
+    });
     it("Kana Character Recognition", () => {
         const ori = "こ";
         const result = Kuroshiro.Util.isKana(ori);
@@ -104,10 +110,15 @@ describe("Kuroshiro Node Funtional Test", () => {
         const result = Kuroshiro.Util.isKanji(ori);
         expect(result).toBeTruthy();
     });
-    it("Kana-mixed String Recognition", () => {
+    it("Kana-mixed String Recognition(T)", () => {
         const ori = "この公園の中で";
         const result = Kuroshiro.Util.hasKana(ori);
         expect(result).toBeTruthy();
+    });
+    it("Kana-mixed String Recognition(F)", () => {
+        const ori = "abc漢字";
+        const result = Kuroshiro.Util.hasKana(ori);
+        expect(result).toBeFalsy();
     });
     it("Kanji-mixed String Recognition", () => {
         const ori = "この公園の中で";
@@ -182,27 +193,47 @@ describe("Kuroshiro Node Funtional Test", () => {
     it("Kanji to Romaji", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { to: "romaji" });
-        expect(result).toEqual("kanjitoretarateotsunagou,kasanarunohajinseinorain and remiriasaikou!");
+        expect(result).toEqual("kanjitoretarateotsunagō,kasanarunowajinseinorain and remiriasaikō!");
     });
-    it("Kanji to Romaji with passport-shiki romaji system", async () => {
-        const ori = EXAMPLE_TEXT;
-        const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "passport" });
-        expect(result).toEqual("kanjitoretarateotsunagou,kasanarunohajinseinorain and remiriasaiko!");
-    });
-    it("Kanji to Hiragana with spaces", async () => {
-        const ori = EXAMPLE_TEXT;
-        const result = await kuroshiro.convert(ori, { mode: "spaced", to: "hiragana" });
-        expect(result).toEqual("かんじとれ たら て を つなご う 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！");
-    });
-    it("Kanji to Katakana with spaces", async () => {
-        const ori = EXAMPLE_TEXT;
-        const result = await kuroshiro.convert(ori, { mode: "spaced", to: "katakana" });
-        expect(result).toEqual("カンジトレ タラ テ ヲ ツナゴ ウ 、 カサナル ノ ハ ジンセイ ノ ライン   and   レミ リア サイコウ ！");
+    it("Kanji to Romaji with sokuon", async () => {
+        const ori = "勝手に買っちゃったんだ";
+        const result = await kuroshiro.convert(ori, { mode: "spaced", to: "romaji" });
+        expect(result).toEqual("katte ni katchatta n da");
     });
     it("Kanji to Romaji with spaces", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { mode: "spaced", to: "romaji" });
-        expect(result).toEqual("kanjitore tara te o tsunago u , kasanaru no ha jinsei no rain   and   remi ria saikou !");
+        expect(result).toEqual("kanjitore tara te o tsunagō , kasanaru no wa jinsei no rain   and   remi ria saikō !");
+    });
+    it("Kanji to Romaji with passport-shiki romaji system", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "passport" });
+        expect(result).toEqual("kanjitoretarateotsunago,kasanarunowajinseinorain and remiriasaiko!");
+    });
+    it("Kanji to Romaji misc with hepburn-shiki romaji system", async () => {
+        const ori = "東京、九州、丸の内、観桜、呼応、思う、長雨、記入、金融、学校、ビール、お母さん、委員";
+        const result = await kuroshiro.convert(ori, { to: "romaji" });
+        expect(result).toEqual("tōkyō,kyūshū,marunouchi,kan'ō,koō,omou,nagaame,kinyū,kin'yū,gakkō,bīru,okāsan,iin");
+    });
+    it("Kanji to Romaji misc with nippon-shiki romaji system", async () => {
+        const ori = "東京、九州、丸の内、観桜、呼応、思う、長雨、記入、金融、学校、ビール、お母さん、委員";
+        const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "nippon" });
+        expect(result).toEqual("tôkyô,kyûsyû,marunouti,kan'ô,koô,omou,nagaame,kinyû,kin'yû,gakkô,bîru,okâsan,iin");
+    });
+    it("Kanji to Romaji misc with passport-shiki romaji system", async () => {
+        const ori = "東京、九州、丸の内、観桜、呼応、思う、長雨、記入、金融、学校、ビール、お母さん、委員";
+        const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "passport" });
+        expect(result).toEqual("tokyo,kyushu,marunouchi,kano,koo,omou,nagaame,kinyu,kinyu,gakko,biru,okasan,iin");
+    });
+    it("Kanji to Hiragana with spaces", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { mode: "spaced", to: "hiragana" });
+        expect(result).toEqual("かんじとれ たら て を つなごう 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！");
+    });
+    it("Kanji to Katakana with spaces", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { mode: "spaced", to: "katakana" });
+        expect(result).toEqual("カンジトレ タラ テ ヲ ツナゴウ 、 カサナル ノ ハ ジンセイ ノ ライン   and   レミ リア サイコウ ！");
     });
     it("Kanji to Hiragana with okurigana(1)", async () => {
         const ori = EXAMPLE_TEXT;
@@ -242,7 +273,7 @@ describe("Kuroshiro Node Funtional Test", () => {
     it("Kanji to Romaji with okurigana", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { mode: "okurigana", to: "romaji" });
-        expect(result).toEqual("感(kan)じ取(to)れたら手(te)を繋(tsuna)ごう、重(kasa)なるのは人生(jinsei)のライン and レミリア最高(saikou)！");
+        expect(result).toEqual("感(kan)じ取(to)れたら手(te)を繋(tsuna)ごう、重(kasa)なるのは人生(jinsei)のライン and レミリア最高(saikō)！");
     });
     it("Kanji to Hiragana with furigana", async () => {
         const ori = EXAMPLE_TEXT;
@@ -257,6 +288,6 @@ describe("Kuroshiro Node Funtional Test", () => {
     it("Kanji to Romaji with furigana", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { mode: "furigana", to: "romaji" });
-        expect(result).toEqual("<ruby>感<rp>(</rp><rt>kan</rt><rp>)</rp>じ<rp>(</rp><rt>ji</rt><rp>)</rp>取<rp>(</rp><rt>to</rt><rp>)</rp>れ<rp>(</rp><rt>re</rt><rp>)</rp>た<rp>(</rp><rt>ta</rt><rp>)</rp>ら<rp>(</rp><rt>ra</rt><rp>)</rp>手<rp>(</rp><rt>te</rt><rp>)</rp>を<rp>(</rp><rt>o</rt><rp>)</rp>繋<rp>(</rp><rt>tsuna</rt><rp>)</rp>ご<rp>(</rp><rt>go</rt><rp>)</rp>う<rp>(</rp><rt>u</rt><rp>)</rp>、<rp>(</rp><rt>,</rt><rp>)</rp>重<rp>(</rp><rt>kasa</rt><rp>)</rp>な<rp>(</rp><rt>na</rt><rp>)</rp>る<rp>(</rp><rt>ru</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>は<rp>(</rp><rt>ha</rt><rp>)</rp>人生<rp>(</rp><rt>jinsei</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>ラ<rp>(</rp><rt>ra</rt><rp>)</rp>イ<rp>(</rp><rt>i</rt><rp>)</rp>ン<rp>(</rp><rt>n</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>a<rp>(</rp><rt>a</rt><rp>)</rp>n<rp>(</rp><rt>n</rt><rp>)</rp>d<rp>(</rp><rt>d</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>レ<rp>(</rp><rt>re</rt><rp>)</rp>ミ<rp>(</rp><rt>mi</rt><rp>)</rp>リ<rp>(</rp><rt>ri</rt><rp>)</rp>ア<rp>(</rp><rt>a</rt><rp>)</rp>最高<rp>(</rp><rt>saikou</rt><rp>)</rp>！<rp>(</rp><rt>!</rt><rp>)</rp></ruby>");
+        expect(result).toEqual("<ruby>感<rp>(</rp><rt>kan</rt><rp>)</rp>じ<rp>(</rp><rt>ji</rt><rp>)</rp>取<rp>(</rp><rt>to</rt><rp>)</rp>れ<rp>(</rp><rt>re</rt><rp>)</rp>た<rp>(</rp><rt>ta</rt><rp>)</rp>ら<rp>(</rp><rt>ra</rt><rp>)</rp>手<rp>(</rp><rt>te</rt><rp>)</rp>を<rp>(</rp><rt>o</rt><rp>)</rp>繋<rp>(</rp><rt>tsuna</rt><rp>)</rp>ご<rp>(</rp><rt>go</rt><rp>)</rp>う<rp>(</rp><rt>u</rt><rp>)</rp>、<rp>(</rp><rt>,</rt><rp>)</rp>重<rp>(</rp><rt>kasa</rt><rp>)</rp>な<rp>(</rp><rt>na</rt><rp>)</rp>る<rp>(</rp><rt>ru</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>は<rp>(</rp><rt>wa</rt><rp>)</rp>人生<rp>(</rp><rt>jinsei</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>ラ<rp>(</rp><rt>ra</rt><rp>)</rp>イ<rp>(</rp><rt>i</rt><rp>)</rp>ン<rp>(</rp><rt>n</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>a<rp>(</rp><rt>a</rt><rp>)</rp>n<rp>(</rp><rt>n</rt><rp>)</rp>d<rp>(</rp><rt>d</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>レ<rp>(</rp><rt>re</rt><rp>)</rp>ミ<rp>(</rp><rt>mi</rt><rp>)</rp>リ<rp>(</rp><rt>ri</rt><rp>)</rp>ア<rp>(</rp><rt>a</rt><rp>)</rp>最高<rp>(</rp><rt>saikō</rt><rp>)</rp>！<rp>(</rp><rt>!</rt><rp>)</rp></ruby>");
     });
 });

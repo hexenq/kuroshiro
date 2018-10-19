@@ -127,7 +127,7 @@ Convert given string to target syllabary with options available
 __Arguments__
 
 * `str` - A String to be converted.
-* `options` - *Optional* kuroshiro has several convert options as below. `romajiSystem` is only applied when the value of param `to` is `romaji`
+* `options` - *Optional* kuroshiro has several convert options as below.
 
 | Options | Type | Default | Description |
 |---|---|---|---|
@@ -207,7 +207,7 @@ Convert input kana string to hiragana.
 Convert input kana string to katakana.
 
 #### kanaToRomaji(str, system)
-Convert input kana string to romaji. Param `system` accepts `"nippon"`, `"passport"`, `"hepburn"` (Default: "hepburn")
+Convert input kana string to romaji. Param `system` accepts `"nippon"`, `"passport"`, `"hepburn"` (Default: "hepburn"). 
 
 ## Romanization System
 kuroshiro supports three kinds of romanization systems.
@@ -219,6 +219,16 @@ kuroshiro supports three kinds of romanization systems.
 `hepburn`: Hepburn romanization. Refer to [BS 4812 : 1972](https://archive.is/PiJ4).
 
 There is a useful [webpage](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm) for you to check the difference between these romanization systems.
+
+### Notice for Romaji Conversion
+Since it's impossible to fully automatically convert __furigana__ directly to __romaji__ because furigana lacks information on pronunciation (Refer to [なぜ フリガナでは ダメなのか？](https://green.adam.ne.jp/roomazi/onamae.html#naze)). 
+
+kuroshiro will not handle chōon when processing directly furigana (kana) -> romaji conversion with `nippon` or `hepburn` romanization system (Chōon will be ignored by `passport` romanization system) 
+
+*For example, you'll get "kousi", "koshi", "koushi" respectively when converts kana "こうし" to romaji 
+using `nippon`, `passport`, `hepburn` romanization system.*
+
+The kanji -> romaji conversion with/without furigana mode is __unaffected__ by this logic.
 
 ## Contributing
 Please check [CONTRIBUTING](CONTRIBUTING.md).

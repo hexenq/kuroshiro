@@ -208,7 +208,7 @@ const result = Kuroshiro.Util.isHiragana("あ"));
 轉換輸入假名字元串至片假名。
 
 #### kanaToRomaji(str, system)
-轉換輸入假名字元串至羅馬字。參數`system`可選值為`"nippon"`, `"passport"`, `"hepburn"` (默認值: "hepburn")
+轉換輸入假名字元串至羅馬字。參數`system`可選值為`"nippon"`, `"passport"`, `"hepburn"` (默認值: "hepburn")。
 
 ## 羅馬字體系
 kuroshiro支持三種羅馬字體系。
@@ -220,6 +220,15 @@ kuroshiro支持三種羅馬字體系。
 `hepburn`: 平文羅馬字。參照 [BS 4812 : 1972](https://archive.is/PiJ4)。
 
 想快速了解這些羅馬字體系的不同，可參考這個實用的[網頁](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm)。
+
+### 羅馬字轉換須知
+完全自動化進行注音假名到羅馬字的直接轉換是不可能的，這是因為一般的注音假名都缺乏正確的發音信息，可以參考 [なぜ フリガナでは ダメなのか？](https://green.adam.ne.jp/roomazi/onamae.html#naze)。
+
+因此kuroshiro在進行直接的注音假名->羅馬字轉換（使用`nippon`或`hepburn`羅馬字體系）時，不會處理長音。(`passport`羅馬字體系本身便忽略長音)
+
+*例如，當進行假名"こうし"到羅馬字的轉換時，對於`nippon`, `passport`, `hepburn`三種羅馬字體系，你會分別得到"kousi", "koshi", "koushi"這幾個結果*
+
+漢字->羅馬字的轉換無論使用注音假名模式與否都 __不受__ 此邏輯影響。
 
 ## 貢獻
 請查閱文檔 [CONTRIBUTING](CONTRIBUTING.md).

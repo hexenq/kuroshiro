@@ -102,10 +102,20 @@ class Kuroshiro {
                     }
                     return tokens.map(token => token.reading).join(" ");
                 case "romaji":
+                    const romajiConv = (token) => {
+                        let preToken;
+                        if (hasJapanese(token.surface_form)) {
+                            preToken = token.pronunciation || token.reading;
+                        }
+                        else {
+                            preToken = token.surface_form;
+                        }
+                        return toRawRomaji(preToken, options.romajiSystem);
+                    };
                     if (options.mode === "normal") {
-                        return tokens.map(token => toRawRomaji(token.pronunciation || token.reading, options.romajiSystem)).join("");
+                        return tokens.map(romajiConv).join("");
                     }
-                    return tokens.map(token => toRawRomaji(token.pronunciation || token.reading, options.romajiSystem)).join(" ");
+                    return tokens.map(romajiConv).join(" ");
                 case "hiragana":
                     for (let hi = 0; hi < tokens.length; hi++) {
                         if (hasKanji(tokens[hi].surface_form)) {

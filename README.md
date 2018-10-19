@@ -13,7 +13,7 @@ kuroshiro is a Japanese language library for converting Japanese sentence to Hir
 *Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
 
 ## Demo
-*This demo utilizes Yahoo-WebAPI analyzer.*
+*For convenience, this demo utilizes Yahoo-WebAPI analyzer plugin. However this analyzer might not give optimized converted result when converting kanji to romaji with kuroshiro since Yahoo Web API lacks information of pronunciation in analysis result. Use other analyzer plugins could avoid this issue. Please note that.*
 <style>    
     #demoArea {
         font-size: 16pt;

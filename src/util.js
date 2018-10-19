@@ -1474,6 +1474,26 @@ const getStrType = function (str) {
  * @return {Object} Patched tokens
  */
 const patchTokens = function (tokens) {
+    // patch for token structure
+    for (let cr = 0; cr < tokens.length; cr++) {
+        if (hasJapanese(tokens[cr].surface_form)) {
+            if (!tokens[cr].reading) {
+                if (tokens[cr].surface_form.split("").every(isKana)) {
+                    tokens[cr].reading = toRawKatakana(tokens[cr].surface_form);
+                }
+                else {
+                    tokens[cr].reading = tokens[cr].surface_form;
+                }
+            }
+            else if (hasHiragana(tokens[cr].reading)) {
+                tokens[cr].reading = toRawKatakana(tokens[cr].reading);
+            }
+        }
+        else {
+            tokens[cr].reading = tokens[cr].surface_form;
+        }
+    }
+
     // patch for 助動詞"う" after 動詞
     for (let i = 0; i < tokens.length; i++) {
         if (tokens[i].pos && tokens[i].pos === "助動詞" && (tokens[i].surface_form === "う" || tokens[i].surface_form === "ウ")) {

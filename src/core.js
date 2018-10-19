@@ -93,24 +93,6 @@ class Kuroshiro {
 
         const rawTokens = await this._analyzer.parse(str);
         const tokens = patchTokens(rawTokens);
-        for (let cr = 0; cr < tokens.length; cr++) {
-            if (hasJapanese(tokens[cr].surface_form)) {
-                if (!tokens[cr].reading) {
-                    if (tokens[cr].surface_form.split().every(isKana)) {
-                        tokens[cr].reading = toRawKatakana(tokens[cr].surface_form);
-                    }
-                    else {
-                        tokens[cr].reading = tokens[cr].surface_form;
-                    }
-                }
-                else if (hasHiragana(tokens[cr].reading)) {
-                    tokens[cr].reading = toRawKatakana(tokens[cr].reading);
-                }
-            }
-            else {
-                tokens[cr].reading = tokens[cr].surface_form;
-            }
-        }
 
         if (options.mode === "normal" || options.mode === "spaced") {
             switch (options.to) {

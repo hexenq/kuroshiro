@@ -4,6 +4,7 @@
 
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
 import Kuroshiro from "../src";
+import { patchTokens } from "../src/util";
 
 describe("Kuroshiro Node Initialization Test", () => {
     let kuroshiro;
@@ -94,6 +95,11 @@ describe("Kuroshiro Node Funtional Test", () => {
             done();
         }
     });
+    it("Token Patch", () => {
+        const tokens = JSON.parse("[{\"surface_form\":\"綺麗\",\"pos\":\"名詞\",\"reading\":\"きれい\"},{\"surface_form\":\"な\",\"pos\":\"助動詞\"},{\"surface_form\":\"花\",\"pos\":\"名詞\",\"reading\":\"ハナ\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"面白い\",\"pos\":\"形容詞\",\"reading\":\"オモシロイ\"},{\"surface_form\":\"映画\",\"pos\":\"名詞\",\"reading\":\"エイガ\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"面白かっ\",\"pos\":\"形容詞\",\"reading\":\"オモシロカッ\"},{\"surface_form\":\"た\",\"pos\":\"助動詞\",\"reading\":\"タ\"},{\"surface_form\":\"です\",\"pos\":\"助動詞\",\"reading\":\"デス\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"繋ご\",\"pos\":\"動詞\",\"reading\":\"ツナゴ\"},{\"surface_form\":\"う\",\"pos\":\"助動詞\",\"reading\":\"ウ\"},{\"surface_form\":\"うp\",\"pos\":\"名詞\"}]");
+        const result = patchTokens(tokens);
+        expect(result).toHaveLength(12);
+    });
     it("Kana Character Recognition", () => {
         const ori = "こ";
         const result = Kuroshiro.Util.isKana(ori);
@@ -104,10 +110,15 @@ describe("Kuroshiro Node Funtional Test", () => {
         const result = Kuroshiro.Util.isKanji(ori);
         expect(result).toBeTruthy();
     });
-    it("Kana-mixed String Recognition", () => {
+    it("Kana-mixed String Recognition(T)", () => {
         const ori = "この公園の中で";
         const result = Kuroshiro.Util.hasKana(ori);
         expect(result).toBeTruthy();
+    });
+    it("Kana-mixed String Recognition(F)", () => {
+        const ori = "abc漢字";
+        const result = Kuroshiro.Util.hasKana(ori);
+        expect(result).toBeFalsy();
     });
     it("Kanji-mixed String Recognition", () => {
         const ori = "この公園の中で";

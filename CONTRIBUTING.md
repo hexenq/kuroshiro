@@ -45,11 +45,11 @@ npm run test
 
    ```bash
    # Clone your fork of the repo into the current directory
-   git clone https://github.com/<your-username>/<repo-name>
+   git clone https://github.com/<your-username>/kuroshiro
    # Navigate to the newly cloned directory
-   cd <repo-name>
+   cd kuroshiro
    # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/<upstream-owner>/<repo-name>
+   git remote add upstream https://github.com/hexenq/kuroshiro
    ```
 
 2. If you cloned a while ago, get the latest changes from upstream:
@@ -83,8 +83,7 @@ npm run test
    git push origin <topic-branch-name>
    ```
 
-8. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
-    with a clear title and description.
+8. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) to `dev` branch with a clear title and description.
 
 ## Code Style
 

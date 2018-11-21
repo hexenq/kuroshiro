@@ -223,9 +223,9 @@ There is a useful [webpage](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm)
 ### Notice for Romaji Conversion
 Since it's impossible to fully automatically convert __furigana__ directly to __romaji__ because furigana lacks information on pronunciation (Refer to [なぜ フリガナでは ダメなのか？](https://green.adam.ne.jp/roomazi/onamae.html#naze)). 
 
-kuroshiro will not handle chōon when processing directly furigana (kana) -> romaji conversion with `nippon` or `hepburn` romanization system (Chōon will be ignored by `passport` romanization system) 
+kuroshiro will not handle chōon when processing directly furigana (kana) -> romaji conversion with every romanization system (Except that Chōonpu will be handled) 
 
-*For example, you'll get "kousi", "koshi", "koushi" respectively when converts kana "こうし" to romaji 
+*For example, you'll get "kousi", "koushi", "koushi" respectively when converts kana "こうし" to romaji 
 using `nippon`, `passport`, `hepburn` romanization system.*
 
 The kanji -> romaji conversion with/without furigana mode is __unaffected__ by this logic.

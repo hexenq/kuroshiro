@@ -55,9 +55,6 @@ describe("Kuroshiro Node Funtional Test", () => {
     const EXAMPLE_TEXT = "感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！";
     const EXAMPLE_TEXT2 = "ブラウン管への愛が足りねぇな";
     const EXAMPLE_TEXT3 = "関ヶ原の戦い";
-    const EXAMPLE_TEXT4 = "綺麗な花。面白い映画。面白かったです。";
-    const EXAMPLE_TEXT5 = "言い訳";
-    const EXAMPLE_TEXT6 = "可愛い";
 
     let kuroshiro;
 
@@ -251,19 +248,24 @@ describe("Kuroshiro Node Funtional Test", () => {
         expect(result).toEqual("関ヶ原(せきがはら)の戦(たたか)い");
     });
     it("Kanji to Hiragana with okurigana(4)", async () => {
-        const ori = EXAMPLE_TEXT4;
+        const ori = "綺麗な花。面白い映画。面白かったです。";
         const result = await kuroshiro.convert(ori, { mode: "okurigana", to: "hiragana" });
         expect(result).toEqual("綺麗(きれい)な花(はな)。面白(おもしろ)い映画(えいが)。面白(おもしろ)かったです。");
     });
     it("Kanji to Hiragana with okurigana(5)", async () => {
-        const ori = EXAMPLE_TEXT5;
+        const ori = "言い訳";
         const result = await kuroshiro.convert(ori, { mode: "okurigana", to: "hiragana" });
         expect(result).toEqual("言(い)い訳(わけ)");
     });
     it("Kanji to Hiragana with okurigana(6)", async () => {
-        const ori = EXAMPLE_TEXT6;
+        const ori = "可愛い";
         const result = await kuroshiro.convert(ori, { mode: "okurigana", to: "hiragana" });
         expect(result).toEqual("可愛(かわい)い");
+    });
+    it("Kanji to Hiragana with okurigana(7)", async () => {
+        const ori = "渡り鳥";
+        const result = await kuroshiro.convert(ori, { mode: "okurigana", to: "hiragana" });
+        expect(result).toEqual("渡(わた)り鳥(どり)");
     });
     it("Kanji to Katakana with okurigana", async () => {
         const ori = EXAMPLE_TEXT;

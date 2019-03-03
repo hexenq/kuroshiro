@@ -180,7 +180,7 @@ class Kuroshiro {
                             if (isKanji(tokens[i].surface_form[c])) {
                                 if (!isLastTokenKanji) { // ignore successive kanji tokens (#10)
                                     isLastTokenKanji = true;
-                                    pattern += "(.*)";
+                                    pattern += "(.+)";
                                     subs.push(tokens[i].surface_form[c]);
                                 }
                                 else {

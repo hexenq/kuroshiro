@@ -46,9 +46,9 @@ const isKana = function (ch) {
  */
 const isKanji = function (ch) {
     ch = ch[0];
-    return (ch >= "\u4e00" && ch <= "\u9fcf") ||
-        (ch >= "\uf900" && ch <= "\ufaff") ||
-        (ch >= "\u3400" && ch <= "\u4dbf");
+    return (ch >= "\u4e00" && ch <= "\u9fcf")
+        || (ch >= "\uf900" && ch <= "\ufaff")
+        || (ch >= "\u3400" && ch <= "\u4dbf");
 };
 
 /**
@@ -1463,8 +1463,8 @@ const getStrType = function (str) {
         }
     }
     if (hasKJ && hasHK) return 1;
-    else if (hasKJ) return 0;
-    else if (hasHK) return 2;
+    if (hasKJ) return 0;
+    if (hasHK) return 2;
     return 3;
 };
 

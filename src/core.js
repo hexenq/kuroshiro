@@ -1,23 +1,10 @@
+import { ROMANIZATION_SYSTEM } from "./constants";
 import {
-    ROMANIZATION_SYSTEM,
-    getStrType,
-    patchTokens,
-    isHiragana,
-    isKatakana,
-    isKana,
-    isKanji,
-    isJapanese,
-    hasHiragana,
-    hasKatakana,
-    hasKana,
-    hasKanji,
-    hasJapanese,
-    toRawHiragana,
-    toRawKatakana,
-    toRawRomaji,
-    kanaToHiragna,
-    kanaToKatakana,
-    kanaToRomaji
+    getStrType, patchTokens,
+    isHiragana, isKatakana, isKana, isKanji, isJapanese,
+    hasHiragana, hasKatakana, hasKana, hasKanji, hasJapanese,
+    toRawHiragana, toRawKatakana, toRawRomaji,
+    kanaToHiragna, kanaToKatakana, kanaToRomaji
 } from "./util";
 
 /**

@@ -30,13 +30,8 @@ class Kuroshiro {
             throw new Error("Invalid initialization parameter.");
         }
         else if (this._analyzer == null) {
-            try {
-                await analyzer.init();
-                this._analyzer = analyzer;
-            }
-            catch (err) {
-                throw err;
-            }
+            await analyzer.init();
+            this._analyzer = analyzer;
         }
         else {
             throw new Error("Kuroshiro has already been initialized.");
@@ -73,7 +68,7 @@ class Kuroshiro {
             throw new Error("Invalid Conversion Mode.");
         }
 
-        const ROMAJI_SYSTEMS = Object.keys(ROMANIZATION_SYSTEM).map(e => ROMANIZATION_SYSTEM[e]);
+        const ROMAJI_SYSTEMS = Object.keys(ROMANIZATION_SYSTEM).map((e) => ROMANIZATION_SYSTEM[e]);
         if (ROMAJI_SYSTEMS.indexOf(options.romajiSystem) === -1) {
             throw new Error("Invalid Romanization System.");
         }
@@ -85,9 +80,9 @@ class Kuroshiro {
             switch (options.to) {
                 case "katakana":
                     if (options.mode === "normal") {
-                        return tokens.map(token => token.reading).join("");
+                        return tokens.map((token) => token.reading).join("");
                     }
-                    return tokens.map(token => token.reading).join(" ");
+                    return tokens.map((token) => token.reading).join(" ");
                 case "romaji":
                     const romajiConv = (token) => {
                         let preToken;
@@ -144,9 +139,9 @@ class Kuroshiro {
                         }
                     }
                     if (options.mode === "normal") {
-                        return tokens.map(token => token.reading).join("");
+                        return tokens.map((token) => token.reading).join("");
                     }
-                    return tokens.map(token => token.reading).join(" ");
+                    return tokens.map((token) => token.reading).join(" ");
                 default:
                     throw new Error("Unknown option.to param");
             }

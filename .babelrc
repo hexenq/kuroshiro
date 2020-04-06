@@ -1,113 +1,113 @@
 {
-    "presets": [
-        "@babel/preset-env"
-    ],
-    "plugins": [
+  "presets": [
+    "@babel/preset-env"
+  ],
+  "plugins": [
+    "add-module-exports",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "helpers": false,
+        "regenerator": true
+      }
+    ]
+  ],
+  "env": {
+    "cjs": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "10"
+            }
+          }
+        ]
+      ],
+      "plugins": [
         "add-module-exports",
         [
-            "@babel/plugin-transform-runtime",
-            {
-                "helpers": false,
-                "regenerator": true
-            }
+          "@babel/plugin-transform-runtime",
+          {
+            "helpers": false,
+            "regenerator": true
+          }
         ]
-    ],
-    "env": {
-        "cjs": {
-            "presets": [
-                [
-                    "@babel/preset-env",
-                    {
-                        "targets": {
-                            "node": "6"
-                        }
-                    }
-                ]
-            ],
-            "plugins": [
-                "add-module-exports",
-                [
-                    "@babel/plugin-transform-runtime",
-                    {
-                        "helpers": false,
-                        "regenerator": true
-                    }
-                ]
-            ]
-        },
-        "es": {
-            "presets": [
-                [
-                    "@babel/preset-env",
-                    {
-                        "targets": {
-                            "browsers": [
-                                ">0.25%",
-                                "not ie 11",
-                                "not op_mini all"
-                            ]
-                        },
-                        "modules": false
-                    }
-                ]
-            ],
-            "plugins": [
-                [
-                    "@babel/plugin-transform-runtime",
-                    {
-                        "helpers": false,
-                        "regenerator": true
-                    }
-                ]
-            ]
-        },
-        "umd": {
-            "presets": [
-                [
-                    "@babel/preset-env",
-                    {
-                        "targets": {
-                            "browsers": [
-                                ">0.25%",
-                                "not ie 11",
-                                "not op_mini all"
-                            ]
-                        }
-                    }
-                ]
-            ],
-            "plugins": [
-                "add-module-exports",
-                [
-                    "@babel/plugin-transform-runtime",
-                    {
-                        "helpers": false,
-                        "regenerator": true
-                    }
-                ]
-            ]
-        },
-        "test": {
-            "presets": [
-                [
-                    "@babel/preset-env",
-                    {
-                        "targets": {
-                            "node": "6"
-                        }
-                    }
-                ]
-            ],
-            "plugins": [
-                "add-module-exports",
-                [
-                    "@babel/plugin-transform-runtime",
-                    {
-                        "helpers": false,
-                        "regenerator": true
-                    }
-                ]
-            ]
-        }
+      ]
+    },
+    "es": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "browsers": [
+                ">0.25%",
+                "not ie 11",
+                "not op_mini all"
+              ]
+            },
+            "modules": false
+          }
+        ]
+      ],
+      "plugins": [
+        [
+          "@babel/plugin-transform-runtime",
+          {
+            "helpers": false,
+            "regenerator": true
+          }
+        ]
+      ]
+    },
+    "umd": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "browsers": [
+                ">0.25%",
+                "not ie 11",
+                "not op_mini all"
+              ]
+            }
+          }
+        ]
+      ],
+      "plugins": [
+        "add-module-exports",
+        [
+          "@babel/plugin-transform-runtime",
+          {
+            "helpers": false,
+            "regenerator": true
+          }
+        ]
+      ]
+    },
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "10"
+            }
+          }
+        ]
+      ],
+      "plugins": [
+        "add-module-exports",
+        [
+          "@babel/plugin-transform-runtime",
+          {
+            "helpers": false,
+            "regenerator": true
+          }
+        ]
+      ]
     }
+  }
 }

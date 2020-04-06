@@ -1,8 +1,4 @@
-import {
-    ROMAJI_TABLE, ROMANIZATION_SYSTEM, HIRAGANA_KATAKANA_SHIFT, KATAKANA_HIRAGANA_SHIFT,
-    HIRAGANA_START, HIRAGANA_END, KATAKANA_START, KATAKANA_END,
-    CJK_START, CJK_END, CJK_EXT_A_START, CJK_EXT_A_END, CJK_EXT_B_START, CJK_EXT_B_END, KATAKANA_SHIFTABLE_START, KATAKANA_SHIFTABLE_END, HIRAGANA_SHIFTABLE_START, HIRAGANA_SHIFTABLE_END
-} from "./constants";
+import * as Constants from "./constants";
 
 /**
  * Check if given char is a hiragana
@@ -12,7 +8,7 @@ import {
  */
 export const isHiragana = function (ch = "") {
     const charCode = (ch[0] || "").charCodeAt(0);
-    return charCode >= HIRAGANA_START && charCode <= HIRAGANA_END;
+    return charCode >= Constants.HIRAGANA_START && charCode <= Constants.HIRAGANA_END;
 };
 
 /**
@@ -23,7 +19,7 @@ export const isHiragana = function (ch = "") {
  */
 export const isKatakana = function (ch = "") {
     const charCode = (ch[0] || "").charCodeAt(0);
-    return charCode >= KATAKANA_START && charCode <= KATAKANA_END;
+    return charCode >= Constants.KATAKANA_START && charCode <= Constants.KATAKANA_END;
 };
 
 /**
@@ -44,9 +40,9 @@ export const isKana = function (ch = "") {
  */
 export const isKanji = function (ch = "") {
     const charCode = ([...ch][0] || "").codePointAt(0);
-    return (charCode >= CJK_START && charCode <= CJK_END)
-        || (charCode >= CJK_EXT_A_START && charCode <= CJK_EXT_A_END)
-        || (charCode >= CJK_EXT_B_START && charCode <= CJK_EXT_B_END);
+    return (charCode >= Constants.CJK_START && charCode <= Constants.CJK_END)
+        || (charCode >= Constants.CJK_EXT_A_START && charCode <= Constants.CJK_EXT_A_END)
+        || (charCode >= Constants.CJK_EXT_B_START && charCode <= Constants.CJK_EXT_B_END);
 };
 
 /**
@@ -134,8 +130,8 @@ export const hasJapanese = function (str = "") {
  */
 export const toRawHiragana = function (str = "") {
     return [...str].map((ch) => {
-        if (ch.codePointAt(0) >= KATAKANA_SHIFTABLE_START && ch.codePointAt(0) <= KATAKANA_SHIFTABLE_END) {
-            return String.fromCharCode(ch.charCodeAt(0) + KATAKANA_HIRAGANA_SHIFT);
+        if (ch.codePointAt(0) >= Constants.KATAKANA_SHIFTABLE_START && ch.codePointAt(0) <= Constants.KATAKANA_SHIFTABLE_END) {
+            return String.fromCharCode(ch.charCodeAt(0) + Constants.KATAKANA_HIRAGANA_SHIFT);
         }
         return ch;
     }).join("");
@@ -149,8 +145,8 @@ export const toRawHiragana = function (str = "") {
  */
 export const toRawKatakana = function (str = "") {
     return [...str].map((ch) => {
-        if (ch.codePointAt(0) >= HIRAGANA_SHIFTABLE_START && ch.codePointAt(0) <= HIRAGANA_SHIFTABLE_END) {
-            return String.fromCharCode(ch.charCodeAt(0) + HIRAGANA_KATAKANA_SHIFT);
+        if (ch.codePointAt(0) >= Constants.HIRAGANA_SHIFTABLE_START && ch.codePointAt(0) <= Constants.HIRAGANA_SHIFTABLE_END) {
+            return String.fromCharCode(ch.charCodeAt(0) + Constants.HIRAGANA_KATAKANA_SHIFT);
         }
         return ch;
     }).join("");
@@ -164,7 +160,7 @@ export const toRawKatakana = function (str = "") {
  * @return {string} Romaji string
  */
 export const toRawRomaji = function (str = "", system) {
-    system = system || ROMANIZATION_SYSTEM.HEPBURN;
+    system = system || Constants.ROMANIZATION_SYSTEM.HEPBURN;
 
     const reg_tsu = /(っ|ッ)([bcdfghijklmnopqrstuvwyz])/gm;
     const reg_xtsu = /っ|ッ/gm;
@@ -175,12 +171,12 @@ export const toRawRomaji = function (str = "", system) {
     let result = "";
 
     // [PASSPORT] 長音省略 「―」の場合
-    if (system === ROMANIZATION_SYSTEM.PASSPORT) {
+    if (system === Constants.ROMANIZATION_SYSTEM.PASSPORT) {
         str = str.replace(/ー/gm, "");
     }
 
     // [NIPPON|HEPBURN] 撥音の特殊表記 a、i、u、e、o、y
-    if (system === ROMANIZATION_SYSTEM.NIPPON || system === ROMANIZATION_SYSTEM.HEPBURN) {
+    if (system === Constants.ROMANIZATION_SYSTEM.NIPPON || system === Constants.ROMANIZATION_SYSTEM.HEPBURN) {
         const reg_hatu = new RegExp(/(ん|ン)(?=あ|い|う|え|お|ア|イ|ウ|エ|オ|ぁ|ぃ|ぅ|ぇ|ぉ|ァ|ィ|ゥ|ェ|ォ|や|ゆ|よ|ヤ|ユ|ヨ|ゃ|ゅ|ょ|ャ|ュ|ョ)/g);
         let match;
         const indices = [];
@@ -205,33 +201,33 @@ export const toRawRomaji = function (str = "", system) {
     // [ALL] kana to roman chars
     const max = str.length;
     while (pnt <= max) {
-        if (r = ROMAJI_TABLE[system][str.substring(pnt, pnt + 2)]) {
+        if (r = Constants.ROMAJI_TABLE[system][str.substring(pnt, pnt + 2)]) {
             result += r;
             pnt += 2;
         }
         else {
-            result += (r = ROMAJI_TABLE[system][ch = str.substring(pnt, pnt + 1)]) ? r : ch;
+            result += (r = Constants.ROMAJI_TABLE[system][ch = str.substring(pnt, pnt + 1)]) ? r : ch;
             pnt += 1;
         }
     }
     result = result.replace(reg_tsu, "$2$2");
 
     // [PASSPORT|HEPBURN] 子音を重ねて特殊表記
-    if (system === ROMANIZATION_SYSTEM.PASSPORT || system === ROMANIZATION_SYSTEM.HEPBURN) {
+    if (system === Constants.ROMANIZATION_SYSTEM.PASSPORT || system === Constants.ROMANIZATION_SYSTEM.HEPBURN) {
         result = result.replace(/cc/gm, "tc");
     }
 
     result = result.replace(reg_xtsu, "tsu");
 
     // [PASSPORT|HEPBURN] 撥音の特殊表記 b、m、p
-    if (system === ROMANIZATION_SYSTEM.PASSPORT || system === ROMANIZATION_SYSTEM.HEPBURN) {
+    if (system === Constants.ROMANIZATION_SYSTEM.PASSPORT || system === Constants.ROMANIZATION_SYSTEM.HEPBURN) {
         result = result.replace(/nm/gm, "mm");
         result = result.replace(/nb/gm, "mb");
         result = result.replace(/np/gm, "mp");
     }
 
     // [NIPPON] 長音変換
-    if (system === ROMANIZATION_SYSTEM.NIPPON) {
+    if (system === Constants.ROMANIZATION_SYSTEM.NIPPON) {
         result = result.replace(/aー/gm, "â");
         result = result.replace(/iー/gm, "î");
         result = result.replace(/uー/gm, "û");
@@ -240,7 +236,7 @@ export const toRawRomaji = function (str = "", system) {
     }
 
     // [HEPBURN] 長音変換
-    if (system === ROMANIZATION_SYSTEM.HEPBURN) {
+    if (system === Constants.ROMANIZATION_SYSTEM.HEPBURN) {
         result = result.replace(/aー/gm, "ā");
         result = result.replace(/iー/gm, "ī");
         result = result.replace(/uー/gm, "ū");

@@ -67,9 +67,9 @@ class Kuroshiro {
      * @param {string} [options.romajiSystem="hepburn"] Romanization System ["nippon"|"passport"|"hepburn"]
      * @param {string} [options.delimiter_start="("] Delimiter(Start)
      * @param {string} [options.delimiter_end=")"] Delimiter(End)
-     * @returns {Promise} Promise object represents the result of conversion
+     * @returns {string} Result of conversion
      */
-    async convert(str, options) {
+    convertSync(str, options) {
         options = options || {};
         options.to = options.to || "hiragana";
         options.mode = options.mode || "normal";
@@ -91,7 +91,7 @@ class Kuroshiro {
             throw new Error("Invalid Romanization System.");
         }
 
-        const rawTokens = await this._analyzer.parse(str);
+        const rawTokens = this._analyzer.parseSync(str);
         const tokens = patchTokens(rawTokens);
 
         if (options.mode === "normal" || options.mode === "spaced") {
@@ -294,6 +294,23 @@ class Kuroshiro {
                     throw new Error("Invalid Target Syllabary.");
             }
         }
+    }
+
+    /**
+     * Asynchronously convert given string to target syllabary with options available
+     * @memberOf Kuroshiro
+     * @instance
+     * @param {string} str Given String
+     * @param {Object} [options] Settings Object
+     * @param {string} [options.to="hiragana"] Target syllabary ["hiragana"|"katakana"|"romaji"]
+     * @param {string} [options.mode="normal"] Convert mode ["normal"|"spaced"|"okurigana"|"furigana"]
+     * @param {string} [options.romajiSystem="hepburn"] Romanization System ["nippon"|"passport"|"hepburn"]
+     * @param {string} [options.delimiter_start="("] Delimiter(Start)
+     * @param {string} [options.delimiter_end=")"] Delimiter(End)
+     * @returns {Promise<string>} Promise result of conversion
+     */
+    convert(str, options) {
+        return Promise.resolve(this.convertSync(str, options));
     }
 }
 

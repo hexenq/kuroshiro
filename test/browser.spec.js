@@ -19,9 +19,9 @@ describe("Kuroshiro Browser Test", () => {
         const result = Kuroshiro.Util.isKanji(ori);
         expect(result).toBeTruthy();
     });
-    it("Convert Test", async () => {
+    it("Convert Test", () => {
         const ori = EXAMPLE_TEXT;
-        const result = await kuroshiro.convert(ori, { to: "hiragana" });
+        const result = kuroshiro.convertSync(ori, { to: "hiragana" });
         expect(result).toEqual("かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！");
     });
 });

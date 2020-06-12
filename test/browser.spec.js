@@ -21,7 +21,7 @@ describe("Kuroshiro Browser Test", () => {
     });
     it("Convert Test", () => {
         const ori = EXAMPLE_TEXT;
-        const result = kuroshiro.convert(ori, { to: "hiragana" });
+        const result = kuroshiro.convertSync(ori, { to: "hiragana" });
         expect(result).toEqual("かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！");
     });
 });

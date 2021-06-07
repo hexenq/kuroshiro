@@ -292,4 +292,19 @@ describe("Kuroshiro Node Funtional Test", () => {
         const result = await kuroshiro.convert(ori, { mode: "furigana", to: "romaji" });
         expect(result).toEqual("<ruby>感<rp>(</rp><rt>kan</rt><rp>)</rp>じ<rp>(</rp><rt>ji</rt><rp>)</rp>取<rp>(</rp><rt>to</rt><rp>)</rp>れ<rp>(</rp><rt>re</rt><rp>)</rp>た<rp>(</rp><rt>ta</rt><rp>)</rp>ら<rp>(</rp><rt>ra</rt><rp>)</rp>手<rp>(</rp><rt>te</rt><rp>)</rp>を<rp>(</rp><rt>o</rt><rp>)</rp>繋<rp>(</rp><rt>tsuna</rt><rp>)</rp>ご<rp>(</rp><rt>go</rt><rp>)</rp>う<rp>(</rp><rt>u</rt><rp>)</rp>、<rp>(</rp><rt>,</rt><rp>)</rp>重<rp>(</rp><rt>kasa</rt><rp>)</rp>な<rp>(</rp><rt>na</rt><rp>)</rp>る<rp>(</rp><rt>ru</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>は<rp>(</rp><rt>wa</rt><rp>)</rp>人生<rp>(</rp><rt>jinsei</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>ラ<rp>(</rp><rt>ra</rt><rp>)</rp>イ<rp>(</rp><rt>i</rt><rp>)</rp>ン<rp>(</rp><rt>n</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>a<rp>(</rp><rt>a</rt><rp>)</rp>n<rp>(</rp><rt>n</rt><rp>)</rp>d<rp>(</rp><rt>d</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>レ<rp>(</rp><rt>re</rt><rp>)</rp>ミ<rp>(</rp><rt>mi</rt><rp>)</rp>リ<rp>(</rp><rt>ri</rt><rp>)</rp>ア<rp>(</rp><rt>a</rt><rp>)</rp>最高<rp>(</rp><rt>saikō</rt><rp>)</rp>！<rp>(</rp><rt>!</rt><rp>)</rp></ruby>");
     });
+    it("Kanji to Hiragana with raw", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { mode: "raw", to: "hiragana" });
+        expect(result).toEqual(JSON.parse("[{\"text\":\"感\",\"reading\":\"かん\"},{\"text\":\"じ\"},{\"text\":\"取\",\"reading\":\"と\"},{\"text\":\"れたら\"},{\"text\":\"手\",\"reading\":\"て\"},{\"text\":\"を\"},{\"text\":\"繋\",\"reading\":\"つな\"},{\"text\":\"ごう、\"},{\"text\":\"重\",\"reading\":\"かさ\"},{\"text\":\"なるのは\"},{\"text\":\"人生\",\"reading\":\"じんせい\"},{\"text\":\"のライン and レミリア\"},{\"text\":\"最高\",\"reading\":\"さいこう\"},{\"text\":\"！\"}]"));
+    });
+    it("Kanji to Katakana with raw", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { mode: "raw", to: "katakana" });
+        expect(result).toEqual(JSON.parse("[{\"text\":\"感\",\"reading\":\"カン\"},{\"text\":\"じ\"},{\"text\":\"取\",\"reading\":\"ト\"},{\"text\":\"れたら\"},{\"text\":\"手\",\"reading\":\"テ\"},{\"text\":\"を\"},{\"text\":\"繋\",\"reading\":\"ツナ\"},{\"text\":\"ごう、\"},{\"text\":\"重\",\"reading\":\"カサ\"},{\"text\":\"なるのは\"},{\"text\":\"人生\",\"reading\":\"ジンセイ\"},{\"text\":\"のライン and レミリア\"},{\"text\":\"最高\",\"reading\":\"サイコウ\"},{\"text\":\"！\"}]"));
+    });
+    it("Kanji to Romaji with raw", async () => {
+        const ori = EXAMPLE_TEXT;
+        const result = await kuroshiro.convert(ori, { mode: "raw", to: "romaji" });
+        expect(result).toEqual(JSON.parse("[{\"text\":\"感\",\"reading\":\"kan\"},{\"text\":\"じ\"},{\"text\":\"取\",\"reading\":\"to\"},{\"text\":\"れたら\"},{\"text\":\"手\",\"reading\":\"te\"},{\"text\":\"を\"},{\"text\":\"繋\",\"reading\":\"tsuna\"},{\"text\":\"ごう、\"},{\"text\":\"重\",\"reading\":\"kasa\"},{\"text\":\"なるのは\"},{\"text\":\"人生\",\"reading\":\"jinsei\"},{\"text\":\"のライン and レミリア\"},{\"text\":\"最高\",\"reading\":\"saikō\"},{\"text\":\"！\"}]"));
+    });
 });

@@ -8,7 +8,7 @@
 [![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
 [![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
 
-kuroshiro is a Japanese language library for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.
+kuroshiro is a Japanese language library for converting Japanese sentences to Hiragana, Katakana or Romaji with furigana, okurigana, and raw modes supported.
 
 *Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md).*
 
@@ -17,7 +17,7 @@ You can check the demo [here](https://kuroshiro.org/#demo).
 
 ## Feature
 - Japanese Sentence => Hiragana, Katakana or Romaji
-- Furigana and okurigana supported
+- Furigana, okurigana, and raw supported
 - 🆕Multiple morphological analyzers supported
 - 🆕Multiple romanization systems supported
 - Useful Japanese utils
@@ -137,7 +137,7 @@ __Arguments__
 | Options | Type | Default | Description |
 |---|---|---|---|
 | to | String | "hiragana" | Target syllabary [`hiragana`, `katakana`, `romaji`] |
-| mode | String | "normal" | Convert mode [`normal`, `spaced`, `okurigana`, `furigana`] |
+| mode | String | "normal" | Convert mode [`normal`, `spaced`, `okurigana`, `furigana`, `raw`] |
 | romajiSystem<sup>*</sup> | String | "hepburn" | Romanization system [`nippon`, `passport`, `hepburn`] |
 | delimiter_start | String | "(" | Delimiter(Start) |
 | delimiter_end | String | ")" | Delimiter(End) |
@@ -162,6 +162,28 @@ await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人�
 // okurigana
 await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
 // result: 感(かん)じ取(と)れたら手(て)を繋(つな)ごう、重(かさ)なるのは人生(じんせい)のライン and レミリア最高(さいこう)！
+```
+
+```js
+// raw
+await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"raw", to:"hiragana"});
+// result:
+// [
+//   { text: '感', reading: 'かん' },
+//   { text: 'じ' },
+//   { text: '取', reading: 'と' },
+//   { text: 'れたら' },
+//   { text: '手', reading: 'て' },
+//   { text: 'を' },
+//   { text: '繋', reading: 'つな' },
+//   { text: 'ごう、' },
+//   { text: '重', reading: 'かさ' },
+//   { text: 'なるのは' },
+//   { text: '人生', reading: 'じんせい' },
+//   { text: 'のライン and レミリア' },
+//   { text: '最高', reading: 'さいこう' },
+//   { text: '！' }
+// ]
 ```
 
 <pre>

@@ -58,13 +58,19 @@ class Kuroshiro {
      * @param {string} str Given String
      * @param {Object} [options] Settings Object
      * @param {string} [options.to="hiragana"] Target syllabary ["hiragana"|"katakana"|"romaji"]
-     * @param {string} [options.mode="normal"] Convert mode ["normal"|"spaced"|"okurigana"|"furigana"]
+     * @param {string} [options.mode="normal"] Convert mode ["normal"|"spaced"|"okurigana"|"furigana"|"raw"]
      * @param {string} [options.romajiSystem="hepburn"] Romanization System ["nippon"|"passport"|"hepburn"]
      * @param {string} [options.delimiter_start="("] Delimiter(Start)
      * @param {string} [options.delimiter_end=")"] Delimiter(End)
      * @returns {Promise} Promise object represents the result of conversion
      */
     async convert(str, options) {
+        function flushPendingText(rawResult, pendingText) {
+            if (pendingText) {
+                rawResult.push({ text: pendingText });
+            }
+        }
+
         options = options || {};
         options.to = options.to || "hiragana";
         options.mode = options.mode || "normal";
@@ -77,7 +83,7 @@ class Kuroshiro {
             throw new Error("Invalid Target Syllabary.");
         }
 
-        if (["normal", "spaced", "okurigana", "furigana"].indexOf(options.mode) === -1) {
+        if (["normal", "spaced", "okurigana", "furigana", "raw"].indexOf(options.mode) === -1) {
             throw new Error("Invalid Conversion Mode.");
         }
 
@@ -159,7 +165,7 @@ class Kuroshiro {
                     throw new Error("Unknown option.to param");
             }
         }
-        else if (options.mode === "okurigana" || options.mode === "furigana") {
+        else if (options.mode === "okurigana" || options.mode === "furigana" || options.mode === "raw") {
             const notations = []; // [basic, basic_type[1=kanji,2=kana,3=others], notation, pronunciation]
             for (let i = 0; i < tokens.length; i++) {
                 const strType = getStrType(tokens[i].surface_form);
@@ -220,71 +226,123 @@ class Kuroshiro {
                         throw new Error("Unknown strType");
                 }
             }
-            let result = "";
+            const rawResult = [];
+            let stringResult = "";
             switch (options.to) {
                 case "katakana":
                     if (options.mode === "okurigana") {
                         for (let n0 = 0; n0 < notations.length; n0++) {
                             if (notations[n0][1] !== 1) {
-                                result += notations[n0][0];
+                                stringResult += notations[n0][0];
                             }
                             else {
-                                result += notations[n0][0] + options.delimiter_start + toRawKatakana(notations[n0][2]) + options.delimiter_end;
+                                stringResult += notations[n0][0] + options.delimiter_start + toRawKatakana(notations[n0][2]) + options.delimiter_end;
                             }
                         }
                     }
-                    else { // furigana
+                    else if (options.mode === "furigana") {
                         for (let n1 = 0; n1 < notations.length; n1++) {
                             if (notations[n1][1] !== 1) {
-                                result += notations[n1][0];
+                                stringResult += notations[n1][0];
                             }
                             else {
-                                result += `<ruby>${notations[n1][0]}<rp>${options.delimiter_start}</rp><rt>${toRawKatakana(notations[n1][2])}</rt><rp>${options.delimiter_end}</rp></ruby>`;
+                                stringResult += `<ruby>${notations[n1][0]}<rp>${options.delimiter_start}</rp><rt>${toRawKatakana(notations[n1][2])}</rt><rp>${options.delimiter_end}</rp></ruby>`;
                             }
                         }
                     }
-                    return result;
+                    else { // raw
+                        let pendingText = "";
+                        for (let n6 = 0; n6 < notations.length; n6++) {
+                            if (notations[n6][1] !== 1) {
+                                pendingText += notations[n6][0];
+                            }
+                            else {
+                                flushPendingText(rawResult, pendingText);
+                                pendingText = "";
+                                rawResult.push({
+                                    text: notations[n6][0],
+                                    reading: toRawKatakana(notations[n6][2])
+                                });
+                            }
+                        }
+                        flushPendingText(rawResult, pendingText);
+                        return rawResult;
+                    }
+                    return stringResult;
                 case "romaji":
                     if (options.mode === "okurigana") {
                         for (let n2 = 0; n2 < notations.length; n2++) {
                             if (notations[n2][1] !== 1) {
-                                result += notations[n2][0];
+                                stringResult += notations[n2][0];
                             }
                             else {
-                                result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][3], options.romajiSystem) + options.delimiter_end;
+                                stringResult += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][3], options.romajiSystem) + options.delimiter_end;
                             }
                         }
                     }
-                    else { // furigana
-                        result += "<ruby>";
+                    else if (options.mode === "furigana") {
+                        stringResult += "<ruby>";
                         for (let n3 = 0; n3 < notations.length; n3++) {
-                            result += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
+                            stringResult += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
                         }
-                        result += "</ruby>";
+                        stringResult += "</ruby>";
                     }
-                    return result;
+                    else { // raw
+                        let pendingText = "";
+                        for (let n7 = 0; n7 < notations.length; n7++) {
+                            if (notations[n7][1] !== 1) {
+                                pendingText += notations[n7][0];
+                            }
+                            else {
+                                flushPendingText(rawResult, pendingText);
+                                pendingText = "";
+                                rawResult.push({
+                                    text: notations[n7][0],
+                                    reading: toRawRomaji(notations[n7][3], options.romajiSystem)
+                                });
+                            }
+                        }
+                        flushPendingText(rawResult, pendingText);
+                        return rawResult;
+                    }
+                    return stringResult;
                 case "hiragana":
                     if (options.mode === "okurigana") {
                         for (let n4 = 0; n4 < notations.length; n4++) {
                             if (notations[n4][1] !== 1) {
-                                result += notations[n4][0];
+                                stringResult += notations[n4][0];
                             }
                             else {
-                                result += notations[n4][0] + options.delimiter_start + notations[n4][2] + options.delimiter_end;
+                                stringResult += notations[n4][0] + options.delimiter_start + notations[n4][2] + options.delimiter_end;
                             }
                         }
                     }
-                    else { // furigana
+                    else if (options.mode === "furigana") {
                         for (let n5 = 0; n5 < notations.length; n5++) {
                             if (notations[n5][1] !== 1) {
-                                result += notations[n5][0];
+                                stringResult += notations[n5][0];
                             }
                             else {
-                                result += `<ruby>${notations[n5][0]}<rp>${options.delimiter_start}</rp><rt>${notations[n5][2]}</rt><rp>${options.delimiter_end}</rp></ruby>`;
+                                stringResult += `<ruby>${notations[n5][0]}<rp>${options.delimiter_start}</rp><rt>${notations[n5][2]}</rt><rp>${options.delimiter_end}</rp></ruby>`;
                             }
                         }
                     }
-                    return result;
+                    else { // raw
+                        let pendingText = "";
+                        for (let n8 = 0; n8 < notations.length; n8++) {
+                            if (notations[n8][1] !== 1) {
+                                pendingText += notations[n8][0];
+                            }
+                            else {
+                                flushPendingText(rawResult, pendingText);
+                                pendingText = "";
+                                rawResult.push({ text: notations[n8][0], reading: notations[n8][2] });
+                            }
+                        }
+                        flushPendingText(rawResult, pendingText);
+                        return rawResult;
+                    }
+                    return stringResult;
                 default:
                     throw new Error("Invalid Target Syllabary.");
             }

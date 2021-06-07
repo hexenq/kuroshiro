@@ -1,3 +1,25 @@
+<a name="1.2.0"></a>
+## [1.2.0](https://github.com/hexenq/kuroshiro/compare/1.1.2...1.2.0) (2021-6-7)
+
+### Bug Fixes
+
+* fix errors occurring when converting っ to romaji ([#61](https://github.com/hexenq/kuroshiro/issues/61))
+* fix wrong regex pattern ([#60](https://github.com/hexenq/kuroshiro/issues/60))
+
+### Dependencies
+
+* Upgrade to babel 7
+* Update other dependencies
+
+### Documents
+
+* Add ready to use code in readme
+* Add Esperanto docs
+
+### Miscellaneous
+
+* Add husky and lint-staged for pre-commit check
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/hexenq/kuroshiro/compare/1.1.1...1.1.2) (2018-10-19)
 

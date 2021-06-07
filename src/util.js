@@ -46,9 +46,9 @@ const isKana = function (ch) {
  */
 const isKanji = function (ch) {
     ch = ch[0];
-    return (ch >= "\u4e00" && ch <= "\u9fcf") ||
-        (ch >= "\uf900" && ch <= "\ufaff") ||
-        (ch >= "\u3400" && ch <= "\u4dbf");
+    return (ch >= "\u4e00" && ch <= "\u9fcf")
+        || (ch >= "\uf900" && ch <= "\ufaff")
+        || (ch >= "\u3400" && ch <= "\u4dbf");
 };
 
 /**
@@ -1463,8 +1463,8 @@ const getStrType = function (str) {
         }
     }
     if (hasKJ && hasHK) return 1;
-    else if (hasKJ) return 0;
-    else if (hasHK) return 2;
+    if (hasKJ) return 0;
+    if (hasHK) return 2;
     return 3;
 };
 
@@ -1515,7 +1515,7 @@ const patchTokens = function (tokens) {
     // patch for "っ" at the tail of 動詞、形容詞
     for (let j = 0; j < tokens.length; j++) {
         if (tokens[j].pos && (tokens[j].pos === "動詞" || tokens[j].pos === "形容詞") && tokens[j].surface_form.length > 1 && (tokens[j].surface_form[tokens[j].surface_form.length - 1] === "っ" || tokens[j].surface_form[tokens[j].surface_form.length - 1] === "ッ")) {
-            if (j + 1 < tokens.length && tokens[j + 1].pos && (tokens[j + 1].pos === "動詞" || tokens[j + 1].pos === "助動詞")) {
+            if (j + 1 < tokens.length) {
                 tokens[j].surface_form += tokens[j + 1].surface_form;
                 if (tokens[j].pronunciation) {
                     tokens[j].pronunciation += tokens[j + 1].pronunciation;

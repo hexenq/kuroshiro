@@ -10,7 +10,7 @@
 
 kuroshiro is a Japanese language library for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.
 
-*Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md).*
+*Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md).*
 
 ## Demo
 *For convenience, this demo utilizes Yahoo-WebAPI analyzer plugin. However this analyzer might not give optimized converted result when converting kanji to romaji with kuroshiro since Yahoo Web API lacks information of pronunciation in analysis result. Use other analyzer plugins could avoid this issue. Please note that.*
@@ -250,34 +250,39 @@ Install with npm package manager:
 ```sh
 $ npm install kuroshiro
 ```
-    
+
 Load the library:
 
-*Support both ES6 Module `import` and CommonJS `require`*
+*Support ES6 Module `import`*
 ```js
 import Kuroshiro from "kuroshiro";
-```
-
-Instantiate:
-```js
-const kuroshiro = new Kuroshiro();
-```
-
-Initialize kuroshiro with an instance of analyzer (You could check the [apidoc](#initanalyzer) for more information):
-```js
+// Initialize kuroshiro with an instance of analyzer (You could check the [apidoc](#initanalyzer) for more information):
 // For this example, you should npm install and import the kuromoji analyzer first
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
-
-// ...
-
+// Instantiate:
+const kuroshiro = new Kuroshiro();
 // Initialize
 // Here uses async/await, you could also use Promise
 await kuroshiro.init(new KuromojiAnalyzer());
+// Convert what you want:
+const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
 ```
 
-Convert what you want:
+*And CommonJS `require`*
+
 ```js
-const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
+const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
+const Kuroshiro = require("kuroshiro")
+const kuroshiro = new Kuroshiro();
+
+kuroshiro.init(new KuromojiAnalyzer())
+.then(function () {
+    return kuroshiro.convert("シンゲキ ノ キョジン", {to: "romaji"});
+})
+.then(function(result){
+  console.log(result);
+  //shingeki no kyojin
+})
 ```
     
 ### Browser

@@ -11,7 +11,7 @@
 kuroshiro是一款十分方便使用的日文转换注音工具，主要针对日文文本，进行到平假名、片假名及罗马字的转换，并支持注音假名、送假名
 （旁注音）等注音模式。
 
-*其他说明语言：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md)。*
+*其他说明语言：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md)。*
 
 ## 演示
 你可以在[这里](https://kuroshiro.org/#demo)查看在线演示。
@@ -224,9 +224,9 @@ kuroshiro支持三种罗马字体系。
 ### 罗马字转换须知
 完全自动化进行注音假名到罗马字的直接转换是不可能的，这是因为一般的注音假名都缺乏正确的发音信息，可以参考 [なぜ フリガナでは ダメなのか？](https://green.adam.ne.jp/roomazi/onamae.html#naze)。
 
-因此kuroshiro在进行直接的注音假名->罗马字转换（使用`nippon`或`hepburn`罗马字体系）时，不会处理长音。(`passport`罗马字体系本身便忽略长音)
+因此kuroshiro在进行直接的注音假名->罗马字转换（使用任何罗马字体系）时，不会处理长音。(但长音符会被处理)
 
-*例如，当进行假名"こうし"到罗马字的转换时，对于`nippon`, `passport`, `hepburn`三种罗马字体系，你会分别得到"kousi", "koshi", "koushi"这几个结果*
+*例如，当进行假名"こうし"到罗马字的转换时，对于`nippon`, `passport`, `hepburn`三种罗马字体系，你会分别得到"kousi", "koushi", "koushi"这几个结果*
 
 汉字->罗马字的转换无论使用注音假名模式与否都 __不受__ 此逻辑影响。
 

@@ -46,35 +46,35 @@ $ npm install kuroshiro
 Load the library:
 
 *Support ES6 Module `import`*
+
 ```js
 import Kuroshiro from "kuroshiro";
 // Initialize kuroshiro with an instance of analyzer (You could check the [apidoc](#initanalyzer) for more information):
 // For this example, you should npm install and import the kuromoji analyzer first
 import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
-// Instantiate:
+// Instantiate
 const kuroshiro = new Kuroshiro();
 // Initialize
 // Here uses async/await, you could also use Promise
 await kuroshiro.init(new KuromojiAnalyzer());
-// Convert what you want:
+// Convert what you want
 const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
 ```
 
 *And CommonJS `require`*
 
 ```js
+const Kuroshiro = require("kuroshiro")；
 const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
-const Kuroshiro = require("kuroshiro")
 const kuroshiro = new Kuroshiro();
 
 kuroshiro.init(new KuromojiAnalyzer())
-.then(function () {
-    return kuroshiro.convert("シンゲキ ノ キョジン", {to: "romaji"});
-})
-.then(function(result){
-  console.log(result);
-  //shingeki no kyojin
-})
+    .then(function(){
+        return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
+    })
+    .then(function(result){
+        console.log(result);
+    })
 ```
     
 ### Browser

@@ -43,13 +43,8 @@ class Kuroshiro {
             throw new Error("Invalid initialization parameter.");
         }
         else if (this._analyzer == null) {
-            try {
-                await analyzer.init();
-                this._analyzer = analyzer;
-            }
-            catch (err) {
-                throw err;
-            }
+            await analyzer.init();
+            this._analyzer = analyzer;
         }
         else {
             throw new Error("Kuroshiro has already been initialized.");

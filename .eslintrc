@@ -8,6 +8,7 @@
       "no-console": 0,
       "padded-blocks": 0,
       "indent": ["error", 4, {"SwitchCase": 1}],
+      "arrow-parens": ["error", "as-needed",{ "requireForBlockBody": true }],
       "spaced-comment": 1,
       "quotes": ["error", "double", { "allowTemplateLiterals": true }],
       "import/prefer-default-export": "off",

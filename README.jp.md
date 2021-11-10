@@ -10,7 +10,7 @@
 
 kuroshiroは日本語文をローマ字や仮名なとに変換できるライブラリです。フリガナ・送り仮名の機能も搭載します。
 
-*ほかの言語：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md)。*
+*ほかの言語：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md)。*
 
 ## デモ
 オンラインデモは[こちら](https://kuroshiro.org/#demo)です。

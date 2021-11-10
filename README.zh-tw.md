@@ -11,7 +11,7 @@
 kuroshiro是一款十分方便使用的日文轉換注音工具，主要針對日文文本，進行到平假名、片假名及羅馬字的轉換，並支持注音假名、送假名
 （旁註音）等注音模式。
 
-*其他說明語言：[English](README.md), [日本語](README.jp.md), [簡體中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md)。*
+*其他說明語言：[English](README.md), [日本語](README.jp.md), [簡體中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md)。*
 
 ## 演示
 你可以在[這裡](https://kuroshiro.org/#demo)查看在線演示。

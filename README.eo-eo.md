@@ -10,7 +10,7 @@
 
 la Kuroshiro estas Japanalingvo kodlibrejo por konverti Japanajn frazojn al Hiraganao, Katakanao aŭ Romaĝio, kaj ankaŭ subtenas furiganaon kaj okuriganaon.
 
-*Legi ĉi tion per aliaj lingvoj: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md).*
+*Legi ĉi tion per aliaj lingvoj: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md).*
 
 ## Ekzempla Paĝo
 Vidi la ekzemplan paĝon [ĉi tie](https://kuroshiro.org/#demo).

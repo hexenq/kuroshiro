@@ -95,5 +95,6 @@
   "lint-staged": {
     "src/**/*.js": "eslint",
     "test/**/*.js": "eslint"
-  }
+  },
+  "types": "./src/index.d.ts"
 }

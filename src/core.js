@@ -18,7 +18,7 @@ import {
     kanaToHiragna,
     kanaToKatakana,
     kanaToRomaji
-} from "./util";
+} from "./util.js";
 
 /**
  * Kuroshiro Class

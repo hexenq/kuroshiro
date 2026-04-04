@@ -1668,8 +1668,8 @@ const toRawRomaji = function (str, system) {
             ヮ: "xwa",
             ヵ: "xka",
             ヶ: "xke",
-            ん: "nn",
-            ン: "nn",
+            // ん: "nn",
+            // ン: "nn",
             // ー: "",
             "　": " ",
 
@@ -1825,6 +1825,12 @@ const toRawRomaji = function (str, system) {
         result = result.replace(/nm/gm, "mm");
         result = result.replace(/nb/gm, "mb");
         result = result.replace(/np/gm, "mp");
+    }
+
+    // [JIS] 撥音の特殊表記
+    if (system === ROMANIZATION_SYSTEM.JIS) {
+        result = result.replace(/(ん|ン)([bcdfghjklmnpqrstvwz])/gm, "n$2");
+        result = result.replace(/ん|ン/gm, "nn");
     }
 
     // [NIPPON] 長音変換

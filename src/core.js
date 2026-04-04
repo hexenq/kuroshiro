@@ -100,7 +100,12 @@ class Kuroshiro {
                     const romajiConv = (token) => {
                         let preToken;
                         if (hasJapanese(token.surface_form)) {
-                            preToken = token.pronunciation || token.reading;
+                            if (options.romajiSystem === ROMANIZATION_SYSTEM.JIS) {
+                                preToken = token.reading || token.pronunciation;
+                            }
+                            else {
+                                preToken = token.pronunciation || token.reading;
+                            }
                         }
                         else {
                             preToken = token.surface_form;

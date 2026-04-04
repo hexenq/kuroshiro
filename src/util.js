@@ -1829,7 +1829,7 @@ const toRawRomaji = function (str, system) {
 
     // [JIS] 撥音の特殊表記
     if (system === ROMANIZATION_SYSTEM.JIS) {
-        result = result.replace(/(ん|ン)([bcdfghjklmnpqrstvwz])/gm, "n$2");
+        result = result.replace(/(ん|ン)([bcdfghjklmpqrstvwxz])/gm, "n$2");
         result = result.replace(/ん|ン/gm, "nn");
     }
 

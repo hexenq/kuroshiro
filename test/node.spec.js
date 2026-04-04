@@ -185,7 +185,7 @@ describe("Kuroshiro Node Funtional Test", () => {
     it("Kana to Romaji (jis)(5)", () => {
         const ori = "ウォッカ";
         const result = Kuroshiro.Util.kanaToRomaji(ori, "jis");
-        expect(result).toEqual("uxokka");
+        expect(result).toEqual("whokka");
     });
     it("Kana to Romaji (jis)(6)", () => {
         const ori = "おばあさん";

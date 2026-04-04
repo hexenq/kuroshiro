@@ -138,7 +138,7 @@ __Arguments__
 |---|---|---|---|
 | to | String | "hiragana" | Target syllabary [`hiragana`, `katakana`, `romaji`] |
 | mode | String | "normal" | Convert mode [`normal`, `spaced`, `okurigana`, `furigana`] |
-| romajiSystem<sup>*</sup> | String | "hepburn" | Romanization system [`nippon`, `passport`, `hepburn`] |
+| romajiSystem<sup>*</sup> | String | "hepburn" | Romanization system [`nippon`, `passport`, `hepburn`, `jis`] |
 | delimiter_start | String | "(" | Delimiter(Start) |
 | delimiter_end | String | ")" | Delimiter(End) |
 
@@ -212,7 +212,7 @@ Convert input kana string to hiragana.
 Convert input kana string to katakana.
 
 #### kanaToRomaji(str, system)
-Convert input kana string to romaji. Param `system` accepts `"nippon"`, `"passport"`, `"hepburn"` (Default: "hepburn"). 
+Convert input kana string to romaji. Param `system` accepts `"nippon"`, `"passport"`, `"hepburn"`, `"jis"` (Default: "hepburn"). 
 
 ## Romanization System
 kuroshiro supports three kinds of romanization systems.
@@ -223,6 +223,8 @@ kuroshiro supports three kinds of romanization systems.
 
 `hepburn`: Hepburn romanization. Refer to [BS 4812 : 1972](https://archive.is/PiJ4).
 
+`jis`: IME software style romanization. Refer to [JIS X 4063](https://jgrammar.life.coocan.jp/ja/hyouk021.htm#jisx4063).
+
 There is a useful [webpage](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm) for you to check the difference between these romanization systems.
 
 ### Notice for Romaji Conversion
@@ -230,8 +232,8 @@ Since it's impossible to fully automatically convert __furigana__ directly to __
 
 kuroshiro will not handle chōon when processing directly furigana (kana) -> romaji conversion with every romanization system (Except that Chōonpu will be handled) 
 
-*For example, you'll get "kousi", "koushi", "koushi" respectively when converts kana "こうし" to romaji 
-using `nippon`, `passport`, `hepburn` romanization system.*
+*For example, you'll get "kousi", "koushi", "koushi", "koushi" respectively when converts kana "こうし" to romaji 
+using `nippon`, `passport`, `hepburn`, `jis` romanization system.*
 
 The kanji -> romaji conversion with/without furigana mode is __unaffected__ by this logic.
 

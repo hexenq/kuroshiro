@@ -162,6 +162,41 @@ describe("Kuroshiro Node Funtional Test", () => {
         const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
         expect(result).toEqual("matcha");
     });
+    it("Kana to Romaji (jis)(1)", () => {
+        const ori = "サポート";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "jis");
+        expect(result).toEqual("sapo-to");
+    });
+    it("Kana to Romaji (jis)(2)", () => {
+        const ori = "ナンバ";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "jis");
+        expect(result).toEqual("nanba");
+    });
+    it("Kana to Romaji (jis)(3)", () => {
+        const ori = "まんえんいか";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "jis");
+        expect(result).toEqual("mannennika");
+    });
+    it("Kana to Romaji (jis)(4)", () => {
+        const ori = "まっちゃ";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "jis");
+        expect(result).toEqual("maccha");
+    });
+    it("Kana to Romaji (jis)(5)", () => {
+        const ori = "ウォッカ";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "jis");
+        expect(result).toEqual("uxokka");
+    });
+    it("Kana to Romaji (jis)(6)", () => {
+        const ori = "おばあさん";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "jis");
+        expect(result).toEqual("obaasann");
+    });
+    it("Kana to Romaji (jis)(7)", () => {
+        const ori = "ラーメン";
+        const result = Kuroshiro.Util.kanaToRomaji(ori, "jis");
+        expect(result).toEqual("ra-menn");
+    });
     it("Kanji to Hiragana(1)", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { to: "hiragana" });
@@ -221,6 +256,11 @@ describe("Kuroshiro Node Funtional Test", () => {
         const ori = "東京、九州、丸の内、観桜、呼応、思う、長雨、記入、金融、学校、ビール、お母さん、委員";
         const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "passport" });
         expect(result).toEqual("tokyo,kyushu,marunouchi,kano,koo,omou,nagaame,kinyu,kinyu,gakko,biru,okasan,iin");
+    });
+    it("Kanji to Romaji misc with jis romaji system", async () => {
+        const ori = "東京、九州、丸の内、観桜、呼応、思う、長雨、記入、金融、学校、ビール、お母さん、委員";
+        const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "jis" });
+        expect(result).toEqual("toukyou,kyuushuu,marunouchi,kannou,koou,omou,nagaame,kinyu,kinnyuu,gakkou,bi-ru,okaasann,iinn");
     });
     it("Kanji to Hiragana with spaces", async () => {
         const ori = EXAMPLE_TEXT;

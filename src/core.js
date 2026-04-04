@@ -59,7 +59,7 @@ class Kuroshiro {
      * @param {Object} [options] Settings Object
      * @param {string} [options.to="hiragana"] Target syllabary ["hiragana"|"katakana"|"romaji"]
      * @param {string} [options.mode="normal"] Convert mode ["normal"|"spaced"|"okurigana"|"furigana"]
-     * @param {string} [options.romajiSystem="hepburn"] Romanization System ["nippon"|"passport"|"hepburn"]
+     * @param {string} [options.romajiSystem="hepburn"] Romanization System ["nippon"|"passport"|"hepburn"|"jis"]
      * @param {string} [options.delimiter_start="("] Delimiter(Start)
      * @param {string} [options.delimiter_end=")"] Delimiter(End)
      * @returns {Promise} Promise object represents the result of conversion
@@ -100,7 +100,12 @@ class Kuroshiro {
                     const romajiConv = (token) => {
                         let preToken;
                         if (hasJapanese(token.surface_form)) {
-                            preToken = token.pronunciation || token.reading;
+                            if (options.romajiSystem === ROMANIZATION_SYSTEM.JIS) {
+                                preToken = token.reading || token.pronunciation;
+                            }
+                            else {
+                                preToken = token.pronunciation || token.reading;
+                            }
                         }
                         else {
                             preToken = token.surface_form;

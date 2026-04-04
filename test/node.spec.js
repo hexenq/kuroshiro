@@ -260,7 +260,7 @@ describe("Kuroshiro Node Funtional Test", () => {
     it("Kanji to Romaji misc with jis romaji system", async () => {
         const ori = "東京、九州、丸の内、観桜、呼応、思う、長雨、記入、金融、学校、ビール、お母さん、委員";
         const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "jis" });
-        expect(result).toEqual("toukyou,kyuushuu,marunouchi,kannou,koou,omou,nagaame,kinyu,kinnyuu,gakkou,bi-ru,okaasann,iinn");
+        expect(result).toEqual("toukyou,kyuushuu,marunouchi,kannou,koou,omou,nagaame,kinyuu,kinnyuu,gakkou,bi-ru,okaasann,iinn");
     });
     it("Kanji to Hiragana with spaces", async () => {
         const ori = EXAMPLE_TEXT;

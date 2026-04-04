@@ -1670,7 +1670,7 @@ const toRawRomaji = function (str, system) {
             ヶ: "xke",
             ん: "nn",
             ン: "nn",
-            ー: "-",
+            // ー: "",
             "　": " ",
 
             // 外来音(イェ～グォ)
@@ -1769,6 +1769,11 @@ const toRawRomaji = function (str, system) {
     // [PASSPORT] 長音省略 「―」の場合
     if (system === ROMANIZATION_SYSTEM.PASSPORT) {
         str = str.replace(/ー/gm, "");
+    }
+
+    // [JIS] 長音省略 「―」の場合
+    if (system === ROMANIZATION_SYSTEM.JIS) {
+        str = str.replace(/ー/gm, "-");
     }
 
     // [NIPPON|HEPBURN] 撥音の特殊表記 a、i、u、e、o、y

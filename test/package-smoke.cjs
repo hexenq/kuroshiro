@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
+const { parse } = require("acorn");
 const { JSDOM } = require("jsdom");
 
 const Kuroshiro = require("..");
@@ -39,6 +40,9 @@ async function main() {
 
     for (const file of ["dist/kuroshiro.js", "dist/kuroshiro.min.js"]) {
         const bundle = fs.readFileSync(file, "utf8");
+        // Match the syntax baseline of the previously published UMD bundles.
+        assert.doesNotThrow(() => parse(bundle, { ecmaVersion: 2015, sourceType: "script" }),
+            `${file}: UMD syntax must remain compatible with ES2015`);
         const environments = [
             ["browser", globalContext("window", "self"), context => context.window.Kuroshiro],
             ["worker", globalContext("self"), context => context.self.Kuroshiro],

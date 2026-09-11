@@ -19,7 +19,7 @@ All kinds of contributions are welcome, whether it's:
 
 ## Setting up development environment
 
-To contribute, fork the repository and install its dependencies. Development requires Node.js 22 or newer.
+To contribute, fork the repository and install its dependencies. Use Node.js 22.13+ (22.x) or 24+ for development.
 
 ```bash
 git clone https://github.com/<your-username>/kuroshiro

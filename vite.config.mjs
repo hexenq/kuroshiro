@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => ({
     build: {
-        target: "es2017",
+        target: "es2015",
         emptyOutDir: false,
         minify: mode === "minify",
         lib: {

@@ -21,6 +21,70 @@ import {
 } from "./util";
 
 /**
+ * Merge a lone sokuon (っ / ッ) into the notation that follows it.
+ *
+ * A sokuon has no reading of its own — it geminates the consonant that
+ * starts the next mora. When each notation is romanised independently
+ * (which is what the furigana renderer does), a sokuon standing alone
+ * falls through to the "no mapping" branch of toRawRomaji and comes out
+ * as the literal "tsu":
+ *
+ *   座って  ->  座[suwa] っ[tsu] て[te]     // wrong
+ *   真っ赤  ->  真[ma]   っ[tsu] 赤[ka]     // wrong
+ *   カッター ->  カ[ka]   ッ[tsu] タ[ta] ー  // wrong
+ *
+ * Merging the sokuon forward gives the romaji converter the following
+ * consonant it needs, so its existing gemination rule applies:
+ *
+ *   座って  ->  座[suwa] って[tte]
+ *   真っ赤  ->  真[ma]   っ赤[kka]
+ *
+ * Reported upstream as takuyaa/kuromoji.js#53, filed against the
+ * tokenizer. It is not a tokenizer bug: kuromoji correctly returns
+ * 座っ[スワッ] + て[テ]. The error is here, in the consumer.
+ *
+ * Only the romaji paths use this. Hiragana and katakana output is
+ * unaffected, because there a sokuon is emitted as its own literal
+ * character and is already correct.
+ *
+ * A trailing sokuon with nothing to geminate (「あっ」) is left alone —
+ * it has no well-defined romanisation and inventing one here would be a
+ * separate decision.
+ *
+ * @param {Array} notations [basic, basic_type, notation, pronunciation]
+ * @returns {Array} notations with lone sokuon merged forward
+ */
+const mergeSokuonForward = function (notations) {
+    const SOKUON = /^[っッ]$/;
+    const merged = [];
+    let carry = null;
+    for (let i = 0; i < notations.length; i++) {
+        const n = notations[i];
+        if (carry) {
+            merged.push([
+                carry[0] + n[0],
+                n[1],
+                carry[2] + n[2],
+                carry[3] + n[3]
+            ]);
+            carry = null;
+        }
+        // [3] is the pronunciation; a lone sokuon is the whole of it.
+        // The last notation has nothing to merge into, so it is kept.
+        else if (SOKUON.test(n[3]) && i + 1 < notations.length) {
+            carry = n;
+        }
+        else {
+            merged.push(n);
+        }
+    }
+    if (carry) {
+        merged.push(carry); // trailing sokuon: nothing to merge into
+    }
+    return merged;
+};
+
+/**
  * Kuroshiro Class
  */
 class Kuroshiro {
@@ -244,24 +308,28 @@ class Kuroshiro {
                         }
                     }
                     return result;
-                case "romaji":
+                case "romaji": {
+                    // A lone sokuon has no reading of its own; romanising
+                    // it in isolation yields "tsu". See mergeSokuonForward.
+                    const romajiNotations = mergeSokuonForward(notations);
                     if (options.mode === "okurigana") {
-                        for (let n2 = 0; n2 < notations.length; n2++) {
-                            if (notations[n2][1] !== 1) {
-                                result += notations[n2][0];
+                        for (let n2 = 0; n2 < romajiNotations.length; n2++) {
+                            if (romajiNotations[n2][1] !== 1) {
+                                result += romajiNotations[n2][0];
                             }
                             else {
-                                result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][3], options.romajiSystem) + options.delimiter_end;
+                                result += romajiNotations[n2][0] + options.delimiter_start + toRawRomaji(romajiNotations[n2][3], options.romajiSystem) + options.delimiter_end;
                             }
                         }
                     }
                     else { // furigana
                         result += "<ruby>";
-                        for (let n3 = 0; n3 < notations.length; n3++) {
-                            result += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
+                        for (let n3 = 0; n3 < romajiNotations.length; n3++) {
+                            result += `${romajiNotations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(romajiNotations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
                         }
                         result += "</ruby>";
                     }
+                }
                     return result;
                 case "hiragana":
                     if (options.mode === "okurigana") {

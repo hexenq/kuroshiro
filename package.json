@@ -21,8 +21,8 @@
     "clean": "rimraf lib dist",
     "build": "npm run clean && npm run build:cjs && npm run build:umd && npm run build:umd:min",
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
-    "build:umd": "esbuild scripts/browser-entry.js --bundle --format=iife --target=es2017 --outfile=dist/kuroshiro.js",
-    "build:umd:min": "esbuild scripts/browser-entry.js --bundle --format=iife --target=es2017 --minify --outfile=dist/kuroshiro.min.js",
+    "build:umd": "node scripts/build-umd.cjs",
+    "build:umd:min": "node scripts/build-umd.cjs --minify",
     "prepack": "npm run build"
   },
   "repository": {

@@ -1,3 +1,5 @@
 import Kuroshiro from "../src/index";
 
-window.Kuroshiro = Kuroshiro;
+Kuroshiro.default = Kuroshiro;
+
+export default Kuroshiro;

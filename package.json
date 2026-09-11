@@ -11,7 +11,7 @@
     "src"
   ],
   "scripts": {
-    "lint": "eslint src test scripts index.js eslint.config.mjs",
+    "lint": "eslint src test scripts index.js eslint.config.mjs vite.config.mjs",
     "lint:fix": "npm run lint -- --fix",
     "jest": "jest --verbose",
     "jest:watch": "npm run jest -- --watch",
@@ -21,8 +21,8 @@
     "clean": "rimraf lib dist",
     "build": "npm run clean && npm run build:cjs && npm run build:umd && npm run build:umd:min",
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib",
-    "build:umd": "node scripts/build-umd.cjs",
-    "build:umd:min": "node scripts/build-umd.cjs --minify",
+    "build:umd": "vite build",
+    "build:umd:min": "vite build --mode minify",
     "prepack": "npm run build"
   },
   "repository": {
@@ -66,13 +66,14 @@
     "@eslint/js": "^10.0.1",
     "babel-jest": "^30.5.1",
     "cross-env": "^10.1.0",
-    "esbuild": "^0.28.2",
     "eslint": "^10.10.0",
     "globals": "^17.12.0",
     "jest": "^30.5.1",
     "jest-environment-jsdom": "^30.5.1",
+    "jsdom": "^26.1.0",
     "kuroshiro-analyzer-kuromoji": "^1.1.0",
-    "rimraf": "^6.1.3"
+    "rimraf": "^6.1.3",
+    "vite": "^8.3.0"
   },
   "engines": {
     "node": ">=6.5.0"

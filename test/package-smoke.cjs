@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
+const { JSDOM } = require("jsdom");
 
 const Kuroshiro = require("..");
 
@@ -24,6 +25,13 @@ async function checkConstructor(Constructor, label) {
     assert.equal(await instance.convert("漢字"), "かんじ", label);
 }
 
+function globalContext(...aliases) {
+    const context = {};
+    // In browsers and workers, window/self refer to the global object itself.
+    for (const alias of aliases) context[alias] = context;
+    return context;
+}
+
 async function main() {
     await checkConstructor(Kuroshiro, "package CommonJS entry");
     const imported = await import("../index.js");
@@ -32,10 +40,11 @@ async function main() {
     for (const file of ["dist/kuroshiro.js", "dist/kuroshiro.min.js"]) {
         const bundle = fs.readFileSync(file, "utf8");
         const environments = [
-            ["browser", { window: {} }, context => context.window.Kuroshiro],
-            ["worker", { self: {} }, context => context.self.Kuroshiro],
-            ["global", { global: {} }, context => context.global.Kuroshiro],
+            ["browser", globalContext("window", "self"), context => context.window.Kuroshiro],
+            ["worker", globalContext("self"), context => context.self.Kuroshiro],
+            ["global", globalContext("global"), context => context.global.Kuroshiro],
             ["bare context", {}, context => context.Kuroshiro],
+            ["without globalThis", { globalThis: undefined }, context => context.Kuroshiro],
             ["CommonJS", { module: { exports: {} }, exports: {} }, context => context.module.exports]
         ];
 
@@ -44,16 +53,26 @@ async function main() {
             await checkConstructor(getExport(context), `${file}: ${name}`);
         }
 
+        await checkConstructor(require(`../${file}`), `${file}: Node.js require`);
+        const dom = new JSDOM("", { runScripts: "outside-only" });
+        try {
+            dom.window.eval(bundle);
+            await checkConstructor(dom.window.Kuroshiro, `${file}: DOM window`);
+        }
+        finally {
+            dom.window.close();
+        }
+
         let amdExport;
         let defineCalls = 0;
-        const amdContext = {
-            window: {},
+        const amdContext = globalContext("window", "self");
+        Object.assign(amdContext, {
             define: Object.assign((dependencies, factory) => {
                 assert.equal(dependencies.length, 0);
                 defineCalls++;
                 amdExport = factory();
             }, { amd: {} })
-        };
+        });
         vm.runInNewContext(bundle, amdContext, { filename: file });
         assert.equal(defineCalls, 1, `${file}: AMD registration`);
         assert.equal(amdContext.window.Kuroshiro, undefined, `${file}: AMD must not set a global`);

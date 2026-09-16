@@ -1,5 +1,9 @@
 # Website development
 
+## Analytics
+
+The homepage and documentation share `_includes/analytics.html`, using GA4 measurement ID `G-GSRQ6JMLTZ` from `_config.yml`. The tag runs only in production Jekyll builds on `kuroshiro.org` or `www.kuroshiro.org`; the local preview omits it. No custom events containing demo input or conversion output are added. Google's external script performs its own analytics collection; local conversion does not mean the page has no third-party analytics. Review enhanced measurement, data collection and any applicable notice/consent requirements in the GA4 account. The old Baidu and Universal Analytics integrations have been removed.
+
 This branch retains the existing Jekyll/GitHub Pages site. The demo no longer uses a conversion API. Text is processed by a Web Worker after the visitor explicitly starts the demo.
 
 Run `npm ci`, `npm run build`, and `npm test` on Node.js 22 or newer. `npm run preview` serves the complete homepage at http://127.0.0.1:14337 using `index.html` and the shared `_includes/demo.html`. It substitutes only the homepage's include and relative URLs, not the full Jekyll engine. Language documentation links redirect to GitHub in this preview; production uses the Jekyll-rendered pages.

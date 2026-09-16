@@ -1,0 +1,13 @@
+<div id="demoArea">
+  <div class="demo-editors">
+    <div class="editor-pane"><div class="pane-heading"><label for="oritext">Original text</label><span>日本語 · up to 5,000 characters</span></div><textarea id="oritext" lang="ja" rows="5" maxlength="5000" spellcheck="false">感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！</textarea></div>
+    <div class="editor-pane result-pane"><div class="pane-heading"><span id="outputLabel">Your reading</span><span>CONVERTED OUTPUT</span></div><div id="output" role="region" aria-labelledby="outputLabel" aria-live="polite"></div></div>
+  </div>
+  <div class="demo-toolbar"><div class="demo-options">
+    <div><label for="to">To</label><select id="to"><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="romaji">Romaji</option></select></div>
+    <div><label for="mode">Mode</label><select id="mode"><option value="normal">Normal</option><option value="spaced">Spaced</option><option value="okurigana">Okurigana</option><option value="furigana">Furigana</option></select></div>
+    <div id="romajiOption" hidden><label for="romajiSystem">Romaji system</label><select id="romajiSystem"><option value="hepburn">Hepburn</option><option value="nippon">Nippon</option><option value="passport">Passport</option></select></div>
+  </div><div class="demo-actions"><button id="startBtn" type="button">Start demo</button><button id="convertBtn" type="button" disabled>Convert →</button><button id="cancelBtn" type="button" hidden>Cancel</button></div></div>
+  <p id="demoStatus" role="status" aria-live="polite">Start the demo to load the dictionary, then convert your text.</p>
+  <noscript>JavaScript and Web Workers are required for this demo.</noscript>
+</div>

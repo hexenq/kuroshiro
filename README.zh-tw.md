@@ -2,11 +2,10 @@
 
 # kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
+[![CI](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
 [![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
-[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/hexenq/kuroshiro.svg)](https://github.com/hexenq/kuroshiro/blob/master/LICENSE)
 
 kuroshiro是一款十分方便使用的日文轉換注音工具，主要針對日文文本，進行到平假名、片假名及羅馬字的轉換，並支持注音假名、送假名
 （旁註音）等注音模式。
@@ -24,7 +23,7 @@ kuroshiro是一款十分方便使用的日文轉換注音工具，主要針對�
 - 實用日語工具
 
 ## 1.x版本的重大變化
-- 從注音邏輯中分離語素解析器部分，使得我們可以使用不同的語素解析器（[預定義的](#解析器插件)或[自定義的](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)）
+- 從注音邏輯中分離語素解析器部分，使得我們可以使用不同的語素解析器（[預定義的](#解析器插件)或[自定義的](https://github.com/hexenq/kuroshiro/blob/master/CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)）
 - 擁抱ES8/ES2017以使用async/await方法
 - 使用ES6 Module取代CommonJS
     
@@ -169,7 +168,7 @@ kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生の�
 ### 實用工具
 __示例__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 判斷輸入字元是否是平假名。
@@ -231,7 +230,7 @@ kuroshiro支持三種羅馬字體系。
 漢字->羅馬字的轉換無論使用注音假名模式與否都 __不受__ 此邏輯影響。
 
 ## 貢獻
-請查閱文檔 [CONTRIBUTING](CONTRIBUTING.md).
+請查閱文檔 [CONTRIBUTING](https://github.com/hexenq/kuroshiro/blob/master/CONTRIBUTING.md).
 
 ## 靈感源
 - kuromoji

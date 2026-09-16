@@ -2,7 +2,7 @@
 
 ## Analytics
 
-The homepage and documentation share `_includes/analytics.html`, using GA4 measurement ID `G-GSRQ6JMLTZ` from `_config.yml`. The tag runs only in production Jekyll builds on `kuroshiro.org` or `www.kuroshiro.org`; the local preview omits it. No custom events containing demo input or conversion output are added. Google's external script performs its own analytics collection; local conversion does not mean the page has no third-party analytics. Review enhanced measurement, data collection and any applicable notice/consent requirements in the GA4 account. The old Baidu and Universal Analytics integrations have been removed.
+The homepage and documentation share `_includes/analytics.html`, using GA4 measurement ID `G-GSRQ6JMLTZ` from `_config.yml`. The official static async gtag.js snippet is placed immediately after the head element and included only in production Jekyll builds; the local preview omits it. Production artifacts retain analytics even when hosted elsewhere, so do not use a production build for local testing. No custom events containing demo input or conversion output are added. Google's external script performs its own analytics collection; local conversion does not mean the page has no third-party analytics. Review enhanced measurement, data collection and any applicable notice/consent requirements in the GA4 account. The old Baidu and Universal Analytics integrations have been removed.
 
 This branch retains the existing Jekyll/GitHub Pages site. The demo no longer uses a conversion API. Text is processed by a Web Worker after the visitor explicitly starts the demo.
 

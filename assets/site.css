@@ -3,4 +3,22 @@
 @media(max-width:1000px){.wrap{width:calc(100% - 48px)}.hero{gap:35px}.hero-actions{gap:18px}.quickstart{gap:35px}.section-heading h2{font-size:30px}}
 @media(max-width:720px){.wrap{width:calc(100% - 36px)}.site-header{min-height:90px;flex-wrap:wrap;justify-content:center;padding:20px 0;gap:14px}.site-header nav{gap:18px;font-size:13px}.hero{grid-template-columns:1fr;gap:40px;padding-block:48px}.hero h1{font-size:52px}.hero-description{font-size:17px}.reading-art{transform:none}.features{grid-template-columns:1fr;gap:28px;padding-block:30px 45px}.section-heading{display:block}.section-heading>p{margin-top:18px}.playground-section{padding-block:42px}.quickstart{grid-template-columns:1fr;padding-block:50px;gap:24px}.community{display:block}.community .button{margin-top:10px}.site-footer{grid-template-columns:1fr}.site-footer nav{justify-content:flex-start}.site-footer nav>span{text-align:left}}
 .brand:hover { text-decoration: none; }
+/* Let content shrink and actions wrap instead of widening the page. */
+.hero > *, .quickstart > * { min-width: 0; }
+.hero-actions { flex-wrap: wrap; }
+@media (max-width: 720px) {
+  .site-header nav { flex-wrap: wrap; justify-content: center; gap: 4px 18px; }
+  .site-header nav a, .hero-actions .text-link, .site-footer nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .hero h1 { font-size: clamp(40px, 8vw, 52px); letter-spacing: -2px; }
+  .hero-actions { gap: 12px 20px; }
+  .reading-art { padding-inline: 18px; }
+  .reading-row > span:last-child { font-size: clamp(24px, 7vw, 34px); letter-spacing: 2px; }
+  .reading-row .roman-reading { font-size: clamp(24px, 7vw, 34px); }
+  .art-top { flex-wrap: wrap; }
+  .code-panel pre { padding: 18px; }
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

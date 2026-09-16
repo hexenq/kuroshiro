@@ -21,4 +21,11 @@
 #demoStatus{margin:0;padding:12px 26px;font-size:13px;background:#f6f8f2;color:#53604e;border-top:1px solid #e1e5dc}
 #demoArea :focus-visible{outline:3px solid #477357;outline-offset:3px}
 #demoArea noscript{display:block;padding:15px}
+@media (max-width: 720px) {
+  .demo-options { width: 100%; }
+  .demo-options > div { flex: 1 1 120px; min-width: 0; }
+  .demo-options select { width: 100%; min-height: 44px; font-size: 16px; }
+  .demo-actions { width: 100%; }
+  #demoArea button { flex: 1 1 auto; min-height: 44px; }
+}
 @media(max-width:720px){.demo-editors{grid-template-columns:1fr}.result-pane{border-left:0;border-top:1px solid #e1e5dc}.editor-pane{padding:18px}#demoArea textarea,#output{font-size:19px;min-height:140px}.demo-toolbar{padding:18px}.demo-options{gap:12px}#demoStatus{padding:12px 18px}.pane-heading{flex-wrap:wrap}}

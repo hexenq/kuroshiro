@@ -6,6 +6,7 @@ const root = path.resolve(__dirname, '..');
 function homepage() {
     return fs.readFileSync(path.join(root, 'index.html'), 'utf8')
         .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '')
+        .replace('{% include analytics.html %}', '')
         .replace('{% include demo.html %}', fs.readFileSync(path.join(root, '_includes/demo.html'), 'utf8'))
         .replace(/\{\{ '([^']+)' \| relative_url \}\}/g, '$1');
 }

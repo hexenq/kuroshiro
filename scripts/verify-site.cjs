@@ -16,6 +16,13 @@ function verifySite(site = path.join(root, '_site')) {
         const html = read(name).toString();
         assert.match(html, /<html[\s>]/i, `Not a rendered page: ${name}`);
         assert.ok(!html.includes('{% include demo.html %}'), `Unrendered include: ${name}`);
+        assert.ok(!html.includes('{% include analytics.html %}'), `Unrendered analytics: ${name}`);
+        if (name !== 'demo/index.html') {
+            assert.equal((html.match(/https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=/g) || []).length, 1, `Missing or duplicate analytics: ${name}`);
+            assert.ok(html.includes('G-GSRQ6JMLTZ'), `Missing GA4 measurement ID: ${name}`);
+            assert.ok(!html.includes('hm.baidu.com'), `Retired Baidu tag: ${name}`);
+            assert.ok(!html.includes('google-analytics.com/analytics.js'), `Retired Google tag: ${name}`);
+        }
     }
     assert.equal(read('CNAME').toString().trim(), 'kuroshiro.org');
     const dom = new JSDOM(read('index.html').toString(), {url:'https://kuroshiro.org/'});

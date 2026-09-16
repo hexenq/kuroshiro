@@ -12,6 +12,7 @@ layout: null
   <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/demo.css' | relative_url }}">
   <script defer src="{{ '/assets/demo.js' | relative_url }}"></script>
+  {% include analytics.html %}
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -45,6 +46,6 @@ const result = await kuroshiro.convert(text, {
 });</code></pre></div></section>
     <section class="community wrap"><div><p class="eyebrow">BUILT IN THE OPEN</p><h2>Better with your ideas.</h2><p>Found an unexpected reading? Have a use case to share?<br>Issues, improvements and contributions are welcome.</p></div><a class="button" href="https://github.com/hexenq/kuroshiro">Explore on GitHub ↗</a></section>
   </main>
-  <footer class="site-footer wrap"><div><a class="brand" href="#">kuroshiro</a><p>Convert Japanese text to hiragana, katakana and romaji.</p></div><nav aria-label="Documentation languages"><span>DOCUMENTATION</span><a href="https://github.com/hexenq/kuroshiro#readme">English</a><a href="{{ '/README.jp.html' | relative_url }}" lang="ja">日本語</a><a href="{{ '/README.zh-cn.html' | relative_url }}" lang="zh-CN">简体中文</a><a href="{{ '/README.zh-tw.html' | relative_url }}" lang="zh-TW">繁體中文</a><a href="{{ '/README.eo-eo.html' | relative_url }}" lang="eo">Esperanto</a></nav><p class="footer-credit">Created by <a href="https://github.com/hexenq">Hexen Qi</a> · <a href="https://github.com/hexenq/kuroshiro/blob/master/LICENSE">MIT License</a></p></footer>
+  <footer class="site-footer wrap"><div><a class="brand" href="#">kuroshiro</a><p>Convert Japanese text to hiragana, katakana and romaji.</p></div><nav aria-label="Documentation languages"><span>DOCUMENTATION</span><a href="https://github.com/hexenq/kuroshiro#readme">English</a><a href="{{ '/README.jp.html' | relative_url }}" lang="ja">日本語</a><a href="{{ '/README.zh-cn.html' | relative_url }}" lang="zh-CN">简体中文</a><a href="{{ '/README.zh-tw.html' | relative_url }}" lang="zh-TW">繁體中文</a><a href="{{ '/README.eo-eo.html' | relative_url }}" lang="eo">Esperanto</a></nav><p class="footer-credit">Site usage is measured with Google Analytics. · Created by <a href="https://github.com/hexenq">Hexen Qi</a> · <a href="https://github.com/hexenq/kuroshiro/blob/master/LICENSE">MIT License</a></p></footer>
 </body>
 </html>

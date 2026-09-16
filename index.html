@@ -1,0 +1,50 @@
+---
+layout: null
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>kuroshiro — Japanese, in another reading.</title>
+  <meta name="description" content="An open-source JavaScript library for converting Japanese to hiragana, katakana and romaji, with furigana support. Try it in your browser.">
+  <link rel="icon" href="{{ '/favicon.ico' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/demo.css' | relative_url }}">
+  <script defer src="{{ '/assets/demo.js' | relative_url }}"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header wrap">
+    <a class="brand" href="#" aria-label="kuroshiro home"><span class="brand-mark" aria-hidden="true">黒<span>白</span></span>kuroshiro</a>
+    <nav aria-label="Main navigation"><a href="#features">Features</a><a href="#demo">Playground</a><a href="#quickstart">Get started</a><a href="https://github.com/hexenq/kuroshiro">GitHub ↗</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div><p class="eyebrow">● OPEN-SOURCE JAPANESE LANGUAGE LIBRARY</p><h1 id="hero-title">Japanese,<br>in another <em>reading.</em></h1><p class="hero-description">Turn Japanese text into hiragana, katakana or romaji. Add readings with furigana. One JavaScript library, more ways to read.</p><div class="hero-actions"><a class="button primary" href="#demo">Try the playground ↘</a><a class="text-link" href="#quickstart">Start building →</a></div><p class="hero-meta">JavaScript &nbsp; / &nbsp; Node.js &amp; browser &nbsp; / &nbsp; MIT licensed</p></div>
+      <div class="reading-art" aria-label="Japanese readings: kanji, hiragana, katakana and romaji"><div class="art-top"><span>ONE LANGUAGE, MANY READINGS</span><span>01 — 04</span></div><div class="reading-row"><span class="reading-label">KANJI</span><span lang="ja" class="kanji">黒<span>白</span></span></div><div class="reading-row"><span class="reading-label">HIRAGANA</span><span lang="ja">くろしろ</span></div><div class="reading-row"><span class="reading-label">KATAKANA</span><span lang="ja">クロシロ</span></div><div class="reading-row"><span class="reading-label">ROMAJI</span><span class="roman-reading">kuroshiro</span></div><p class="art-caption">A little clarity, character by character.</p></div>
+    </section>
+    <section id="features" class="features wrap" aria-label="Library features">
+      <article><span class="feature-number">01 / CONVERT</span><h2>Choose your reading.</h2><p>Hiragana, katakana and romaji, with normal, spaced, okurigana and furigana output modes.</p></article>
+      <article><span class="feature-number">02 / CUSTOMIZE</span><h2>Make it fit your project.</h2><p>Choose Hepburn, Nippon or Passport romanization. Use an analyzer suited to your environment.</p></article>
+      <article><span class="feature-number">03 / BUILD</span><h2>From learning to creating.</h2><p>Add reading aids to a Japanese learning tool, annotate text, or explore pronunciation in your own app.</p></article>
+    </section>
+    <section id="demo" class="playground-section"><div class="wrap"><div class="section-heading"><div><p class="eyebrow">THE PLAYGROUND</p><h2>Give your words another form.</h2></div><p>Real conversion, right here.<br>No account. No conversion server.</p></div>
+      {% include demo.html %}
+      <p class="download-note">↳ Loaded only when you start: about <strong>17 MiB</strong> of dictionary files, plus library scripts. Repeat visits may use your browser’s cache. Your text stays in this browser.</p>
+    </div></section>
+    <section id="quickstart" class="quickstart wrap"><div><p class="eyebrow">SMALL API. MANY POSSIBILITIES.</p><h2>A few lines.<br>A new way to read.</h2><p>Install kuroshiro and an analyzer, initialize once, then convert. This example uses Kuromoji in a JavaScript module environment.</p><a class="text-link" href="https://github.com/hexenq/kuroshiro#usage">Read the documentation ↗</a></div><div class="code-panel"><div class="code-heading"><span>QUICK START</span><span>JavaScript</span></div><pre aria-label="Install packages"><code>npm install kuroshiro kuroshiro-analyzer-kuromoji</code></pre><pre aria-label="Conversion example"><code>import Kuroshiro from "kuroshiro";
+import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
+
+const kuroshiro = new Kuroshiro();
+await kuroshiro.init(new KuromojiAnalyzer());
+
+const text = "感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！";
+const result = await kuroshiro.convert(text, {
+  to: "hiragana"
+});</code></pre></div></section>
+    <section class="community wrap"><div><p class="eyebrow">BUILT IN THE OPEN</p><h2>Better with your ideas.</h2><p>Found an unexpected reading? Have a use case to share?<br>Issues, improvements and contributions are welcome.</p></div><a class="button" href="https://github.com/hexenq/kuroshiro">Explore on GitHub ↗</a></section>
+  </main>
+  <footer class="site-footer wrap"><div><a class="brand" href="#">kuroshiro</a><p>Convert Japanese text to hiragana, katakana and romaji.</p></div><nav aria-label="Documentation languages"><span>DOCUMENTATION</span><a href="https://github.com/hexenq/kuroshiro#readme">English</a><a href="{{ '/README.jp.html' | relative_url }}" lang="ja">日本語</a><a href="{{ '/README.zh-cn.html' | relative_url }}" lang="zh-CN">简体中文</a><a href="{{ '/README.zh-tw.html' | relative_url }}" lang="zh-TW">繁體中文</a><a href="{{ '/README.eo-eo.html' | relative_url }}" lang="eo">Esperanto</a></nav><p class="footer-credit">Created by <a href="https://github.com/hexenq">Hexen Qi</a> · <a href="https://github.com/hexenq/kuroshiro/blob/master/LICENSE">MIT License</a></p></footer>
+</body>
+</html>

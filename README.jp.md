@@ -2,11 +2,10 @@
 
 # kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
+[![CI](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
 [![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
-[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/hexenq/kuroshiro.svg)](https://github.com/hexenq/kuroshiro/blob/master/LICENSE)
 
 kuroshiroは日本語文をローマ字や仮名なとに変換できるライブラリです。フリガナ・送り仮名の機能も搭載します。
 
@@ -23,7 +22,7 @@ kuroshiroは日本語文をローマ字や仮名なとに変換できるライ�
 - 実用ツール付き
 
 ## バッジョン1.xでの重大な変更
-- 形態素解析器がルビロジックから分離される。それゆえ、様々な形態素解析器（[レディーメイド](#形態素解析器プラグイン)も[カスタマイズ](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)も）を利用できることになります。
+- 形態素解析器がルビロジックから分離される。それゆえ、様々な形態素解析器（[レディーメイド](#形態素解析器プラグイン)も[カスタマイズ](https://github.com/hexenq/kuroshiro/blob/master/CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)も）を利用できることになります。
 - ES2017の新機能「async/await」を利用します
 - CommonJSからES Modulesへ移行します
     
@@ -168,7 +167,7 @@ kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生の�
 ### 実用ツール
 __例__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 入力文字はひらがなかどうかを判断します。
@@ -230,7 +229,7 @@ kuroshiroは三種類のローマ字表記法をサポートします。
 フリガナモードを使うかどうかにかかわらず、漢字->ローマ字の変換はこの仕組みに影響を与えられないです。
 
 ## 貢献したい方
-[CONTRIBUTING](CONTRIBUTING.md) を参考にしてみてください。
+[CONTRIBUTING](https://github.com/hexenq/kuroshiro/blob/master/CONTRIBUTING.md) を参考にしてみてください。
 
 ## 感謝
 - kuromoji

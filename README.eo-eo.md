@@ -2,11 +2,10 @@
 
 # Kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
+[![CI](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml)
 [![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
 [![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
-[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/hexenq/kuroshiro.svg)](https://github.com/hexenq/kuroshiro/blob/master/LICENSE)
 
 la Kuroshiro estas Japanalingvo kodlibrejo por konverti Japanajn frazojn al Hiraganao, Katakanao aŭ Romaĝio, kaj ankaŭ subtenas furiganaon kaj okuriganaon.
 
@@ -23,7 +22,7 @@ Vidi la ekzemplan paĝon [ĉi tie](https://kuroshiro.org/#demo).
 - Utilaj Japanalingvaj iloj
 
 ## Gravaj Ŝanĝoj je 1.x
-- Aparta lingvasttrukturametoda ilo kaj fonetika notacia logiko por eblegi la uzaton de multaj lingvastrukturaj metodoj. ([finitaj iloj](#ready-made-analyzer-plugins) or [personigitaj iloj](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins))
+- Aparta lingvasttrukturametoda ilo kaj fonetika notacia logiko por eblegi la uzaton de multaj lingvastrukturaj metodoj. ([finitaj iloj](#ready-made-analyzer-plugins) or [personigitaj iloj](https://github.com/hexenq/kuroshiro/blob/master/CONTRIBUTING.md#how-to-submit-new-analyzer-plugins))
 - ES8/ES2017 por uzi "async/await" funkciojn
 - Uzu la modulon ES6 anstataŭ CommonJS
     
@@ -142,13 +141,13 @@ __Ekzemploj__
 
 ```js
 // normal
-await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
+await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"normal", to:"hiragana"});
 // rezulto：かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！
 ```
 
 ```js
 // spaced
-await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
+await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"spaced", to:"hiragana"});
 // rezulto：かんじとれ たら て を つなご う 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
 ```
 
@@ -168,7 +167,7 @@ await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人�
 
 __Ekzemploj__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 Determini se enigita litero estas hiragana.
@@ -229,7 +228,7 @@ kiam vi uzas `nippon`, `passport`, `hepburn` sistemojn respektive*
 Kanĝip -> romaĝio konvertado __ne estas afektita__.
 
 ## Kontribui
-Rigardu [CONTRIBUTING](CONTRIBUTING.md).
+Rigardu [CONTRIBUTING](https://github.com/hexenq/kuroshiro/blob/master/CONTRIBUTING.md).
 
 ## Inspiroj
 - kuromoji

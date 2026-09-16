@@ -1,0 +1,16 @@
+{
+  "name": "kuroshiro-website",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-assets.cjs",
+    "test": "node --test test/*.test.cjs",
+    "preview": "node scripts/preview.cjs"
+  },
+  "engines": { "node": ">=22" },
+  "dependencies": {
+    "kuroshiro": "1.2.0",
+    "kuroshiro-analyzer-kuromoji": "1.1.0",
+    "kuromoji": "0.1.2"
+  },
+  "devDependencies": { "jsdom": "26.1.0" }
+}

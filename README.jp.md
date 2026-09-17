@@ -32,7 +32,9 @@ kuroshiroは日本語文をローマ字や仮名なとに変換できるライ�
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
 |Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+|Yahoo Web API (メンテナンス休止中)|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+
+Yahoo Web API 解析器の API 移行は未完了で、現在メンテナンスを休止しています。新規プロジェクトでの利用は推奨しません。詳しくは[メンテナンス状況](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi#maintenance-status)をご覧ください。
 
 ## 使い方
 ### Node.js (又はWebpackなどのモジュールバンドラを使ってる時)

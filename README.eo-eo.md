@@ -31,7 +31,9 @@ Vidi la ekzemplan paĝon [ĉi tie](https://kuroshiro.org/#demo).
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
 |Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+|Yahoo Web API (prizorgado paŭzita)|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+
+La migrado de la analizilo Yahoo Web API al la nova API ankoraŭ ne finiĝis, kaj ĝia prizorgado estas paŭzita. Ĝi ne estas rekomendata por novaj projektoj. Vidu la [staton de prizorgado](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi#maintenance-status).
 
 ## Uzado
 ### Node.js (aŭ per "module bundler"-ilo (kiel Webpack))

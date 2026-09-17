@@ -32,7 +32,9 @@ You can check the demo [here](https://kuroshiro.org/#demo).
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
 |Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+|Yahoo Web API (paused)|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+
+The Yahoo Web API analyzer's API migration is incomplete and maintenance is paused. It is not recommended for new projects. See its [maintenance status](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi#maintenance-status).
 
 ## Usage
 ### Node.js (or using a module bundler (e.g. Webpack))

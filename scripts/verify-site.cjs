@@ -28,6 +28,8 @@ function verifySite(site = path.join(root, '_site')) {
     const dom = new JSDOM(read('index.html').toString(), {url:'https://kuroshiro.org/'});
     try {
         const doc = dom.window.document;
+        const styleUrl = doc.querySelector('link[rel="stylesheet"]').getAttribute('href');
+        assert.match(styleUrl, /\/assets\/site\.css\?v=[a-f0-9]{40}$/, 'Homepage stylesheet must use the deployment revision');
         assert.equal(doc.querySelector('#oritext')?.textContent, '感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');
         for (const node of doc.querySelectorAll('[href],script[src],img[src]')) {
             const value = node.getAttribute('href') || node.getAttribute('src');

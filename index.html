@@ -10,7 +10,7 @@ layout: null
   <title>kuroshiro — Japanese, in another reading.</title>
   <meta name="description" content="An open-source JavaScript library for converting Japanese to hiragana, katakana and romaji, with furigana support. Try it in your browser.">
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}?v={{ site.github.build_revision | default: 'local' }}">
   <link rel="stylesheet" href="{{ '/assets/demo.css' | relative_url }}">
   <script defer src="{{ '/assets/demo.js' | relative_url }}"></script>
 </head>

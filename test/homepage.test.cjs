@@ -21,7 +21,8 @@ test('homepage includes the shared demo, product sections and valid local target
             if (anchor.hash) assert.ok(doc.getElementById(anchor.hash.slice(1)), anchor.hash);
         }
         for (const asset of doc.querySelectorAll('link[href],script[src]')) {
-            assert.ok(fs.existsSync(path.join(root, asset.getAttribute('href') || asset.getAttribute('src'))));
+            const url = new URL(asset.getAttribute('href') || asset.getAttribute('src'), 'https://kuroshiro.org');
+            assert.ok(fs.existsSync(path.join(root, url.pathname)));
         }
         assert.ok(doc.querySelector('pre').textContent.includes('npm install'));
         assert.ok(doc.querySelectorAll('pre')[1].textContent.includes(doc.querySelector('textarea').value));

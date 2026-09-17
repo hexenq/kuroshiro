@@ -12,42 +12,18 @@ describe("Kuroshiro Node Initialization Test", () => {
     beforeAll(async () => {
         kuroshiro = new Kuroshiro();
     });
-    it("Invalid Initialization Parameter(1)", async (done) => {
-        try {
-            await kuroshiro.init();
-            done("SHOULD NOT BE HERE");
-        }
-        catch (err) {
-            done();
-        }
+    it("Invalid Initialization Parameter(1)", async () => {
+        await expect(kuroshiro.init()).rejects.toThrow("Invalid initialization parameter.");
     });
-    it("Invalid Initialization Parameter(2)", async (done) => {
-        try {
-            await kuroshiro.init("param");
-            done("SHOULD NOT BE HERE");
-        }
-        catch (err) {
-            done();
-        }
+    it("Invalid Initialization Parameter(2)", async () => {
+        await expect(kuroshiro.init("param")).rejects.toThrow("Invalid initialization parameter.");
     });
-    it("Invalid Initialization Parameter(3)", async (done) => {
-        try {
-            await kuroshiro.init({});
-            done("SHOULD NOT BE HERE");
-        }
-        catch (err) {
-            done();
-        }
+    it("Invalid Initialization Parameter(3)", async () => {
+        await expect(kuroshiro.init({})).rejects.toThrow("Invalid initialization parameter.");
     });
-    it("Repeated Initialization", async (done) => {
-        try {
-            await kuroshiro.init(new KuromojiAnalyzer());
-            await kuroshiro.init(new KuromojiAnalyzer());
-            done("SHOULD NOT BE HERE");
-        }
-        catch (err) {
-            done();
-        }
+    it("Repeated Initialization", async () => {
+        await kuroshiro.init(new KuromojiAnalyzer());
+        await expect(kuroshiro.init(new KuromojiAnalyzer())).rejects.toThrow("Kuroshiro has already been initialized.");
     });
 });
 
@@ -62,35 +38,17 @@ describe("Kuroshiro Node Funtional Test", () => {
         kuroshiro = new Kuroshiro();
         await kuroshiro.init(new KuromojiAnalyzer());
     });
-    it("Convert - Wrong Parameter - Invalid Target Syllabary", async (done) => {
+    it("Convert - Wrong Parameter - Invalid Target Syllabary", async () => {
         const ori = EXAMPLE_TEXT;
-        try {
-            const result = await kuroshiro.convert(ori, { to: "xxxx" });
-            done("SHOULD NOT BE HERE");
-        }
-        catch (err) {
-            done();
-        }
+        await expect(kuroshiro.convert(ori, { to: "xxxx" })).rejects.toThrow("Invalid Target Syllabary.");
     });
-    it("Convert - Wrong Parameter - Invalid Conversion Mode", async (done) => {
+    it("Convert - Wrong Parameter - Invalid Conversion Mode", async () => {
         const ori = EXAMPLE_TEXT;
-        try {
-            const result = await kuroshiro.convert(ori, { to: "hiragana", mode: "xxxx" });
-            done("SHOULD NOT BE HERE");
-        }
-        catch (err) {
-            done();
-        }
+        await expect(kuroshiro.convert(ori, { to: "hiragana", mode: "xxxx" })).rejects.toThrow("Invalid Conversion Mode.");
     });
-    it("Convert - Wrong Parameter - Invalid Romanization System", async (done) => {
+    it("Convert - Wrong Parameter - Invalid Romanization System", async () => {
         const ori = EXAMPLE_TEXT;
-        try {
-            const result = await kuroshiro.convert(ori, { to: "hiragana", romajiSystem: "xxxx" });
-            done("SHOULD NOT BE HERE");
-        }
-        catch (err) {
-            done();
-        }
+        await expect(kuroshiro.convert(ori, { to: "hiragana", romajiSystem: "xxxx" })).rejects.toThrow("Invalid Romanization System.");
     });
     it("Token Patch", () => {
         const tokens = JSON.parse("[{\"surface_form\":\"綺麗\",\"pos\":\"名詞\",\"reading\":\"きれい\"},{\"surface_form\":\"な\",\"pos\":\"助動詞\"},{\"surface_form\":\"花\",\"pos\":\"名詞\",\"reading\":\"ハナ\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"面白い\",\"pos\":\"形容詞\",\"reading\":\"オモシロイ\"},{\"surface_form\":\"映画\",\"pos\":\"名詞\",\"reading\":\"エイガ\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"面白かっ\",\"pos\":\"形容詞\",\"reading\":\"オモシロカッ\"},{\"surface_form\":\"た\",\"pos\":\"助動詞\",\"reading\":\"タ\"},{\"surface_form\":\"です\",\"pos\":\"助動詞\",\"reading\":\"デス\"},{\"surface_form\":\"。\",\"pos\":\"記号\",\"reading\":\"。\"},{\"surface_form\":\"繋ご\",\"pos\":\"動詞\",\"reading\":\"ツナゴ\"},{\"surface_form\":\"う\",\"pos\":\"助動詞\",\"reading\":\"ウ\"},{\"surface_form\":\"うp\",\"pos\":\"名詞\"}]");

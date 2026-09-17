@@ -2,11 +2,9 @@
 
 # kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
-[![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
-[![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
-[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
+[![CI](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml/badge.svg)](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/kuroshiro.svg)](https://www.npmjs.com/package/kuroshiro)
+[![License](https://img.shields.io/github/license/hexenq/kuroshiro.svg)](LICENSE)
 
 kuroshiro是一款十分方便使用的日文轉換注音工具，主要針對日文文本，進行到平假名、片假名及羅馬字的轉換，並支持注音假名、送假名
 （旁註音）等注音模式。

@@ -105,12 +105,15 @@ class Kuroshiro {
                         else {
                             preToken = token.surface_form;
                         }
-                        return toRawRomaji(preToken, options.romajiSystem);
+                        return preToken;
                     };
                     if (options.mode === "normal") {
-                        return tokens.map(romajiConv).join("");
+                        // Join before converting so that a sokuon (っ) at a token
+                        // boundary geminates the next consonant correctly
+                        // (e.g. 座って -> スワッ + テ -> "suwatte", not "suwatsute")
+                        return toRawRomaji(tokens.map(romajiConv).join(""), options.romajiSystem);
                     }
-                    return tokens.map(romajiConv).join(" ");
+                    return tokens.map(token => toRawRomaji(romajiConv(token), options.romajiSystem)).join(" ");
                 case "hiragana":
                     for (let hi = 0; hi < tokens.length; hi++) {
                         if (hasKanji(tokens[hi].surface_form)) {

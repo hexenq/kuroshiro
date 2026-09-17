@@ -160,6 +160,11 @@ describe("Kuroshiro Node Funtional Test", () => {
         const result = await kuroshiro.convert(ori, { mode: "spaced", to: "romaji" });
         expect(result).toEqual("kanjitore tara te o tsunagō , kasanaru no wa jinsei no rain   and   remi ria saikō !");
     });
+    it("Kanji to Romaji with sokuon across token boundary", async () => {
+        const ori = "座って";
+        const result = await kuroshiro.convert(ori, { mode: "normal", to: "romaji" });
+        expect(result).toEqual("suwatte");
+    });
     it("Kanji to Romaji with passport-shiki romaji system", async () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { to: "romaji", romajiSystem: "passport" });

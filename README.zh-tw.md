@@ -33,7 +33,9 @@ kuroshiro是一款十分方便使用的日文轉換注音工具，主要針對�
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
 |Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+|Yahoo Web API (維護暫停)|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+
+Yahoo Web API 解析器的 API 遷移尚未完成，目前暫停維護，暫不建議用於新專案。詳情請參閱[維護狀態說明](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi#maintenance-status)。
 
 ## 如何使用
 ### Node.js (或使用Webpack等打包工具時)

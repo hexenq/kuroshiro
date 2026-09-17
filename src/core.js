@@ -21,65 +21,41 @@ import {
 } from "./util";
 
 /**
- * Merge a lone sokuon (っ / ッ) into the notation that follows it.
- *
- * A sokuon has no reading of its own — it geminates the consonant that
- * starts the next mora. When each notation is romanised independently
- * (which is what the furigana renderer does), a sokuon standing alone
- * falls through to the "no mapping" branch of toRawRomaji and comes out
- * as the literal "tsu":
- *
- *   座って  ->  座[suwa] っ[tsu] て[te]     // wrong
- *   真っ赤  ->  真[ma]   っ[tsu] 赤[ka]     // wrong
- *   カッター ->  カ[ka]   ッ[tsu] タ[ta] ー  // wrong
- *
- * Merging the sokuon forward gives the romaji converter the following
- * consonant it needs, so its existing gemination rule applies:
- *
- *   座って  ->  座[suwa] って[tte]
- *   真っ赤  ->  真[ma]   っ赤[kka]
- *
- * Reported upstream as takuyaa/kuromoji.js#53, filed against the
- * tokenizer. It is not a tokenizer bug: kuromoji correctly returns
- * 座っ[スワッ] + て[テ]. The error is here, in the consumer.
- *
- * Only the romaji paths use this. Hiragana and katakana output is
- * unaffected, because there a sokuon is emitted as its own literal
- * character and is already correct.
- *
- * A trailing sokuon with nothing to geminate (「あっ」) is left alone —
- * it has no well-defined romanisation and inventing one here would be a
- * separate decision.
+ * Keep a lone sokuon with the following Japanese mora for romaji output.
+ * For example: 座[suwa] って[tte], 真[ma] っ赤[kka], 買[ka] っちゃ[tcha].
+ * Do not cross non-Japanese boundaries or invent a reading for a stranded
+ * sokuon. Normal/spaced modes and hiragana/katakana output are unaffected.
  *
  * @param {Array} notations [basic, basic_type, notation, pronunciation]
- * @returns {Array} notations with lone sokuon merged forward
+ * @param {string} system Romanization system
+ * @returns {Array} Notations with eligible sokuon merged forward
  */
-const mergeSokuonForward = function (notations) {
-    const SOKUON = /^[っッ]$/;
+const mergeSokuonForward = function (notations, system) {
     const merged = [];
-    let carry = null;
     for (let i = 0; i < notations.length; i++) {
-        const n = notations[i];
-        if (carry) {
-            merged.push([
-                carry[0] + n[0],
-                n[1],
-                carry[2] + n[2],
-                carry[3] + n[3]
-            ]);
-            carry = null;
+        const current = notations[i];
+        const next = notations[i + 1];
+        if (current[1] !== 2 || !/^[っッ]$/.test(current[3])
+            || !next || next[1] === 3 || !next[3]
+            || ![...next[3]].every(isKana) || /^[っッ]/.test(next[3])
+            || !/^[bcdfghjklmnpqrstvwxyz]/.test(toRawRomaji(next[3], system))) {
+            merged.push(current);
+            continue;
         }
-        // [3] is the pronunciation; a lone sokuon is the whole of it.
-        // The last notation has nothing to merge into, so it is kept.
-        else if (SOKUON.test(n[3]) && i + 1 < notations.length) {
-            carry = n;
+
+        const group = [current[0] + next[0], next[1], current[2] + next[2], current[3] + next[3]];
+        i++;
+        // Kana notations are split by character. Include the small kana in
+        // っちゃ / っしょ / ッティ instead of producing tchi + ya, etc.
+        const small = notations[i + 1];
+        if (next[1] === 2 && next[3].length === 1 && small && small[1] === 2
+            && /^[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]$/.test(small[3])) {
+            group[0] += small[0];
+            group[2] += small[2];
+            group[3] += small[3];
+            i++;
         }
-        else {
-            merged.push(n);
-        }
-    }
-    if (carry) {
-        merged.push(carry); // trailing sokuon: nothing to merge into
+        merged.push(group);
     }
     return merged;
 };
@@ -311,7 +287,7 @@ class Kuroshiro {
                 case "romaji": {
                     // A lone sokuon has no reading of its own; romanising
                     // it in isolation yields "tsu". See mergeSokuonForward.
-                    const romajiNotations = mergeSokuonForward(notations);
+                    const romajiNotations = mergeSokuonForward(notations, options.romajiSystem);
                     if (options.mode === "okurigana") {
                         for (let n2 = 0; n2 < romajiNotations.length; n2++) {
                             if (romajiNotations[n2][1] !== 1) {

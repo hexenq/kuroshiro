@@ -19,11 +19,18 @@ async function checkConstructor(Constructor, label) {
     const instance = new Constructor.default();
     await instance.init({
         init: () => Promise.resolve(),
-        parse: () => Promise.resolve([
-            { surface_form: "漢字", reading: "カンジ", pronunciation: "カンジ" }
-        ])
+        parse: text => Promise.resolve(text === "買っちゃった" ? [
+            { surface_form: text, reading: "カッチャッタ", pronunciation: "カッチャッタ" }
+        ] : text === "っcat" ? [
+            { surface_form: "っ", reading: "ッ", pronunciation: "ッ" },
+            { surface_form: "cat" }
+        ] : [{ surface_form: "漢字", reading: "カンジ", pronunciation: "カンジ" }])
     });
     assert.equal(await instance.convert("漢字"), "かんじ", label);
+    const ruby = await instance.convert("買っちゃった", { to: "romaji", mode: "furigana" });
+    assert.ok(ruby.includes("っちゃ<rp>(</rp><rt>tcha</rt>"), `${label}: sokuon with contracted kana`);
+    const mixed = await instance.convert("っcat", { to: "romaji", mode: "furigana" });
+    assert.ok(mixed.includes("っ<rp>(</rp><rt>tsu</rt>"), `${label}: preserve Latin boundary`);
 }
 
 function globalContext(...aliases) {

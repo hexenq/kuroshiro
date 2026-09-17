@@ -29,7 +29,7 @@ function verifySite(site = path.join(root, '_site')) {
     try {
         const doc = dom.window.document;
         assert.equal(doc.querySelector('#oritext')?.textContent, '感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！');
-        for (const node of doc.querySelectorAll('[href],script[src]')) {
+        for (const node of doc.querySelectorAll('[href],script[src],img[src]')) {
             const value = node.getAttribute('href') || node.getAttribute('src');
             assert.ok(!value.includes('{{'), `Unrendered URL: ${value}`);
             const url = new URL(value, 'https://kuroshiro.org/');

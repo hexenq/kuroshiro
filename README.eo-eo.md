@@ -149,7 +149,7 @@ await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人�
 ```js
 // spaced
 await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"spaced", to:"hiragana"});
-// rezulto：かんじとれ たら て を つなご う 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
+// rezulto：かんじとれ たら て を つなごう 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
 ```
 
 ```js

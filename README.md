@@ -8,7 +8,7 @@
 
 kuroshiro is a Japanese language library for converting Japanese sentence to Hiragana, Katakana or Romaji with furigana and okurigana modes supported.
 
-*Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md).*
+*Read this in other languages: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md).*
 
 ## Demo
 You can check the demo [here](https://kuroshiro.org/#demo).
@@ -173,7 +173,7 @@ await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人�
 ### Utils
 __Examples__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 Check if input char is hiragana.

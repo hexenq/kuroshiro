@@ -8,7 +8,7 @@
 
 kuroshiroは日本語文をローマ字や仮名なとに変換できるライブラリです。フリガナ・送り仮名の機能も搭載します。
 
-*ほかの言語：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md)。*
+*ほかの言語：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md)。*
 
 ## デモ
 オンラインデモは[こちら](https://kuroshiro.org/#demo)です。
@@ -168,7 +168,7 @@ kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生の�
 ### 実用ツール
 __例__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 入力文字はひらがなかどうかを判断します。

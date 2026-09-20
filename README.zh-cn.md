@@ -9,7 +9,7 @@
 kuroshiro是一款十分方便使用的日文转换注音工具，主要针对日文文本，进行到平假名、片假名及罗马字的转换，并支持注音假名、送假名
 （旁注音）等注音模式。
 
-*其他说明语言：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md)。*
+*其他说明语言：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md)。*
 
 ## 演示
 你可以在[这里](https://kuroshiro.org/#demo)查看在线演示。
@@ -169,7 +169,7 @@ kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生の�
 ### 实用工具
 __示例__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 判断输入字符是否是平假名。

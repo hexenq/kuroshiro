@@ -2,13 +2,11 @@
 
 # kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
-[![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
-[![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
-[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
+[![CI](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml/badge.svg)](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/kuroshiro.svg)](https://www.npmjs.com/package/kuroshiro)
+[![License](https://img.shields.io/github/license/hexenq/kuroshiro.svg)](LICENSE)
 
-kuroshiro는 일본어 문장을 히라가나, 가타나카 및 로마자로 변환할 수 있는 라이브러리입니다. 후리가나와 오쿠리가나 방식도 지원합니다.
+kuroshiro는 일본어 문장을 히라가나, 가타카나 및 로마자로 변환할 수 있는 라이브러리입니다. 후리가나와 오쿠리가나 방식도 지원합니다.
 
 *다른 언어로 읽기: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md).*
 
@@ -26,7 +24,7 @@ kuroshiro는 일본어 문장을 히라가나, 가타나카 및 로마자로 변
 - 다른 형태소 분석기들을 사용할 수 있도록 형태소 분석기가 음성 표기법 로직에서 분리됨 ([만들어져 있는 형태소 분석기](#형태소-분석기-플러그인)도, [커스터마이즈](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)한 형태소 분석기도 사용할 수 있습니다.)
 - ES8/ES2017의 async/await을 사용합니다.
 - CommonJS 대신 ES6 모듈을 사용합니다.
-    
+
 ## 형태소 분석기 플러그인
 *각 플러그인을 사용하기 전에 호환성을 확인해 주세요.*
 
@@ -34,7 +32,9 @@ kuroshiro는 일본어 문장을 히라가나, 가타나카 및 로마자로 변
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
 |Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+|Yahoo Web API (유지보수 일시 중단)|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+
+Yahoo Web API 분석기는 API 마이그레이션이 완료되지 않았으며 유지보수가 일시 중단된 상태입니다. 새 프로젝트에서는 사용을 권장하지 않습니다. 자세한 내용은 [유지보수 상태](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi#maintenance-status)를 확인해 주세요.
 
 ## 사용방법
 ### Node.js (또는 Webpack과 같은 모듈 번들러를 사용할 때)
@@ -42,7 +42,7 @@ npm을 이용하여 설치합니다.
 ```sh
 $ npm install kuroshiro
 ```
-    
+
 라이브러리를 불러옵니다. `import` 방식도, `require` 방식도 좋습니다.
 
 *ES6 Module `import` 방식의 예시*
@@ -66,7 +66,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 *CommonJS `require` 방식의 예시*
 
 ```js
-const Kuroshiro = require("kuroshiro")；
+const Kuroshiro = require("kuroshiro");
 const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
 const kuroshiro = new Kuroshiro();
 
@@ -78,7 +78,7 @@ kuroshiro.init(new KuromojiAnalyzer())
         console.log(result);
     })
 ```
-    
+
 ### 브라우저
 `dist/kuroshiro.min.js`를 프론트엔드 프로젝트에 추가하세요. (`npm install`로 설치하고, `npm run build`로 만들어서 사용할 수 있습니다.)
 
@@ -152,14 +152,14 @@ __예시__
 
 ```js
 // normal (일반)
-await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
+await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"normal", to:"hiragana"});
 // 결과：かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！
 ```
 
 ```js
 // spaced (공백 문자로 분리)
-await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
-// 결과：かんじとれ たら て を つなご う 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
+await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"spaced", to:"hiragana"});
+// 결과：かんじとれ たら て を つなごう 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
 ```
 
 ```js
@@ -177,7 +177,7 @@ await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人�
 ### 유틸리티
 __예시__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 입력한 문자가 히라가나인지 확인합니다.
@@ -216,7 +216,7 @@ const result = Kuroshiro.Util.isHiragana("あ"));
 입력한 가나 문자열을 가타카나로 변환합니다.
 
 #### kanaToRomaji(str, system)
-입력한 가나 문자열을 로마자로 변환합니다. 매개변수 `system`은 `"nippon"`, `"passport"`, `"hepburn"` 을 받습니다. (기본값: "hepburn"). 
+입력한 가나 문자열을 로마자로 변환합니다. 매개변수 `system`은 `"nippon"`, `"passport"`, `"hepburn"` 을 받습니다. (기본값: "hepburn").
 
 ## 로마자 표기법
 kuroshiro는 세 가지의 로마자 표기법을 지원합니다.

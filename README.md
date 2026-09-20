@@ -173,7 +173,7 @@ await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人�
 ### Utils
 __Examples__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 Check if input char is hiragana.

@@ -104,6 +104,26 @@ kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
     })
 ```
 
+### TypeScript
+
+The maintained source includes declarations for the package entry, custom analyzers,
+conversion options, and the static `Kuroshiro.Util` helpers. Use an analyzer package
+with its own declarations when integrating the two packages. These declarations and
+the new helper spelling are not included in the published 1.2.0 release.
+
+```ts
+import Kuroshiro from "kuroshiro";
+
+const options: Kuroshiro.ConvertOptions = { to: "romaji", romajiSystem: "hepburn" };
+const hiragana: string = Kuroshiro.Util.kanaToHiragana("カナ");
+```
+
+For TypeScript compiled to CommonJS, enable `esModuleInterop` for default imports,
+or use `import Kuroshiro = require("kuroshiro")`. Native Node ESM and bundler module
+resolution also support the default import. Non-module browser scripts can use
+`/// <reference types="kuroshiro" />` for the `Kuroshiro` global; the actual UMD
+script must still be loaded in the page.
+
 ## API
 ### Constructor
 __Examples__
@@ -205,8 +225,11 @@ Check if input string has kanji.
 #### hasJapanese(str)
 Check if input string has Japanese.
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 Convert input kana string to hiragana.
+
+#### kanaToHiragna(str)
+Legacy spelling of `kanaToHiragana`, retained as an alias for compatibility.
 
 #### kanaToKatakana(str)
 Convert input kana string to katakana.

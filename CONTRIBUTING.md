@@ -28,6 +28,23 @@ npm install
 npm run test
 ```
 
+`npm test` also packs the built library and checks its TypeScript declarations in
+CommonJS, native Node ESM, bundler, and browser-global consumers. It includes
+negative type checks and runs the compiled Node consumers. The compiler is pinned
+to TypeScript 5.9.3 as a development test dependency, not a runtime requirement.
+
+To check both maintained packages together, first build the sibling analyzer
+checkout, then run this from the core repository (adjust the path as needed):
+
+```sh
+KUROSHIRO_ANALYZER_PACKAGE=../kuroshiro-analyzer-kuromoji npm run test:types
+```
+
+This additionally packs the analyzer and compiles and runs CommonJS and native ESM
+consumers of both packages, including real dictionary conversion.
+CI runs this check with the analyzer revision pinned in `.github/workflows/ci.yml`;
+update that revision when intentionally changing the paired integration baseline.
+
 ## Commit Messages
 
 Write commit messages in English and follow the Conventional Commits format:

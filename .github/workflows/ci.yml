@@ -41,3 +41,21 @@ jobs:
 
       - name: Inspect package contents
         run: npm pack --dry-run
+
+      - name: Check out typed Kuromoji analyzer
+        uses: actions/checkout@v7
+        with:
+          repository: hexenq/kuroshiro-analyzer-kuromoji
+          ref: 2c8bf3b6107c5cc5e067e015e63ffdbcec596a19
+          path: tmp/kuromoji
+          persist-credentials: false
+
+      - name: Build paired analyzer
+        run: |
+          npm ci --prefix tmp/kuromoji
+          npm run build --prefix tmp/kuromoji
+
+      - name: Check typed consumers of both packed packages
+        run: npm run test:types
+        env:
+          KUROSHIRO_ANALYZER_PACKAGE: tmp/kuromoji

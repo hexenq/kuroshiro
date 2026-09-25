@@ -1539,9 +1539,12 @@ const patchTokens = function (tokens) {
  * @param {string} str Given string
  * @return {string} Hiragana string
  */
-const kanaToHiragna = function (str) {
+const kanaToHiragana = function (str) {
     return toRawHiragana(str);
 };
+
+// Preserve the original public spelling as the same function.
+const kanaToHiragna = kanaToHiragana;
 
 /**
  * Convert kana to katakana
@@ -1582,6 +1585,7 @@ export {
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,
+    kanaToHiragana,
     kanaToHiragna,
     kanaToKatakana,
     kanaToRomaji

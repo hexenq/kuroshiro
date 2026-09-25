@@ -15,6 +15,8 @@ async function checkConstructor(Constructor, label) {
     assert.equal(typeof Constructor, "function", label);
     assert.equal(Constructor.default, Constructor, `${label}: legacy default export`);
     assert.equal(Constructor.Util.kanaToRomaji("カンジ"), "kanji", label);
+    assert.equal(Constructor.Util.kanaToHiragana("カンジ"), "かんじ", label);
+    assert.equal(Constructor.Util.kanaToHiragana, Constructor.Util.kanaToHiragna, label);
 
     const instance = new Constructor.default();
     await instance.init({

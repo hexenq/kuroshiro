@@ -209,7 +209,7 @@ const result = Kuroshiro.Util.isHiragana("あ");
 #### hasJapanese(str)
 입력한 문자열에 일본어가 포함되었는지 확인합니다.
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 입력한 가나 문자열을 히라가나로 변환합니다.
 
 #### kanaToKatakana(str)

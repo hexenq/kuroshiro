@@ -1543,9 +1543,6 @@ const kanaToHiragana = function (str) {
     return toRawHiragana(str);
 };
 
-// Preserve the original public spelling as the same function.
-const kanaToHiragna = kanaToHiragana;
-
 /**
  * Convert kana to katakana
  *
@@ -1586,7 +1583,6 @@ export {
     toRawKatakana,
     toRawRomaji,
     kanaToHiragana,
-    kanaToHiragna,
     kanaToKatakana,
     kanaToRomaji
 };

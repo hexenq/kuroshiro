@@ -228,8 +228,9 @@ Check if input string has Japanese.
 #### kanaToHiragana(str)
 Convert input kana string to hiragana.
 
-#### kanaToHiragna(str)
-Legacy spelling of `kanaToHiragana`, retained as an alias for compatibility.
+For the upcoming 2.x release, this replaces the misspelled 1.x method
+`kanaToHiragna`. Update existing calls to `Kuroshiro.Util.kanaToHiragana(...)`;
+the old name is no longer exported. This is a breaking API change.
 
 #### kanaToKatakana(str)
 Convert input kana string to katakana.

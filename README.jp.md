@@ -200,7 +200,7 @@ const result = Kuroshiro.Util.isHiragana("あ");
 #### hasJapanese(str)
 入力文字列に日本語があるかどうかを確認する。
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 入力仮名文字列をひらがなへ変換します。
 
 #### kanaToKatakana(str)

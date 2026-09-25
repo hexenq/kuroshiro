@@ -82,12 +82,12 @@ describe("Kuroshiro Node Funtional Test", () => {
     });
     it("Kana to Hiragana", () => {
         const ori = "サカナ";
-        const result = Kuroshiro.Util.kanaToHiragna(ori);
+        const result = Kuroshiro.Util.kanaToHiragana(ori);
         expect(result).toEqual("さかな");
     });
-    it("Correctly spelled hiragana helper preserves the legacy alias", () => {
+    it("Hiragana helper uses only the corrected spelling", () => {
         expect(Kuroshiro.Util.kanaToHiragana("サカナ and ひらがな")).toBe("さかな and ひらがな");
-        expect(Kuroshiro.Util.kanaToHiragana).toBe(Kuroshiro.Util.kanaToHiragna);
+        expect(Kuroshiro.Util).not.toHaveProperty("kanaToHiragna");
     });
     it("Kana to Katakana", () => {
         const ori = "さかな";

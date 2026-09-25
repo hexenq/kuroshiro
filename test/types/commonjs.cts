@@ -27,7 +27,8 @@ async function check() {
     const utility: Kuroshiro.Utilities = Kuroshiro.Util;
     const result: string = utility.kanaToRomaji("カンジ");
     if (result !== "kanji") throw new Error(result);
-    if (utility.kanaToHiragana !== utility.kanaToHiragna) throw new Error("Alias mismatch");
+    if (utility.kanaToHiragana("カナ") !== "かな") throw new Error("Invalid hiragana helper");
+    if ("kanaToHiragna" in utility) throw new Error("Removed spelling is still exported");
     const isKana: boolean = utility.isKana("あ");
     if (!isKana) throw new Error("Expected kana");
 }
@@ -35,6 +36,8 @@ void check();
 
 function invalid() {
     const core = new Kuroshiro();
+    // @ts-expect-error The misspelled 1.x helper has been removed for 2.x.
+    Kuroshiro.Util.kanaToHiragna("カナ");
     // @ts-expect-error Utilities belong to the constructor, not an instance.
     core.Util.isKana("あ");
     // @ts-expect-error Target must match a supported conversion target.

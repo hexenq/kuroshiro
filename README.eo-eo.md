@@ -200,7 +200,7 @@ Determini se enigita frazo enhavas kanĵion.
 #### hasJapanese(str)
 Determini se enigita frazo enhavas Japanolingvajn Frazojn.
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 Konverti enigitan kanan frazon al hiragana
 
 #### kanaToKatakana(str)

@@ -55,8 +55,6 @@ declare namespace Kuroshiro {
         hasKanji(str: string): boolean;
         hasJapanese(str: string): boolean;
         kanaToHiragana(str: string): string;
-        /** Legacy spelling retained for compatibility. */
-        kanaToHiragna(str: string): string;
         kanaToKatakana(str: string): string;
         kanaToRomaji(str: string, system?: RomajiSystem): string;
     }

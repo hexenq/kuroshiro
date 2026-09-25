@@ -201,7 +201,7 @@ const result = Kuroshiro.Util.isHiragana("あ");
 #### hasJapanese(str)
 检查输入字符串中是否含有日文。
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 转换输入假名字符串至平假名。
 
 #### kanaToKatakana(str)

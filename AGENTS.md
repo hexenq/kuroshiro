@@ -17,8 +17,8 @@ across CommonJS, ESM default imports, and browser bundles.
 
 - Edit source files instead of generated output in `lib/` or `dist/`.
 - Add or update tests when changing observable behavior.
-- Keep public API changes backward-compatible unless a breaking release is
-  explicitly planned.
+- Current development targets the next 2.x release. Document intentional
+  breaking API changes and test the replacement behavior.
 - Do not change the package version during ordinary development. Update it only
   as part of the release process.
 - Follow `CONTRIBUTING.md` for contribution details.

@@ -32,8 +32,6 @@ npm run test
 CommonJS, native Node ESM, bundler, and browser-global consumers. It includes
 negative type checks and runs the compiled Node consumers. The compiler is pinned
 to TypeScript 5.9.3 as a development test dependency, not a runtime requirement.
-See [the type test guide](test/types/README.md) for the role of each consumer
-fixture and the difference between compile-only and runtime checks.
 
 To check both maintained packages together, first build the sibling analyzer
 checkout, then run this from the core repository (adjust the path as needed):

@@ -13,5 +13,5 @@
     }
   },
   "include": ["**/*.ts", "**/*.cts", "**/*.mts"],
-  "exclude": ["node_modules", "lib", "dist", "coverage", "tmp", "test/integration"]
+  "exclude": ["node_modules", "lib", "dist", "coverage", "tmp"]
 }

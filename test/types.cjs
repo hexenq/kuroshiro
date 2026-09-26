@@ -74,14 +74,12 @@ try {
     compile("nodenext", { module: "NodeNext", moduleResolution: "NodeNext" }, modules, true);
     compile("bundler", { module: "ESNext", moduleResolution: "Bundler", verbatimModuleSyntax: true }, ["default.mts"]);
     compile("browser-global", { module: "None", moduleResolution: "Node", types: ["kuroshiro"] }, ["browser.ts"]);
-    const analyzerDirectory = process.env.KUROSHIRO_ANALYZER_PACKAGE
-        || (process.argv.includes("--integration") && path.join(root, "tmp/kuromoji"));
-    if (analyzerDirectory) {
-        installPackedPackage(path.resolve(analyzerDirectory));
-        const joint = ["joint.cts", "joint.mts"];
-        for (const file of joint) fs.copyFileSync(path.join(root, "test/integration", file), path.join(temp, file));
-        compile("joint", { module: "NodeNext", moduleResolution: "NodeNext" }, joint, true);
-    }
+    // Use the published analyzer already installed as a development dependency.
+    const analyzerDirectory = path.dirname(require.resolve("kuroshiro-analyzer-kuromoji/package.json"));
+    fs.symlinkSync(analyzerDirectory, path.join(temp, "node_modules/kuroshiro-analyzer-kuromoji"), "junction");
+    const joint = ["joint.cts", "joint.mts"];
+    for (const file of joint) fs.copyFileSync(path.join(root, "test/integration", file), path.join(temp, file));
+    compile("joint", { module: "NodeNext", moduleResolution: "NodeNext" }, joint, true);
 }
 catch (error) {
     console.error(error.stdout || error.stderr || error);

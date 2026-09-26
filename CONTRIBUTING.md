@@ -36,23 +36,9 @@ The root `tsconfig.json` provides editor checking without emitting files; it wor
 from a standalone checkout with any directory name. `npm run test:types` checks
 this configuration as well as the independently configured packed consumers.
 
-The optional `test/integration` project needs the analyzer's unpublished types.
-After `npm test`, prepare its pinned checkout inside `tmp/kuromoji` and run:
-
-```sh
-npm run prepare:integration
-npm run test:integration
-```
-
-Preparation requires Git and network access; it installs and builds the analyzer
-without overwriting a modified checkout. It also enables editor checking in
-`test/integration`; missing analyzer types there mean preparation is still needed.
-The integration test packs both packages and checks CommonJS and native ESM with a
-real dictionary. CI uses the same commands and revision in
-`scripts/prepare-integration.cjs`. Ordinary `npm test` needs no analyzer checkout.
-
-To test a different, already-built analyzer checkout without changing the pin:
-`KUROSHIRO_ANALYZER_PACKAGE=/path/to/analyzer npm run test:types`.
+The `test/integration` consumers use the published Kuromoji analyzer installed as
+a development dependency. They are included in `npm test` and `npm run test:types`
+and check CommonJS and native ESM types and conversion with a real dictionary.
 
 ## Commit Messages
 

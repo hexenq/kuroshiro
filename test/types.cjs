@@ -64,7 +64,6 @@ try {
     installPackedPackage(root);
     const fixtureRoot = path.join(root, "test/types");
     for (const file of fs.readdirSync(fixtureRoot)) {
-        if (file.startsWith("joint.")) continue;
         fs.copyFileSync(path.join(fixtureRoot, file), path.join(temp, file));
     }
     const commonjs = ["commonjs.cts"];
@@ -74,11 +73,13 @@ try {
     compile("node16", { module: "Node16", moduleResolution: "Node16" }, modules);
     compile("nodenext", { module: "NodeNext", moduleResolution: "NodeNext" }, modules, true);
     compile("bundler", { module: "ESNext", moduleResolution: "Bundler", verbatimModuleSyntax: true }, ["default.mts"]);
-    compile("browser-global", { module: "None", moduleResolution: "Node" }, ["browser.ts"]);
-    if (process.env.KUROSHIRO_ANALYZER_PACKAGE) {
-        installPackedPackage(path.resolve(process.env.KUROSHIRO_ANALYZER_PACKAGE));
+    compile("browser-global", { module: "None", moduleResolution: "Node", types: ["kuroshiro"] }, ["browser.ts"]);
+    const analyzerDirectory = process.env.KUROSHIRO_ANALYZER_PACKAGE
+        || (process.argv.includes("--integration") && path.join(root, "tmp/kuromoji"));
+    if (analyzerDirectory) {
+        installPackedPackage(path.resolve(analyzerDirectory));
         const joint = ["joint.cts", "joint.mts"];
-        for (const file of joint) fs.copyFileSync(path.join(fixtureRoot, file), path.join(temp, file));
+        for (const file of joint) fs.copyFileSync(path.join(root, "test/integration", file), path.join(temp, file));
         compile("joint", { module: "NodeNext", moduleResolution: "NodeNext" }, joint, true);
     }
 }

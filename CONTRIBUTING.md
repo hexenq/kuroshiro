@@ -32,18 +32,27 @@ npm run test
 CommonJS, native Node ESM, bundler, and browser-global consumers. It includes
 negative type checks and runs the compiled Node consumers. The compiler is pinned
 to TypeScript 5.9.3 as a development test dependency, not a runtime requirement.
+The root `tsconfig.json` provides editor checking without emitting files; it works
+from a standalone checkout with any directory name. `npm run test:types` checks
+this configuration as well as the independently configured packed consumers.
 
-To check both maintained packages together, first build the sibling analyzer
-checkout, then run this from the core repository (adjust the path as needed):
+The optional `test/integration` project needs the analyzer's unpublished types.
+After `npm test`, prepare its pinned checkout inside `tmp/kuromoji` and run:
 
 ```sh
-KUROSHIRO_ANALYZER_PACKAGE=../kuroshiro-analyzer-kuromoji npm run test:types
+npm run prepare:integration
+npm run test:integration
 ```
 
-This additionally packs the analyzer and compiles and runs CommonJS and native ESM
-consumers of both packages, including real dictionary conversion.
-CI runs this check with the analyzer revision pinned in `.github/workflows/ci.yml`;
-update that revision when intentionally changing the paired integration baseline.
+Preparation requires Git and network access; it installs and builds the analyzer
+without overwriting a modified checkout. It also enables editor checking in
+`test/integration`; missing analyzer types there mean preparation is still needed.
+The integration test packs both packages and checks CommonJS and native ESM with a
+real dictionary. CI uses the same commands and revision in
+`scripts/prepare-integration.cjs`. Ordinary `npm test` needs no analyzer checkout.
+
+To test a different, already-built analyzer checkout without changing the pin:
+`KUROSHIRO_ANALYZER_PACKAGE=/path/to/analyzer npm run test:types`.
 
 ## Commit Messages
 

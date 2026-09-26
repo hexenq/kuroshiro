@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "kuroshiro": ["../../index.d.ts"],
+      "kuroshiro-analyzer-kuromoji": ["../../tmp/kuromoji/index.d.ts"]
+    }
+  },
+  "include": ["*.cts", "*.mts"],
+  "exclude": []
+}

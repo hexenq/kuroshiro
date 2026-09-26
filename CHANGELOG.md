@@ -15,19 +15,11 @@
 * Keep the default constructor alias consistent across source and built package entries.
 * Correct lone-sokuon romanization in furigana and okurigana output, including contracted kana and non-Japanese boundaries ([#117](https://github.com/hexenq/kuroshiro/pull/117), [#125](https://github.com/hexenq/kuroshiro/pull/125)).
 
-### Development
-
-* Modernize build tooling, using Vite for browser bundles ([#118](https://github.com/hexenq/kuroshiro/pull/118)).
-* Expand package, browser, and TypeScript checks.
-* Use the published Kuromoji 2.0 beta analyzer for integration tests.
-* Remove the obsolete Babel runtime dependency.
-
 ### Documents
 
 * Correct conversion examples ([#127](https://github.com/hexenq/kuroshiro/pull/127)).
 * Add Korean documentation ([#128](https://github.com/hexenq/kuroshiro/pull/128)).
 * Clarify the Yahoo Web API analyzer's paused maintenance status ([#126](https://github.com/hexenq/kuroshiro/pull/126)).
-* Update installation and 2.x migration instructions across all README translations.
 
 <a name="1.2.0"></a>
 ## [1.2.0](https://github.com/hexenq/kuroshiro/compare/1.1.2...1.2.0) (2021-6-7)

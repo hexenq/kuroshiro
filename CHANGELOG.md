@@ -1,3 +1,26 @@
+<a name="2.0.0-beta.1"></a>
+## [2.0.0-beta.1](https://github.com/hexenq/kuroshiro/compare/1.2.0...2.0.0-beta.1) (2026-09-26)
+
+### Breaking Changes
+
+* Require Node.js 22 or later. Browser bundles target ES2015; Internet Explorer is not supported.
+* Rename `Kuroshiro.Util.kanaToHiragna` to `Kuroshiro.Util.kanaToHiragana` and remove the old spelling.
+
+### Features
+
+* Include TypeScript declarations for the constructor, utilities, conversion options, and custom analyzers, adapted from [#93](https://github.com/hexenq/kuroshiro/pull/93) by ALOHACREPES345.
+
+### Bug Fixes
+
+* Keep the default constructor alias consistent across source and built package entries.
+* Correct lone-sokuon romanization in furigana and okurigana output, including contracted kana and non-Japanese boundaries ([#117](https://github.com/hexenq/kuroshiro/pull/117), [#125](https://github.com/hexenq/kuroshiro/pull/125)).
+
+### Documents
+
+* Correct conversion examples ([#127](https://github.com/hexenq/kuroshiro/pull/127)).
+* Add Korean documentation ([#128](https://github.com/hexenq/kuroshiro/pull/128)).
+* Clarify the Yahoo Web API analyzer's paused maintenance status ([#126](https://github.com/hexenq/kuroshiro/pull/126)).
+
 <a name="1.2.0"></a>
 ## [1.2.0](https://github.com/hexenq/kuroshiro/compare/1.1.2...1.2.0) (2021-6-7)
 

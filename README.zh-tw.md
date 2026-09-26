@@ -21,11 +21,13 @@ kuroshiro是一款十分方便使用的日文轉換注音工具，主要針對�
 - 🆕支持多種羅馬字體系
 - 實用日語工具
 
-## 1.x版本的重大變化
-- 從注音邏輯中分離語素解析器部分，使得我們可以使用不同的語素解析器（[預定義的](#解析器插件)或[自定義的](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)）
-- 擁抱ES8/ES2017以使用async/await方法
-- 使用ES6 Module取代CommonJS
-    
+## 從 1.x 遷移
+
+- 2.x 要求 Node.js 22+，或原生支援 ES2015（包括 Promise）的瀏覽器，不支援 Internet Explorer。請另行確認解析器的環境要求。
+- 將 `Kuroshiro.Util.kanaToHiragna(...)` 改為 `Kuroshiro.Util.kanaToHiragana(...)`，舊拼寫已移除。
+- 繼續支援 CommonJS `require`、ESM 預設匯入、瀏覽器全域變數 `Kuroshiro`，以及非同步的 `init()` / `convert()` API。
+- 套件內提供 TypeScript 宣告，請參閱 [TypeScript 用法](README.md#typescript)。以下範例使用同樣帶有宣告的 Kuromoji 2.0 beta。
+
 ## 解析器插件
 *在開始工作之前，請先確認各插件的環境兼容性*
 
@@ -41,7 +43,7 @@ Yahoo Web API 解析器的 API 遷移尚未完成，目前暫停維護，暫不�
 ### Node.js (或使用Webpack等打包工具時)
 首先使用npm包管理器進行安裝:
 ```sh
-$ npm install kuroshiro
+$ npm install kuroshiro@beta kuroshiro-analyzer-kuromoji@beta
 ```
 
 載入kuroshiro庫:
@@ -74,7 +76,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
 
 ### 瀏覽器
-將`dist/kuroshiro.min.js`加入到你的工程 (你需要先後執行`npm install`和`npm run build`，以把它構建出來)，並在HTML中加入:
+使用已安裝 npm 套件中的 `dist/kuroshiro.min.js`，並在 HTML 中加入：
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
 ```
@@ -201,7 +203,7 @@ const result = Kuroshiro.Util.isHiragana("あ");
 #### hasJapanese(str)
 檢查輸入字元串中是否含有日文。
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 轉換輸入假名字元串至平假名。
 
 #### kanaToKatakana(str)

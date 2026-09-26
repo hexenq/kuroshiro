@@ -1539,7 +1539,7 @@ const patchTokens = function (tokens) {
  * @param {string} str Given string
  * @return {string} Hiragana string
  */
-const kanaToHiragna = function (str) {
+const kanaToHiragana = function (str) {
     return toRawHiragana(str);
 };
 
@@ -1582,7 +1582,7 @@ export {
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,
-    kanaToHiragna,
+    kanaToHiragana,
     kanaToKatakana,
     kanaToRomaji
 };

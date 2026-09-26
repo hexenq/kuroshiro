@@ -9,6 +9,10 @@ import { patchTokens } from "../src/util";
 describe("Kuroshiro Node Initialization Test", () => {
     let kuroshiro;
 
+    it("Source entry exposes the default constructor alias", () => {
+        expect(Kuroshiro.default).toBe(Kuroshiro);
+    });
+
     beforeAll(async () => {
         kuroshiro = new Kuroshiro();
     });
@@ -82,8 +86,12 @@ describe("Kuroshiro Node Funtional Test", () => {
     });
     it("Kana to Hiragana", () => {
         const ori = "サカナ";
-        const result = Kuroshiro.Util.kanaToHiragna(ori);
+        const result = Kuroshiro.Util.kanaToHiragana(ori);
         expect(result).toEqual("さかな");
+    });
+    it("Hiragana helper uses only the corrected spelling", () => {
+        expect(Kuroshiro.Util.kanaToHiragana("サカナ and ひらがな")).toBe("さかな and ひらがな");
+        expect(Kuroshiro.Util).not.toHaveProperty("kanaToHiragna");
     });
     it("Kana to Katakana", () => {
         const ori = "さかな";
@@ -249,5 +257,126 @@ describe("Kuroshiro Node Funtional Test", () => {
         const ori = EXAMPLE_TEXT;
         const result = await kuroshiro.convert(ori, { mode: "furigana", to: "romaji" });
         expect(result).toEqual("<ruby>感<rp>(</rp><rt>kan</rt><rp>)</rp>じ<rp>(</rp><rt>ji</rt><rp>)</rp>取<rp>(</rp><rt>to</rt><rp>)</rp>れ<rp>(</rp><rt>re</rt><rp>)</rp>た<rp>(</rp><rt>ta</rt><rp>)</rp>ら<rp>(</rp><rt>ra</rt><rp>)</rp>手<rp>(</rp><rt>te</rt><rp>)</rp>を<rp>(</rp><rt>o</rt><rp>)</rp>繋<rp>(</rp><rt>tsuna</rt><rp>)</rp>ご<rp>(</rp><rt>go</rt><rp>)</rp>う<rp>(</rp><rt>u</rt><rp>)</rp>、<rp>(</rp><rt>,</rt><rp>)</rp>重<rp>(</rp><rt>kasa</rt><rp>)</rp>な<rp>(</rp><rt>na</rt><rp>)</rp>る<rp>(</rp><rt>ru</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>は<rp>(</rp><rt>wa</rt><rp>)</rp>人生<rp>(</rp><rt>jinsei</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>ラ<rp>(</rp><rt>ra</rt><rp>)</rp>イ<rp>(</rp><rt>i</rt><rp>)</rp>ン<rp>(</rp><rt>n</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>a<rp>(</rp><rt>a</rt><rp>)</rp>n<rp>(</rp><rt>n</rt><rp>)</rp>d<rp>(</rp><rt>d</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>レ<rp>(</rp><rt>re</rt><rp>)</rp>ミ<rp>(</rp><rt>mi</rt><rp>)</rp>リ<rp>(</rp><rt>ri</rt><rp>)</rp>ア<rp>(</rp><rt>a</rt><rp>)</rp>最高<rp>(</rp><rt>saikō</rt><rp>)</rp>！<rp>(</rp><rt>!</rt><rp>)</rp></ruby>");
+    });
+});
+
+/**
+ * Regression tests for lone-sokuon romanisation.
+ *
+ * Reported upstream as takuyaa/kuromoji.js#53 ("座って -> suwatsute,
+ * should be suwatte"), filed against the tokenizer. It is not a tokenizer
+ * bug — kuromoji returns 座っ[スワッ] + て[テ], which is correct. The error
+ * is here: the furigana renderer romanises each notation independently,
+ * so a sokuon standing on its own has no following consonant to geminate
+ * and falls through to the literal "tsu".
+ *
+ * For 座って, patchTokens already merges the verb-tail sokuon with the
+ * following token, so normal mode passes. Furigana splits the patched
+ * token back into notations and needs its own boundary handling.
+ */
+describe("Sokuon romanization", () => {
+    /** Strip the <rp> fallbacks and the wrapper so assertions read clearly. */
+    const plain = str => str.replace(/<rp>.*?<\/rp>/g, "").replace(/<\/?ruby>/g, "");
+
+    let kuroshiro;
+
+    beforeAll(async () => {
+        kuroshiro = new Kuroshiro();
+        await kuroshiro.init(new KuromojiAnalyzer());
+    });
+
+    describe("furigana mode geminates instead of emitting 'tsu'", () => {
+        it("座って (verb, sokuon in okurigana)", async () => {
+            const result = await kuroshiro.convert("座って", { to: "romaji", mode: "furigana" });
+            expect(plain(result)).toBe("座<rt>suwa</rt>って<rt>tte</rt>");
+            expect(result).not.toContain("tsu");
+        });
+
+        it("行った (verb, different consonant)", async () => {
+            const result = await kuroshiro.convert("行った", { to: "romaji", mode: "furigana" });
+            expect(plain(result)).toBe("行<rt>i</rt>った<rt>tta</rt>");
+        });
+
+        it("真っ赤 (sokuon between two kanji)", async () => {
+            const result = await kuroshiro.convert("真っ赤", { to: "romaji", mode: "furigana" });
+            expect(plain(result)).toBe("真<rt>ma</rt>っ赤<rt>kka</rt>");
+        });
+
+        it("カッター (katakana sokuon)", async () => {
+            const result = await kuroshiro.convert("カッター", { to: "romaji", mode: "furigana" });
+            expect(plain(result)).toContain("ッタ<rt>tta</rt>");
+        });
+    });
+
+    describe("cases that were already correct stay correct", () => {
+        it("normal mode romanises the token as a unit", async () => {
+            expect(await kuroshiro.convert("座って", { to: "romaji", mode: "normal" })).toBe("suwatte");
+            expect(await kuroshiro.convert("真っ赤", { to: "romaji", mode: "normal" })).toBe("makka");
+        });
+
+        it("a sokuon inside a single token is untouched", async () => {
+            const result = await kuroshiro.convert("切符", { to: "romaji", mode: "furigana" });
+            expect(plain(result)).toBe("切符<rt>kippu</rt>");
+        });
+
+        it("hiragana furigana output is unchanged", async () => {
+            const result = await kuroshiro.convert("座って", { to: "hiragana", mode: "furigana" });
+            expect(plain(result)).toBe("座<rt>すわ</rt>って");
+        });
+
+        it("text with no sokuon is unchanged", async () => {
+            const result = await kuroshiro.convert("心を燃やせ", { to: "romaji", mode: "furigana" });
+            expect(plain(result)).toBe("心<rt>kokoro</rt>を<rt>o</rt>燃<rt>mo</rt>や<rt>ya</rt>せ<rt>se</rt>");
+        });
+    });
+
+    describe("known limitation", () => {
+        it("a trailing sokuon has nothing to geminate and is left alone", async () => {
+            // 「あっ」 has no following mora. There is no agreed romanisation
+            // for a stranded sokuon, so this is deliberately not changed.
+            const result = await kuroshiro.convert("あっ", { to: "romaji", mode: "furigana" });
+            expect(plain(result)).toContain("っ<rt>tsu</rt>");
+        });
+    });
+
+    describe.each(["hepburn", "passport", "nippon"])("%s boundary regressions", (romajiSystem) => {
+        it.each([
+            ["座って", "suwatte", "suwatte"],
+            ["真っ赤", "makka", "makka"],
+            ["買っちゃった", "katchatta", "kattyatta"],
+            ["いっしょ", "issho", "issyo"],
+            ["マッチャ", "matcha", "mattya"],
+            ["切符", "kippu", "kippu"]
+        ])("keeps the full mora after a sokuon in %s", async (text, hepburn, nippon) => {
+            const result = await kuroshiro.convert(text, { to: "romaji", mode: "furigana", romajiSystem });
+            const readings = [...result.matchAll(/<rt>(.*?)<\/rt>/g)].map(match => match[1]).join("");
+            expect(readings).toBe(romajiSystem === "nippon" ? nippon : hepburn);
+            expect(result.replace(/<rp>.*?<\/rp>|<rt>.*?<\/rt>|<\/?ruby>/g, "")).toBe(text);
+        });
+
+        it.each(["cat", "！", " ", "あ", "ー", "🙂", ""])("does not merge a sokuon into %s", async (suffix) => {
+            // Fixed tokens isolate renderer boundaries from dictionary/POS changes.
+            const instance = new Kuroshiro();
+            await instance.init({
+                init: async () => {},
+                parse: async () => [
+                    { surface_form: "っ", reading: "ッ", pronunciation: "ッ" },
+                    ...(suffix ? [{ surface_form: suffix }] : [])
+                ]
+            });
+            const result = await instance.convert("っ" + suffix, { to: "romaji", mode: "furigana", romajiSystem });
+            expect(plain(result)).toMatch(/^っ<rt>tsu<\/rt>/);
+            if (suffix === "cat") expect(plain(result)).toBe("っ<rt>tsu</rt>c<rt>c</rt>a<rt>a</rt>t<rt>t</rt>");
+        });
+
+        it("preserves non-romaji output and kanji-only okurigana annotations", async () => {
+            const options = { mode: "furigana", romajiSystem };
+            expect(plain(await kuroshiro.convert("座って", { ...options, to: "hiragana" }))).toBe("座<rt>すわ</rt>って");
+            expect(plain(await kuroshiro.convert("座って", { ...options, to: "katakana" }))).toBe("座<rt>スワ</rt>って");
+            expect(await kuroshiro.convert("真っ赤", { to: "romaji", mode: "okurigana", romajiSystem })).toBe("真(ma)っ赤(kka)");
+            expect(await kuroshiro.convert("買っちゃった", { to: "romaji", mode: "okurigana", romajiSystem })).toBe("買(ka)っちゃった");
+            expect(await kuroshiro.convert("あっcat", { to: "romaji", mode: "normal", romajiSystem })).toBe("atsucat");
+            expect(await kuroshiro.convert("座って", { to: "romaji", mode: "spaced", romajiSystem })).toBe("suwatte");
+        });
     });
 });

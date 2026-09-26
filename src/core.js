@@ -15,7 +15,7 @@ import {
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,
-    kanaToHiragna,
+    kanaToHiragana,
     kanaToKatakana,
     kanaToRomaji
 } from "./util";
@@ -347,7 +347,7 @@ const Util = {
     hasKana,
     hasKanji,
     hasJapanese,
-    kanaToHiragna,
+    kanaToHiragana,
     kanaToKatakana,
     kanaToRomaji
 };

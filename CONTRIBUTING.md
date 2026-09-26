@@ -19,14 +19,29 @@ All kinds of contributions are welcome, whether it's:
 
 ## Setting up development environment
 
-To contribute, fork the repository and install its dependencies. Use Node.js 22.13+ (22.x) or 24+ for development.
+To contribute, fork the repository and install its dependencies. Use Node.js
+22.13+ (22.x) or 24+ for development. The published library requires
+Node.js 22+; development tools require a newer minimum version. Browser bundles
+target ES2015.
 
 ```bash
 git clone https://github.com/<your-username>/kuroshiro
 cd kuroshiro
-npm install
-npm run test
+npm ci
+npm test
 ```
+
+`npm test` also packs the built library and checks its TypeScript declarations in
+CommonJS, native Node ESM, bundler, and browser-global consumers. It includes
+negative type checks and runs the compiled Node consumers. The compiler is pinned
+to TypeScript 5.9.3 as a development test dependency, not a runtime requirement.
+The root `tsconfig.json` provides editor checking without emitting files; it works
+from a standalone checkout with any directory name. `npm run test:types` checks
+this configuration as well as the independently configured packed consumers.
+
+The `test/integration` consumers use the published Kuromoji analyzer installed as
+a development dependency. They are included in `npm test` and `npm run test:types`
+and check CommonJS and native ESM types and conversion with a real dictionary.
 
 ## Commit Messages
 

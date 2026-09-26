@@ -20,11 +20,13 @@ Vidi la ekzemplan paĝon [ĉi tie](https://kuroshiro.org/#demo).
 - 🆕Multaj romanaskriptkonvertaj sistemoj
 - Utilaj Japanalingvaj iloj
 
-## Gravaj Ŝanĝoj je 1.x
-- Aparta lingvasttrukturametoda ilo kaj fonetika notacia logiko por eblegi la uzaton de multaj lingvastrukturaj metodoj. ([finitaj iloj](#ready-made-analyzer-plugins) or [personigitaj iloj](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins))
-- ES8/ES2017 por uzi "async/await" funkciojn
-- Uzu la modulon ES6 anstataŭ CommonJS
-    
+## Migrado de 1.x
+
+- Versio 2 postulas Node.js 22+ aŭ retumilon kun denaska subteno por ES2015, inkluzive de Promise. Internet Explorer ne estas subtenata. Kontrolu ankaŭ la postulojn de la analizilo.
+- Anstataŭigu `Kuroshiro.Util.kanaToHiragna(...)` per `Kuroshiro.Util.kanaToHiragana(...)`; la malnova nomo estas forigita.
+- CommonJS `require`, defaŭltaj ESM-importoj, la retumila tutmonda variablo `Kuroshiro` kaj la nesinkronaj API-metodoj `init()` / `convert()` restas subtenataj.
+- La pakaĵo inkluzivas TypeScript-tipdeklarojn; vidu [uzadon kun TypeScript](README.md#typescript). La sekvaj ekzemploj uzas Kuromoji 2.0 beta, kiu ankaŭ inkluzivas tipdeklarojn.
+
 ## Finitaj Analizilaj (Lingvastrukturaj) Iloj
 *Antaŭ uzi ilon, bonvolu certiĝi pri mediakongrueco*
 | Analizilo | Node.js Uzadeblo | Retumilo Uzadeblo | Plugin Repo | Programisto |
@@ -39,7 +41,7 @@ La migrado de la analizilo Yahoo Web API al la nova API ankoraŭ ne finiĝis, ka
 ### Node.js (aŭ per "module bundler"-ilo (kiel Webpack))
 Instali per npm pako-administrilo:
 ```sh
-$ npm install kuroshiro
+$ npm install kuroshiro@beta kuroshiro-analyzer-kuromoji@beta
 ```
     
 Ŝargi la kodotekon:
@@ -72,7 +74,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
     
 ### Retumilo
-Aldoni `dist/kuroshiro.min.js` al via "frontend-a projekto" (vi povas antaŭe kompili la originalan kodon per `npm run build` post `npm install`), kaj en via HTML:
+Uzu `dist/kuroshiro.min.js` el la instalita npm-pakaĵo kaj aldonu ĝin al via HTML:
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
 ```
@@ -200,7 +202,7 @@ Determini se enigita frazo enhavas kanĵion.
 #### hasJapanese(str)
 Determini se enigita frazo enhavas Japanolingvajn Frazojn.
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 Konverti enigitan kanan frazon al hiragana
 
 #### kanaToKatakana(str)

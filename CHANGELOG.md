@@ -17,11 +17,17 @@
 
 ### Development
 
-* Modernize build tooling and expand package, browser, and TypeScript checks. Test with the published Kuromoji 2.0 beta analyzer and remove the obsolete Babel runtime dependency.
+* Modernize build tooling, using Vite for browser bundles ([#118](https://github.com/hexenq/kuroshiro/pull/118)).
+* Expand package, browser, and TypeScript checks.
+* Use the published Kuromoji 2.0 beta analyzer for integration tests.
+* Remove the obsolete Babel runtime dependency.
 
 ### Documents
 
-* Correct conversion examples, add Korean documentation, and update installation and migration instructions.
+* Correct conversion examples ([#127](https://github.com/hexenq/kuroshiro/pull/127)).
+* Add Korean documentation ([#128](https://github.com/hexenq/kuroshiro/pull/128)).
+* Clarify the Yahoo Web API analyzer's paused maintenance status ([#126](https://github.com/hexenq/kuroshiro/pull/126)).
+* Update installation and 2.x migration instructions across all README translations.
 
 <a name="1.2.0"></a>
 ## [1.2.0](https://github.com/hexenq/kuroshiro/compare/1.1.2...1.2.0) (2021-6-7)

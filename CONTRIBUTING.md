@@ -19,13 +19,16 @@ All kinds of contributions are welcome, whether it's:
 
 ## Setting up development environment
 
-To contribute, fork the repository and install its dependencies. Use Node.js 22.13+ (22.x) or 24+ for development.
+To contribute, fork the repository and install its dependencies. Use Node.js
+22.13+ (22.x) or 24+ for development. The published library requires
+Node.js 22+; development tools require a newer minimum version. Browser bundles
+target ES2015.
 
 ```bash
 git clone https://github.com/<your-username>/kuroshiro
 cd kuroshiro
-npm install
-npm run test
+npm ci
+npm test
 ```
 
 `npm test` also packs the built library and checks its TypeScript declarations in

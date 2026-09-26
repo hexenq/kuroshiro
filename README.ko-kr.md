@@ -20,10 +20,12 @@ kuroshiro는 일본어 문장을 히라가나, 가타카나 및 로마자로 변
 - 🆕여러 로마자 표기법 지원
 - 유용한 일본어 유틸리티 포함
 
-## 1.x 버전의 주요 변경 사항
-- 다른 형태소 분석기들을 사용할 수 있도록 형태소 분석기가 음성 표기법 로직에서 분리됨 ([만들어져 있는 형태소 분석기](#형태소-분석기-플러그인)도, [커스터마이즈](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)한 형태소 분석기도 사용할 수 있습니다.)
-- ES8/ES2017의 async/await을 사용합니다.
-- CommonJS 대신 ES6 모듈을 사용합니다.
+## 1.x에서 마이그레이션
+
+- 2.x는 Node.js 22+ 또는 Promise를 포함한 ES2015를 기본 지원하는 브라우저가 필요합니다. Internet Explorer는 지원하지 않습니다. 형태소 분석기의 실행 환경 요구 사항도 따로 확인해 주세요.
+- `Kuroshiro.Util.kanaToHiragna(...)`를 `Kuroshiro.Util.kanaToHiragana(...)`로 바꿔 주세요. 이전 이름은 제거되었습니다.
+- CommonJS `require`, ESM 기본 가져오기, 브라우저 전역 변수 `Kuroshiro`, 비동기 `init()` / `convert()` API는 계속 지원합니다.
+- TypeScript 선언이 포함되어 있습니다. [TypeScript 사용법](README.md#typescript)을 참고해 주세요. 아래 예제에서는 타입 선언을 포함한 Kuromoji 2.0 beta를 사용합니다.
 
 ## 형태소 분석기 플러그인
 *각 플러그인을 사용하기 전에 호환성을 확인해 주세요.*
@@ -40,7 +42,7 @@ Yahoo Web API 분석기는 API 마이그레이션이 완료되지 않았으며 �
 ### Node.js (또는 Webpack과 같은 모듈 번들러를 사용할 때)
 npm을 이용하여 설치합니다.
 ```sh
-$ npm install kuroshiro
+$ npm install kuroshiro@beta kuroshiro-analyzer-kuromoji@beta
 ```
 
 라이브러리를 불러옵니다. `import` 방식도, `require` 방식도 좋습니다.
@@ -80,7 +82,7 @@ kuroshiro.init(new KuromojiAnalyzer())
 ```
 
 ### 브라우저
-`dist/kuroshiro.min.js`를 프론트엔드 프로젝트에 추가하세요. (`npm install`로 설치하고, `npm run build`로 만들어서 사용할 수 있습니다.)
+설치된 npm 패키지의 `dist/kuroshiro.min.js`를 사용하고 HTML에 추가하세요:
 
 HTML에서 script 태그로 불러옵니다.
 ```html

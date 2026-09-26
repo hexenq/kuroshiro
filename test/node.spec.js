@@ -9,6 +9,10 @@ import { patchTokens } from "../src/util";
 describe("Kuroshiro Node Initialization Test", () => {
     let kuroshiro;
 
+    it("Source entry exposes the default constructor alias", () => {
+        expect(Kuroshiro.default).toBe(Kuroshiro);
+    });
+
     beforeAll(async () => {
         kuroshiro = new Kuroshiro();
     });

@@ -20,11 +20,13 @@ kuroshiroは日本語文をローマ字や仮名なとに変換できるライ�
 - 🆕複数のローマ字表記法をサポート
 - 実用ツール付き
 
-## バッジョン1.xでの重大な変更
-- 形態素解析器がルビロジックから分離される。それゆえ、様々な形態素解析器（[レディーメイド](#形態素解析器プラグイン)も[カスタマイズ](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)も）を利用できることになります。
-- ES2017の新機能「async/await」を利用します
-- CommonJSからES Modulesへ移行します
-    
+## 1.x からの移行
+
+- 2.x には Node.js 22+、または Promise を含む ES2015 をネイティブにサポートするブラウザが必要です。Internet Explorer はサポートしません。解析器の動作環境も別途確認してください。
+- `Kuroshiro.Util.kanaToHiragna(...)` を `Kuroshiro.Util.kanaToHiragana(...)` に置き換えてください。旧名は削除されています。
+- CommonJS の `require`、ESM のデフォルトインポート、ブラウザのグローバル変数 `Kuroshiro`、非同期の `init()` / `convert()` API は引き続き利用できます。
+- TypeScript 型定義を同梱しています。[TypeScript の使い方](README.md#typescript)も参照してください。以下の例では、型定義を同梱する Kuromoji 2.0 beta を使用します。
+
 ## 形態素解析器プラグイン
 *始まる前にプラグインの適合性をチェックしてください*
 
@@ -40,7 +42,7 @@ Yahoo Web API 解析器の API 移行は未完了で、現在メンテナンス�
 ### Node.js (又はWebpackなどのモジュールバンドラを使ってる時)
 npmでインストール:
 ```sh
-$ npm install kuroshiro
+$ npm install kuroshiro@beta kuroshiro-analyzer-kuromoji@beta
 ```
 
 kuroshiroをロードします:
@@ -73,7 +75,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
 
 ### ブラウザ
-`dist/kuroshiro.min.js`を導入し (その前に`npm install`と`npm run build`を通じて`kuroshiro.min.js`を生成します)、そしてHTMLに:
+インストールした npm パッケージ内の `dist/kuroshiro.min.js` を使用し、HTML に追加します：
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
 ```

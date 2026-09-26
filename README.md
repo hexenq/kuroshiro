@@ -20,11 +20,13 @@ You can check the demo [here](https://kuroshiro.org/#demo).
 - 🆕Multiple romanization systems supported
 - Useful Japanese utils
 
-## Breaking Change in 1.x
-- Seperate morphological analyzer from phonetic notation logic to make it possible that we can use different morphological analyzers ([ready-made](#ready-made-analyzer-plugins) or [customized](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins))
-- Embrace ES8/ES2017 to use async/await functions
-- Use ES6 Module instead of CommonJS
-    
+## Migrating from 1.x
+
+- Version 2 requires Node.js 22+ or a browser with native ES2015 support, including Promises. Internet Explorer is not supported. Check the analyzer's additional requirements separately.
+- Replace `Kuroshiro.Util.kanaToHiragna(...)` with `Kuroshiro.Util.kanaToHiragana(...)`; the old spelling has been removed.
+- CommonJS `require`, ESM default imports, the `Kuroshiro` browser global, and the asynchronous `init()` / `convert()` API remain supported.
+- TypeScript declarations are included. The examples below use the Kuromoji 2.0 beta, which also includes declarations.
+
 ## Ready-made Analyzer Plugins
 *You should check the environment compatibility of each analyzer before you start working with them*
 
@@ -40,7 +42,7 @@ The Yahoo Web API analyzer's API migration is incomplete and maintenance is paus
 ### Node.js (or using a module bundler (e.g. Webpack))
 Install with npm package manager:
 ```sh
-$ npm install kuroshiro
+$ npm install kuroshiro@beta kuroshiro-analyzer-kuromoji@beta
 ```
     
 Load the library:
@@ -78,7 +80,7 @@ kuroshiro.init(new KuromojiAnalyzer())
 ```
     
 ### Browser
-Add `dist/kuroshiro.min.js` to your frontend project (you may first build it from source with `npm run build` after `npm install`), and in your HTML:
+Use `dist/kuroshiro.min.js` from the installed npm package in your frontend project, and include it in your HTML:
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
 ```
@@ -106,10 +108,9 @@ kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
 
 ### TypeScript
 
-The maintained source includes declarations for the package entry, custom analyzers,
-conversion options, and the static `Kuroshiro.Util` helpers. Use an analyzer package
-with its own declarations when integrating the two packages. These declarations and
-the new helper spelling are not included in the published 1.2.0 release.
+Version 2 includes declarations for the package entry, custom analyzers,
+conversion options, and the static `Kuroshiro.Util` helpers. The Kuromoji 2.0 beta
+also includes declarations, so no separate `@types` package is needed for either library.
 
 ```ts
 import Kuroshiro from "kuroshiro";
@@ -132,7 +133,7 @@ __Examples__
 const kuroshiro = new Kuroshiro();
 ```
 
-### Instance Medthods
+### Instance Methods
 #### init(analyzer)
 Initialize kuroshiro with an instance of analyzer. You should first import an analyzer and initialize it. You can make use of the [Ready-made Analyzers](#ready-made-analyzer-plugins) listed above. And please refer to documentation of analyzers for analyzer initialization instructions
 
@@ -228,7 +229,7 @@ Check if input string has Japanese.
 #### kanaToHiragana(str)
 Convert input kana string to hiragana.
 
-For the upcoming 2.x release, this replaces the misspelled 1.x method
+In 2.x, this replaces the misspelled 1.x method
 `kanaToHiragna`. Update existing calls to `Kuroshiro.Util.kanaToHiragana(...)`;
 the old name is no longer exported. This is a breaking API change.
 

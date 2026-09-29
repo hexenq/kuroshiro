@@ -26,8 +26,14 @@ test('homepage includes the shared demo, product sections and valid local target
         }
         assert.ok(doc.querySelector('pre').textContent.includes('npm install'));
         assert.ok(doc.querySelectorAll('pre')[1].textContent.includes(doc.querySelector('textarea').value));
-        const koreanDocs = doc.querySelector('nav[aria-label="Documentation languages"] a[lang="ko"]');
-        assert.equal(koreanDocs?.textContent, '한국어');
-        assert.equal(koreanDocs.href, 'https://github.com/hexenq/kuroshiro/blob/master/README.ko-kr.md');
+        const docsLinks = [...doc.querySelectorAll('nav[aria-label="Documentation languages"] a')];
+        assert.deepEqual(docsLinks.map(link => [link.textContent, link.href]), [
+            ['English', 'https://github.com/hexenq/kuroshiro/blob/master/README.md'],
+            ['日本語', 'https://github.com/hexenq/kuroshiro/blob/master/README.jp.md'],
+            ['简体中文', 'https://github.com/hexenq/kuroshiro/blob/master/README.zh-cn.md'],
+            ['繁體中文', 'https://github.com/hexenq/kuroshiro/blob/master/README.zh-tw.md'],
+            ['Esperanto', 'https://github.com/hexenq/kuroshiro/blob/master/README.eo-eo.md'],
+            ['한국어', 'https://github.com/hexenq/kuroshiro/blob/master/README.ko-kr.md']
+        ]);
     } finally { dom.window.close(); }
 });

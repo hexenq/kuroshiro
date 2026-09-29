@@ -12,7 +12,7 @@ function verifySite(site = path.join(root, '_site')) {
         assert.ok(data.length, `Empty site asset: ${name}`);
         return data;
     }
-    for (const name of ['index.html', 'README.jp.html', 'README.zh-cn.html', 'README.zh-tw.html', 'README.eo-eo.html', 'demo/index.html']) {
+    for (const name of ['index.html', 'demo/index.html']) {
         const html = read(name).toString();
         assert.match(html, /<html[\s>]/i, `Not a rendered page: ${name}`);
         assert.ok(!html.includes('{% include demo.html %}'), `Unrendered include: ${name}`);
@@ -23,6 +23,9 @@ function verifySite(site = path.join(root, '_site')) {
             assert.ok(!html.includes('hm.baidu.com'), `Retired Baidu tag: ${name}`);
             assert.ok(!html.includes('google-analytics.com/analytics.js'), `Retired Google tag: ${name}`);
         }
+    }
+    for (const name of ['README.html', 'README.jp.html', 'README.zh-cn.html', 'README.zh-tw.html', 'README.eo-eo.html']) {
+        assert.ok(!fs.existsSync(path.join(site, name)), `Retired documentation page published: ${name}`);
     }
     assert.equal(read('CNAME').toString().trim(), 'kuroshiro.org');
     const dom = new JSDOM(read('index.html').toString(), {url:'https://kuroshiro.org/'});

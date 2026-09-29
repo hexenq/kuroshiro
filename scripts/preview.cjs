@@ -1,4 +1,4 @@
-// Preview the actual homepage and shared demo; documentation still needs Jekyll.
+// Preview the actual homepage and shared demo.
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -17,12 +17,6 @@ http.createServer((req,res) => {
         res.setHeader('Content-Type','text/html; charset=utf-8');
         res.setHeader('Cache-Control', 'no-store');
         res.end(homepage());
-        return;
-    }
-    // These pages are rendered by Jekyll in production; preview links use the source docs.
-    const docs = /^\/README\.(jp|zh-cn|zh-tw|eo-eo)\.html$/.exec(url.pathname);
-    if (docs) {
-        res.writeHead(302, {Location: 'https://github.com/hexenq/kuroshiro/blob/master/README.' + docs[1] + '.md'}).end();
         return;
     }
     const name = path.resolve(root, '.' + decodeURIComponent(url.pathname));

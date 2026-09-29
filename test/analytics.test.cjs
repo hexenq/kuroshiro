@@ -6,7 +6,7 @@ const {JSDOM} = require('jsdom');
 const root = path.resolve(__dirname, '..');
 const template = fs.readFileSync(path.join(root, '_includes/analytics.html'), 'utf8');
 
-test('homepage and documentation put one production analytics include first in head', () => {
+test('homepage and Jekyll layout put one production analytics include first in head', () => {
     for (const file of ['index.html', '_layouts/default.html']) {
         const source = fs.readFileSync(path.join(root, file), 'utf8');
         assert.equal(source.split('{% include analytics.html %}').length - 1, 1);

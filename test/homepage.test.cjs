@@ -26,5 +26,8 @@ test('homepage includes the shared demo, product sections and valid local target
         }
         assert.ok(doc.querySelector('pre').textContent.includes('npm install'));
         assert.ok(doc.querySelectorAll('pre')[1].textContent.includes(doc.querySelector('textarea').value));
+        const koreanDocs = doc.querySelector('nav[aria-label="Documentation languages"] a[lang="ko"]');
+        assert.equal(koreanDocs?.textContent, '한국어');
+        assert.equal(koreanDocs.href, 'https://github.com/hexenq/kuroshiro/blob/master/README.ko-kr.md');
     } finally { dom.window.close(); }
 });

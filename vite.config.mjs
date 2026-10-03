@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => ({
         emptyOutDir: false,
         minify: mode === "minify",
         lib: {
-            entry: "scripts/browser-entry.js",
+            entry: "src/index.js",
             name: "Kuroshiro",
             formats: ["umd"],
             fileName: () => mode === "minify" ? "kuroshiro.min.js" : "kuroshiro.js"

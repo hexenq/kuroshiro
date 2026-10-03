@@ -22,8 +22,7 @@ export default [
             "no-cond-assign": "off",
             "no-constant-condition": "off",
             "no-control-regex": "off",
-            "no-useless-escape": "off",
-            "no-unused-vars": "off"
+            "no-useless-escape": "off"
         }
     }
 ];

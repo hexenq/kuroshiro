@@ -6,11 +6,6 @@ const { JSDOM } = require("jsdom");
 
 const Kuroshiro = require("..");
 
-assert.equal(typeof Kuroshiro, "function");
-assert.equal(Kuroshiro.default, Kuroshiro);
-assert.equal(typeof new Kuroshiro().init, "function");
-assert.equal(typeof Kuroshiro.Util.kanaToRomaji, "function");
-
 async function checkConstructor(Constructor, label) {
     assert.equal(typeof Constructor, "function", label);
     assert.equal(Constructor.default, Constructor, `${label}: legacy default export`);
@@ -19,14 +14,21 @@ async function checkConstructor(Constructor, label) {
     assert.equal("kanaToHiragna" in Constructor.Util, false, `${label}: removed 1.x spelling`);
 
     const instance = new Constructor.default();
+    assert.equal(typeof instance.init, "function", label);
     await instance.init({
-        init: () => Promise.resolve(),
-        parse: text => Promise.resolve(text === "買っちゃった" ? [
-            { surface_form: text, reading: "カッチャッタ", pronunciation: "カッチャッタ" }
-        ] : text === "っcat" ? [
-            { surface_form: "っ", reading: "ッ", pronunciation: "ッ" },
-            { surface_form: "cat" }
-        ] : [{ surface_form: "漢字", reading: "カンジ", pronunciation: "カンジ" }])
+        init: async () => {},
+        parse: async (text) => {
+            if (text === "買っちゃった") {
+                return [{ surface_form: text, reading: "カッチャッタ", pronunciation: "カッチャッタ" }];
+            }
+            if (text === "っcat") {
+                return [
+                    { surface_form: "っ", reading: "ッ", pronunciation: "ッ" },
+                    { surface_form: "cat" }
+                ];
+            }
+            return [{ surface_form: "漢字", reading: "カンジ", pronunciation: "カンジ" }];
+        }
     });
     assert.equal(await instance.convert("漢字"), "かんじ", label);
     const ruby = await instance.convert("買っちゃった", { to: "romaji", mode: "furigana" });

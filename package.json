@@ -13,7 +13,7 @@
     "src"
   ],
   "scripts": {
-    "lint": "eslint src test scripts index.js eslint.config.mjs vite.config.mjs",
+    "lint": "eslint src test index.js eslint.config.mjs vite.config.mjs",
     "lint:fix": "npm run lint -- --fix",
     "jest": "jest --verbose",
     "jest:watch": "npm run jest -- --watch",
@@ -71,7 +71,7 @@
     "jest": "^30.5.1",
     "jest-environment-jsdom": "^30.5.1",
     "jsdom": "^26.1.0",
-    "kuroshiro-analyzer-kuromoji": "2.0.0-beta.1",
+    "kuroshiro-analyzer-kuromoji": "2.0.0-beta.2",
     "rimraf": "^6.1.3",
     "typescript": "5.9.3",
     "vite": "^8.3.0"

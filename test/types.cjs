@@ -14,13 +14,13 @@ function run(command, args, cwd = temp) {
     return execFileSync(command, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
 }
 
-function installPackedPackage(directory) {
-    const metadata = JSON.parse(fs.readFileSync(path.join(directory, "package.json"), "utf8"));
+function installPackedPackage() {
+    const metadata = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8"));
     // Build first via npm test. Never recurse into prepack or install from the network.
     const output = run(process.execPath, [
         process.env.npm_execpath, "pack", "--ignore-scripts", "--json",
         "--pack-destination", temp, "--cache", path.join(temp, "cache")
-    ], directory);
+    ], root);
     const result = JSON.parse(output);
     // npm 12 keys results by package name; earlier npm versions return an array.
     const packed = Array.isArray(result) ? result[0] : result[metadata.name];
@@ -28,15 +28,6 @@ function installPackedPackage(directory) {
     const destination = path.join(temp, "node_modules", metadata.name);
     fs.mkdirSync(destination, { recursive: true });
     run("tar", ["-xzf", path.join(temp, packed.filename), "--strip-components=1", "-C", destination]);
-    // Reuse installed runtime dependencies, but load our entry and declarations from the tarball.
-    for (const dependency of Object.keys(metadata.dependencies || {})) {
-        const link = path.join(temp, "node_modules", dependency);
-        if (fs.existsSync(link)) continue;
-        fs.mkdirSync(path.dirname(link), { recursive: true });
-        const manifest = require.resolve(dependency + "/package.json", { paths: [directory] });
-        fs.symlinkSync(path.dirname(manifest), link, "junction");
-    }
-    return metadata.name;
 }
 
 function compile(label, options, files, execute = false) {
@@ -61,7 +52,7 @@ function compile(label, options, files, execute = false) {
 
 try {
     assert.ok(process.env.npm_execpath, "Run this check with npm run test:types");
-    installPackedPackage(root);
+    installPackedPackage();
     const fixtureRoot = path.join(root, "test/types");
     for (const file of fs.readdirSync(fixtureRoot)) {
         fs.copyFileSync(path.join(fixtureRoot, file), path.join(temp, file));

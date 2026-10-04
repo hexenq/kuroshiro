@@ -1518,7 +1518,7 @@ const patchTokens = function (tokens) {
             if (j + 1 < tokens.length) {
                 tokens[j].surface_form += tokens[j + 1].surface_form;
                 if (tokens[j].pronunciation) {
-                    tokens[j].pronunciation += tokens[j + 1].pronunciation;
+                    tokens[j].pronunciation += tokens[j + 1].pronunciation || tokens[j + 1].reading;
                 }
                 else {
                     tokens[j].pronunciation = `${tokens[j].reading}${tokens[j + 1].reading}`;

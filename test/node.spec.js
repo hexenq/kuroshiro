@@ -150,6 +150,21 @@ describe("Kuroshiro Node Funtional Test", () => {
         const result = patchTokens(tokens);
         expect(result).toHaveLength(12);
     });
+    it("Uses the following reading when its pronunciation is missing", () => {
+        const result = patchTokens([
+            {
+                surface_form: "やっ", pos: "動詞", reading: "ヤッ", pronunciation: "ヤッ"
+            },
+            { surface_form: "ぱりやだやだ", pos: "名詞" }
+        ]);
+        expect(result[0].surface_form).toBe("やっぱりやだやだ");
+        expect(result[0].reading).toBe("ヤッパリヤダヤダ");
+        expect(result[0].pronunciation).toBe("ヤッパリヤダヤダ");
+    });
+    it.each(["hepburn", "passport", "nippon"])("Converts unknown kana after sokuon with %s", async (romajiSystem) => {
+        expect(await kuroshiro.convert("やっぱりやだやだ", { to: "romaji", romajiSystem })).toBe("yappariyadayada");
+        expect(await kuroshiro.convert("やっぱりやだやだ", { to: "romaji", mode: "spaced", romajiSystem })).toBe("yappariyadayada");
+    });
     it("Kana Character Recognition", () => {
         const ori = "こ";
         const result = Kuroshiro.Util.isKana(ori);

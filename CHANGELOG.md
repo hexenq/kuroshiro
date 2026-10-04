@@ -4,6 +4,7 @@
 ### Bug Fixes
 
 * Preserve `n` before b/m/p in Hepburn romanization, correcting results such as `こんばんは` → `konbanwa`. Keep passport romanization unchanged ([#111](https://github.com/hexenq/kuroshiro/issues/111)).
+* Use the following token's reading when its pronunciation is missing, correcting `やっぱりやだやだ` → `yappariyadayada` ([#100](https://github.com/hexenq/kuroshiro/issues/100)).
 * Restore direct CommonJS and browser-global constructors while preserving the `.default` alias ([#99](https://github.com/hexenq/kuroshiro/issues/99), [#98](https://github.com/hexenq/kuroshiro/issues/98)).
 * Correct lone-sokuon romanization in furigana and okurigana output, including contracted kana and non-Japanese boundaries. Backported from [#117](https://github.com/hexenq/kuroshiro/pull/117) by iminamii and the follow-up [#125](https://github.com/hexenq/kuroshiro/pull/125).
 

@@ -1,3 +1,10 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/hexenq/kuroshiro/compare/1.2.0...1.2.1) (2026-10-04)
+
+### Bug Fixes
+
+* Preserve `n` before b/m/p in Hepburn romanization, correcting results such as `こんばんは` → `konbanwa`. Keep passport romanization unchanged ([#111](https://github.com/hexenq/kuroshiro/issues/111)).
+
 <a name="1.2.0"></a>
 ## [1.2.0](https://github.com/hexenq/kuroshiro/compare/1.1.2...1.2.0) (2021-6-7)
 

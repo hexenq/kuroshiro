@@ -64,7 +64,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 *And CommonJS `require`*
 
 ```js
-const Kuroshiro = require("kuroshiro")；
+const Kuroshiro = require("kuroshiro");
 const KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
 const kuroshiro = new Kuroshiro();
 

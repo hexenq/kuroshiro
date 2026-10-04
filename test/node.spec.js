@@ -6,6 +6,59 @@ import KuromojiAnalyzer from "kuroshiro-analyzer-kuromoji";
 import Kuroshiro from "../src";
 import { patchTokens } from "../src/util";
 
+describe("Sokuon romanization", () => {
+    let kuroshiro;
+
+    beforeAll(async () => {
+        kuroshiro = new Kuroshiro();
+        await kuroshiro.init(new KuromojiAnalyzer());
+    });
+
+    it.each([
+        ["座って", "suwatte", "suwatte"],
+        ["真っ赤", "makka", "makka"],
+        ["買っちゃった", "katchatta", "kattyatta"],
+        ["いっしょ", "issho", "issyo"],
+        ["マッチャ", "matcha", "mattya"],
+        ["切符", "kippu", "kippu"]
+    ])("Keeps the full mora in %s", async (text, hepburn, nippon) => {
+        await Promise.all(["hepburn", "passport", "nippon"].map(async (romajiSystem) => {
+            const result = await kuroshiro.convert(text, { to: "romaji", mode: "furigana", romajiSystem });
+            const readings = result.match(/<rt>.*?<\/rt>/g).map(rt => rt.slice(4, -5)).join("");
+            expect(readings).toBe(romajiSystem === "nippon" ? nippon : hepburn);
+            expect(result.replace(/<rp>.*?<\/rp>|<rt>.*?<\/rt>|<\/?ruby>/g, "")).toBe(text);
+        }));
+    });
+
+    it.each(["cat", "！", " ", "あ", "ー", "っ", "🙂", ""])("Does not merge into %s", async (suffix) => {
+        const instance = new Kuroshiro();
+        await instance.init({
+            init: async () => {},
+            parse: async () => [
+                { surface_form: "っ", reading: "ッ", pronunciation: "ッ" },
+                ...(suffix ? [{ surface_form: suffix }] : [])
+            ]
+        });
+        await Promise.all(["hepburn", "passport", "nippon"].map(async (romajiSystem) => {
+            const result = await instance.convert(`っ${suffix}`, { to: "romaji", mode: "furigana", romajiSystem });
+            expect(result).toMatch(/^<ruby>っ<rp>\(<\/rp><rt>tsu<\/rt>/);
+            expect(result.replace(/<rp>.*?<\/rp>|<rt>.*?<\/rt>|<\/?ruby>/g, "")).toBe(`っ${suffix}`);
+        }));
+    });
+
+    it("Preserves other modes and kana annotations", async () => {
+        await Promise.all(["hepburn", "passport", "nippon"].map(async (romajiSystem) => {
+            expect(await kuroshiro.convert("座って", { to: "romaji", romajiSystem })).toBe("suwatte");
+            expect(await kuroshiro.convert("座って", { to: "romaji", mode: "spaced", romajiSystem })).toBe("suwatte");
+            expect(await kuroshiro.convert("真っ赤", { to: "romaji", mode: "okurigana", romajiSystem })).toBe("真(ma)っ赤(kka)");
+            expect(await kuroshiro.convert("買っちゃった", { to: "romaji", mode: "okurigana", romajiSystem })).toBe("買(ka)っちゃった");
+            expect(await kuroshiro.convert("座って", { to: "hiragana", mode: "furigana", romajiSystem })).toBe("<ruby>座<rp>(</rp><rt>すわ</rt><rp>)</rp></ruby>って");
+            expect(await kuroshiro.convert("座って", { to: "katakana", mode: "furigana", romajiSystem })).toBe("<ruby>座<rp>(</rp><rt>スワ</rt><rp>)</rp></ruby>って");
+            expect(await kuroshiro.convert("あっcat", { to: "romaji", romajiSystem })).toBe("atsucat");
+        }));
+    });
+});
+
 describe("Kuroshiro Node Initialization Test", () => {
     let kuroshiro;
 

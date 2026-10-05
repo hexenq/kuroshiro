@@ -1,3 +1,29 @@
+<a name="2.0.0-beta.2"></a>
+## [2.0.0-beta.2](https://github.com/hexenq/kuroshiro/compare/2.0.0-beta.1...2.0.0-beta.2) (2026-10-05)
+
+### Bug Fixes
+
+* Correct syllabic `n` handling before b/m/p in Hepburn romanization ([#111](https://github.com/hexenq/kuroshiro/issues/111)).
+* Fix token merging when pronunciation is missing ([#100](https://github.com/hexenq/kuroshiro/issues/100)).
+
+### Security
+
+* Update brace-expansion in development dependencies to address denial-of-service vulnerabilities ([#131](https://github.com/hexenq/kuroshiro/pull/131)).
+
+Note: Hepburn romanization output changes in this release.
+
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/hexenq/kuroshiro/compare/1.2.0...1.2.1) (2026-10-05)
+
+### Bug Fixes
+
+* Correct syllabic `n` handling before b/m/p in Hepburn romanization ([#111](https://github.com/hexenq/kuroshiro/issues/111)).
+* Fix token merging when pronunciation is missing ([#100](https://github.com/hexenq/kuroshiro/issues/100)).
+* Restore direct CommonJS and browser-global constructors while preserving the `.default` alias ([#99](https://github.com/hexenq/kuroshiro/issues/99), [#98](https://github.com/hexenq/kuroshiro/issues/98)).
+* Correct lone-sokuon romanization in furigana and okurigana output, including contracted kana and non-Japanese boundaries. Backported from [#117](https://github.com/hexenq/kuroshiro/pull/117) by iminamii and the follow-up [#125](https://github.com/hexenq/kuroshiro/pull/125).
+
+Note: Hepburn romanization output changes in this release.
+
 <a name="2.0.0-beta.1"></a>
 ## [2.0.0-beta.1](https://github.com/hexenq/kuroshiro/compare/1.2.0...2.0.0-beta.1) (2026-09-26)
 

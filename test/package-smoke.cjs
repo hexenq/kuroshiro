@@ -9,7 +9,7 @@ const Kuroshiro = require("..");
 async function checkConstructor(Constructor, label) {
     assert.equal(typeof Constructor, "function", label);
     assert.equal(Constructor.default, Constructor, `${label}: legacy default export`);
-    assert.equal(Constructor.Util.kanaToRomaji("カンジ"), "kanji", label);
+    assert.equal(Constructor.Util.kanaToRomaji("コンバンワ"), "konbanwa", label);
     assert.equal(Constructor.Util.kanaToHiragana("カンジ"), "かんじ", label);
     assert.equal("kanaToHiragna" in Constructor.Util, false, `${label}: removed 1.x spelling`);
 

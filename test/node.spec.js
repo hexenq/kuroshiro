@@ -59,6 +59,21 @@ describe("Kuroshiro Node Funtional Test", () => {
         const result = patchTokens(tokens);
         expect(result).toHaveLength(12);
     });
+    it("Uses the following reading when its pronunciation is missing", () => {
+        const result = patchTokens([
+            {
+                surface_form: "やっ", pos: "動詞", reading: "ヤッ", pronunciation: "ヤッ"
+            },
+            { surface_form: "ぱりやだやだ", pos: "名詞" }
+        ]);
+        expect(result[0].surface_form).toBe("やっぱりやだやだ");
+        expect(result[0].reading).toBe("ヤッパリヤダヤダ");
+        expect(result[0].pronunciation).toBe("ヤッパリヤダヤダ");
+    });
+    it.each(["hepburn", "passport", "nippon"])("Converts unknown kana after sokuon with %s", async (romajiSystem) => {
+        expect(await kuroshiro.convert("やっぱりやだやだ", { to: "romaji", romajiSystem })).toBe("yappariyadayada");
+        expect(await kuroshiro.convert("やっぱりやだやだ", { to: "romaji", mode: "spaced", romajiSystem })).toBe("yappariyadayada");
+    });
     it("Kana Character Recognition", () => {
         const ori = "こ";
         const result = Kuroshiro.Util.isKana(ori);
@@ -116,7 +131,7 @@ describe("Kuroshiro Node Funtional Test", () => {
     it("Kana to Romaji (hepburn-shiki)(2)", () => {
         const ori = "ナンバ";
         const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
-        expect(result).toEqual("namba");
+        expect(result).toEqual("nanba");
     });
     it("Kana to Romaji (hepburn-shiki)(3)", () => {
         const ori = "まんえんいか";
@@ -127,6 +142,20 @@ describe("Kuroshiro Node Funtional Test", () => {
         const ori = "まっちゃ";
         const result = Kuroshiro.Util.kanaToRomaji(ori, "hepburn");
         expect(result).toEqual("matcha");
+    });
+    it.each([
+        ["しんぶん", "shinbun", "shimbun", "sinbun"],
+        ["ほんま", "honma", "homma", "honma"],
+        ["しんぱい", "shinpai", "shimpai", "sinpai"]
+    ])("Syllabic n in %s", (kana, hepburn, passport, nippon) => {
+        expect(Kuroshiro.Util.kanaToRomaji(kana)).toBe(hepburn);
+        expect(Kuroshiro.Util.kanaToRomaji(kana, "passport")).toBe(passport);
+        expect(Kuroshiro.Util.kanaToRomaji(kana, "nippon")).toBe(nippon);
+    });
+    it.each(["normal", "spaced"])("Converts こんばんは in %s mode", async (mode) => {
+        expect(await kuroshiro.convert("こんばんは", { to: "romaji", mode })).toBe("konbanwa");
+        expect(await kuroshiro.convert("こんばんは", { to: "romaji", mode, romajiSystem: "passport" })).toBe("kombanwa");
+        expect(await kuroshiro.convert("こんばんは", { to: "romaji", mode, romajiSystem: "nippon" })).toBe("konbanwa");
     });
     it("Kanji to Hiragana(1)", async () => {
         const ori = EXAMPLE_TEXT;

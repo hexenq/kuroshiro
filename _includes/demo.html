@@ -1,13 +1,13 @@
 <div id="demoArea">
   <div class="demo-editors">
-    <div class="editor-pane"><div class="pane-heading"><label for="oritext">Original text</label><span>日本語 · up to 5,000 characters</span></div><textarea id="oritext" lang="ja" rows="5" maxlength="5000" spellcheck="false">感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！</textarea></div>
-    <div class="editor-pane result-pane"><div class="pane-heading"><span id="outputLabel">Your reading</span><span>CONVERTED OUTPUT</span></div><div id="output" role="region" aria-labelledby="outputLabel" aria-live="polite"></div></div>
+    <div class="editor-pane"><div class="pane-heading"><label for="oritext" data-i18n="original">Original text</label><span data-i18n="inputHint">日本語 · up to 5,000 characters</span></div><textarea id="oritext" lang="ja" rows="5" maxlength="5000" spellcheck="false">感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！</textarea></div>
+    <div class="editor-pane result-pane"><div class="pane-heading"><span id="outputLabel" data-i18n="output">Your reading</span><span data-i18n="outputHint">CONVERTED OUTPUT</span></div><div id="output" data-placeholder="Your converted text will appear here." data-i18n-data-placeholder="outputPlaceholder" role="region" aria-labelledby="outputLabel" aria-live="polite"></div></div>
   </div>
   <div class="demo-toolbar"><div class="demo-options">
-    <div><label for="to">To</label><select id="to"><option value="hiragana">Hiragana</option><option value="katakana">Katakana</option><option value="romaji">Romaji</option></select></div>
-    <div><label for="mode">Mode</label><select id="mode"><option value="normal">Normal</option><option value="spaced">Spaced</option><option value="okurigana">Okurigana</option><option value="furigana">Furigana</option></select></div>
-    <div id="romajiOption" hidden><label for="romajiSystem">Romaji system</label><select id="romajiSystem"><option value="hepburn">Hepburn</option><option value="nippon">Nippon</option><option value="passport">Passport</option></select></div>
-  </div><div class="demo-actions"><button id="startBtn" type="button">Start demo</button><button id="convertBtn" type="button" disabled>Convert →</button><button id="cancelBtn" type="button" hidden>Cancel</button></div></div>
-  <p id="demoStatus" role="status" aria-live="polite">Start the demo to load the dictionary, then convert your text.</p>
-  <noscript>JavaScript and Web Workers are required for this demo.</noscript>
+    <div><label for="to" data-i18n="to">To</label><select id="to"><option value="hiragana" data-i18n="hiragana">Hiragana</option><option value="katakana" data-i18n="katakana">Katakana</option><option value="romaji" data-i18n="romaji">Romaji</option></select></div>
+    <div><label for="mode" data-i18n="mode">Mode</label><select id="mode"><option value="normal" data-i18n="normal">Normal</option><option value="spaced" data-i18n="spaced">Spaced</option><option value="okurigana" data-i18n="okurigana">Okurigana</option><option value="furigana" data-i18n="furigana">Furigana</option></select></div>
+    <div id="romajiOption" hidden><label for="romajiSystem" data-i18n="system">Romaji system</label><select id="romajiSystem"><option value="hepburn" data-i18n="hepburn">Hepburn</option><option value="nippon" data-i18n="nippon">Nippon</option><option value="passport" data-i18n="passport">Passport</option></select></div>
+  </div><div class="demo-actions"><button id="startBtn" type="button" data-i18n="start">Start demo</button><button id="convertBtn" type="button" disabled data-i18n="convert">Convert →</button><button id="cancelBtn" type="button" hidden data-i18n="cancel">Cancel</button></div></div>
+  <p id="demoStatus" role="status" aria-live="polite" data-i18n="initial">Start the demo to load the dictionary, then convert your text.</p>
+  <noscript data-i18n="noscript">JavaScript and Web Workers are required for this demo.</noscript>
 </div>

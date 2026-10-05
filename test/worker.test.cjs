@@ -6,13 +6,22 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname,'..');
 
 test('worker uses real published bundles and dictionaries for all output modes', async () => {
+    for (const name of ['kuroshiro', 'kuroshiro-analyzer-kuromoji']) {
+        const installed = require(path.join(root, 'node_modules', name, 'package.json'));
+        assert.equal(installed.version, '2.0.0-beta.2');
+        const bundle = name + '.min.js';
+        assert.ok(fs.readFileSync(path.join(root, 'assets/vendor', bundle)).equals(fs.readFileSync(path.join(root, 'node_modules', name, 'dist', bundle))));
+    }
     const messages = [], requests = [];
     const context = vm.createContext({URL, setTimeout, clearTimeout, console});
     context.self = context;
     context.location = {href:'https://example.org/assets/demo-worker.js'};
     context.postMessage = message => messages.push(message);
     context.importScripts = (...names) => {
-        for (const name of names) vm.runInContext(fs.readFileSync(path.join(root,'assets',name),'utf8'),context);
+        for (const name of names) {
+            assert.equal(new URL(name, context.location.href).searchParams.get('v'), '2.0.0-beta.2');
+            vm.runInContext(fs.readFileSync(path.join(root,'assets',name.split('?')[0]),'utf8'),context);
+        }
     };
     context.XMLHttpRequest = class {
         open(method, url) { this.url = url; requests.push(url); }
@@ -43,6 +52,10 @@ test('worker uses real published bundles and dictionaries for all output modes',
         assert.ok(messages.at(-1).result.includes('and'));
         assert.ok(messages.at(-1).result.includes('！'));
         assert.notEqual(messages.at(-1).result,sample);
+    }
+    for (const [romajiSystem, expected] of [['hepburn','konbanwa'], ['nippon','konbanwa'], ['passport','kombanwa']]) {
+        await context.onmessage({data:{id:6,type:'convert',text:'こんばんは',options:{to:'romaji',mode:'normal',romajiSystem}}});
+        assert.equal(messages.at(-1).result, expected);
     }
     await context.onmessage({data:{id:4,type:'convert',text:'<img>日本語',options:{to:'hiragana',mode:'furigana'}}});
     assert.ok(!messages.at(-1).result.includes('<img>'));

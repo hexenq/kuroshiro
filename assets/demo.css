@@ -7,7 +7,7 @@
 .pane-heading>span:last-child:not(:first-child){font-size:10px;letter-spacing:.5px;color:#70786b;font-weight:400}
 #demoArea textarea{display:block;box-sizing:border-box;width:100%;min-height:170px;padding:4px 0;border:0;background:transparent;font:inherit;font-size:21px;line-height:1.9;resize:vertical;color:inherit;border-radius:0}
 #output{min-height:170px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:21px;line-height:2.2;padding:4px 0}
-#output:empty::before{content:"Your converted text will appear here.";color:#777f71;font-size:16px}
+#output:empty::before{content:attr(data-placeholder);color:#777f71;font-size:16px}
 #output rt{font-size:.55em}
 .demo-toolbar{display:flex;justify-content:space-between;align-items:end;gap:20px;padding:18px 26px;border-top:1px solid #e1e5dc;flex-wrap:wrap}
 .demo-options{display:flex;flex-wrap:wrap;gap:16px}

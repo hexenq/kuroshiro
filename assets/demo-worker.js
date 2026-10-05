@@ -7,7 +7,7 @@ self.onmessage = async function ({data}) {
         if (type === 'init') {
             if (!ready) {
                 ready = (async () => {
-                    importScripts('vendor/kuroshiro.min.js', 'vendor/kuroshiro-analyzer-kuromoji.min.js');
+                    importScripts('vendor/kuroshiro.min.js?v=2.0.0-beta.2', 'vendor/kuroshiro-analyzer-kuromoji.min.js?v=2.0.0-beta.2');
                     const Kuroshiro = self.Kuroshiro.default || self.Kuroshiro;
                     kuroshiro = new Kuroshiro();
                     // A pathname avoids kuromoji's path.join corruption of absolute URLs.

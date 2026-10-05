@@ -26,3 +26,16 @@
   .code-panel pre { padding: 18px; }
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Language names remain in their own language so the selector is recognizable. */
+.site-header { flex-wrap: wrap; }
+.site-header nav { flex-wrap: wrap; gap: 8px 24px; }
+.language-control { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.language-control[hidden] { display: none; }
+.language-control select { max-width: 180px; min-height: 44px; padding: 8px; border: 1px solid var(--line); border-radius: 3px; background: var(--paper); color: var(--ink); font: inherit; }
+.reading-label { flex-shrink: 0; }
+html:not([lang="en"]) h1, html:not([lang="en"]) h2 { letter-spacing: normal; }
+@media (max-width: 1000px) { .site-header { padding-block: 20px; } .site-header nav { margin-left: auto; } .language-control { margin-left: auto; } }
+@media (max-width: 720px) { .site-header nav { margin-left: 0; width: 100%; } .language-control { margin-left: 0; } }
+
+.language-control select:focus-visible { outline: none; }

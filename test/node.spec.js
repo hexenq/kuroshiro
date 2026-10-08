@@ -287,6 +287,41 @@ describe("Kuroshiro Node Funtional Test", () => {
         const result = await kuroshiro.convert(ori, { mode: "furigana", to: "romaji" });
         expect(result).toEqual("<ruby>感<rp>(</rp><rt>kan</rt><rp>)</rp>じ<rp>(</rp><rt>ji</rt><rp>)</rp>取<rp>(</rp><rt>to</rt><rp>)</rp>れ<rp>(</rp><rt>re</rt><rp>)</rp>た<rp>(</rp><rt>ta</rt><rp>)</rp>ら<rp>(</rp><rt>ra</rt><rp>)</rp>手<rp>(</rp><rt>te</rt><rp>)</rp>を<rp>(</rp><rt>o</rt><rp>)</rp>繋<rp>(</rp><rt>tsuna</rt><rp>)</rp>ご<rp>(</rp><rt>go</rt><rp>)</rp>う<rp>(</rp><rt>u</rt><rp>)</rp>、<rp>(</rp><rt>,</rt><rp>)</rp>重<rp>(</rp><rt>kasa</rt><rp>)</rp>な<rp>(</rp><rt>na</rt><rp>)</rp>る<rp>(</rp><rt>ru</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>は<rp>(</rp><rt>wa</rt><rp>)</rp>人生<rp>(</rp><rt>jinsei</rt><rp>)</rp>の<rp>(</rp><rt>no</rt><rp>)</rp>ラ<rp>(</rp><rt>ra</rt><rp>)</rp>イ<rp>(</rp><rt>i</rt><rp>)</rp>ン<rp>(</rp><rt>n</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>a<rp>(</rp><rt>a</rt><rp>)</rp>n<rp>(</rp><rt>n</rt><rp>)</rp>d<rp>(</rp><rt>d</rt><rp>)</rp> <rp>(</rp><rt> </rt><rp>)</rp>レ<rp>(</rp><rt>re</rt><rp>)</rp>ミ<rp>(</rp><rt>mi</rt><rp>)</rp>リ<rp>(</rp><rt>ri</rt><rp>)</rp>ア<rp>(</rp><rt>a</rt><rp>)</rp>最高<rp>(</rp><rt>saikō</rt><rp>)</rp>！<rp>(</rp><rt>!</rt><rp>)</rp></ruby>");
     });
+    it("Preserves a middle dot omitted from the dictionary reading in okurigana", async () => {
+        const text = " 次にあげる「ブラック・ユーモア」の例を見れば、自分で判断を下すことができるだろう。";
+        expect(await kuroshiro.convert(text, { mode: "okurigana", to: "hiragana" })).toBe(
+            " 次(つぎ)にあげる「ブラック・ユーモア」の例(れい)を見(み)れば、自分(じぶん)で判断(はんだん)を下(くだ)すことができるだろう。"
+        );
+    });
+    it.each(["・", "·"])("Preserves %s in furigana with a real dictionary", async (dot) => {
+        const text = `映画『ジュラシック${dot}パーク』の恐竜は本物そっくりだ。`;
+        expect(await kuroshiro.convert(text, { mode: "furigana", to: "hiragana" })).toBe(
+            `<ruby>映画<rp>(</rp><rt>えいが</rt><rp>)</rp></ruby>『ジュラシック${dot}パーク』の<ruby>恐竜<rp>(</rp><rt>きょうりゅう</rt><rp>)</rp></ruby>は<ruby>本物<rp>(</rp><rt>ほんもの</rt><rp>)</rp></ruby>そっくりだ。`
+        );
+    });
+});
+
+describe("Kana annotations with unequal reading lengths", () => {
+    it.each([
+        ["ユニ・チャーム", "ユニチャーム", "ユニチャーム", "yunichāmu"],
+        ["ア・イ", "アイ", undefined, "ai"],
+        ["トゥ", "トゥー", undefined, "tū"],
+        ["は", "ハ", "ワー", "wā"],
+        ["ア・イ", "ア・イ", "アイ", "ai"]
+    ])("keeps %s whole without truncating its reading or pronunciation", async (text, reading, pronunciation, romaji) => {
+        // Fixed analyzer output covers omitted symbols and custom dictionary readings.
+        const instance = new Kuroshiro();
+        await instance.init({
+            init: async () => {},
+            parse: async () => [{ surface_form: text, reading, pronunciation }]
+        });
+        for (const to of ["hiragana", "katakana", "romaji"]) {
+            expect(await instance.convert(text, { mode: "okurigana", to })).toBe(text);
+            expect(await instance.convert(text, { mode: "furigana", to })).toBe(
+                to === "romaji" ? `<ruby>${text}<rp>(</rp><rt>${romaji}</rt><rp>)</rp></ruby>` : text
+            );
+        }
+    });
 });
 
 /**

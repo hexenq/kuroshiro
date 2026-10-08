@@ -247,6 +247,13 @@ class Kuroshiro {
                         }
                         break;
                     case 2:
+                        // Readings may omit punctuation or expand kana. Keep the token
+                        // whole when its reading or pronunciation cannot align by length.
+                        if (tokens[i].reading.length !== tokens[i].surface_form.length
+                            || (tokens[i].pronunciation && tokens[i].pronunciation.length !== tokens[i].surface_form.length)) {
+                            notations.push([tokens[i].surface_form, 2, toRawHiragana(tokens[i].reading), tokens[i].pronunciation || tokens[i].reading]);
+                            break;
+                        }
                         for (let c2 = 0; c2 < tokens[i].surface_form.length; c2++) {
                             notations.push([tokens[i].surface_form[c2], 2, toRawHiragana(tokens[i].reading[c2]), (tokens[i].pronunciation && tokens[i].pronunciation[c2]) || tokens[i].reading[c2]]);
                         }

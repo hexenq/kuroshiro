@@ -44,8 +44,8 @@ function invalid() {
     core.convert("日本語", { to: "latin" });
     // @ts-expect-error Raw mode is not implemented.
     core.convert("日本語", { mode: "raw" });
-    // @ts-expect-error JIS is not a supported system.
-    core.convert("日本語", { romajiSystem: "jis" });
+    // @ts-expect-error 'unsupported' is not a supported system.
+    core.convert("日本語", { romajiSystem: "unsupported" });
     // @ts-expect-error Delimiters must be strings.
     core.convert("日本語", { delimiter_start: 1 });
     // @ts-expect-error Missing analyzer parse method.
@@ -57,5 +57,5 @@ function invalid() {
     // @ts-expect-error Utilities are typed, not any.
     Kuroshiro.Util.kanaToHiragana(42);
     // @ts-expect-error The romanization system is restricted here too.
-    Kuroshiro.Util.kanaToRomaji("あ", "jis");
+    Kuroshiro.Util.kanaToRomaji("あ", "unsupported");
 }

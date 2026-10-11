@@ -1698,7 +1698,7 @@ const toRawRomaji = function (str, system) {
             ヴォ: "vo",
             ヴュ: "vyu",
             ヴョ: "vyo",
-            キェ: "kya",
+            キェ: "kye",
             クァ: "kwa",
             クィ: "kwi",
             クェ: "kwe",

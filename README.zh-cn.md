@@ -2,16 +2,14 @@
 
 # kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
-[![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
-[![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
-[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
+[![CI](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml/badge.svg)](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/kuroshiro.svg)](https://www.npmjs.com/package/kuroshiro)
+[![License](https://img.shields.io/github/license/hexenq/kuroshiro.svg)](LICENSE)
 
 kuroshiro是一款十分方便使用的日文转换注音工具，主要针对日文文本，进行到平假名、片假名及罗马字的转换，并支持注音假名、送假名
 （旁注音）等注音模式。
 
-*其他说明语言：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md)。*
+*其他说明语言：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md)。*
 
 ## 演示
 你可以在[这里](https://kuroshiro.org/#demo)查看在线演示。
@@ -23,11 +21,13 @@ kuroshiro是一款十分方便使用的日文转换注音工具，主要针对�
 - 🆕支持多种罗马字体系
 - 实用日语工具
 
-## 1.x版本的重大变化
-- 从注音逻辑中分离语素解析器部分，使得我们可以使用不同的语素解析器（[预定义的](#解析器插件)或[自定义的](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)）
-- 拥抱ES8/ES2017以使用async/await方法
-- 使用ES6 Module取代CommonJS
-    
+## 从 1.x 迁移
+
+- 2.x 要求 Node.js 22+，或原生支持 ES2015（包括 Promise）的浏览器，不支持 Internet Explorer。请另行确认解析器的环境要求。
+- 将 `Kuroshiro.Util.kanaToHiragna(...)` 改为 `Kuroshiro.Util.kanaToHiragana(...)`，旧拼写已移除。
+- 继续支持 CommonJS `require`、ESM 默认导入、浏览器全局变量 `Kuroshiro`，以及异步的 `init()` / `convert()` API。
+- 包内提供 TypeScript 声明，参见 [TypeScript 用法](README.md#typescript)。以下示例使用同样带有声明的 Kuromoji 2.0 beta。
+
 ## 解析器插件
 *在开始工作之前，请先确认各插件的环境兼容性*
 
@@ -35,13 +35,15 @@ kuroshiro是一款十分方便使用的日文转换注音工具，主要针对�
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
 |Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+|Yahoo Web API (维护暂停)|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+
+Yahoo Web API 解析器的 API 迁移尚未完成，目前暂停维护，暂不推荐用于新项目。详情请参阅[维护状态说明](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi#maintenance-status)。
 
 ## 如何使用
 ### Node.js (或使用Webpack等打包工具时)
 首先使用npm包管理器进行安装:
 ```sh
-$ npm install kuroshiro
+$ npm install kuroshiro@beta kuroshiro-analyzer-kuromoji@beta
 ```
 
 加载kuroshiro库:
@@ -74,7 +76,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
 
 ### 浏览器
-将`dist/kuroshiro.min.js`加入到你的工程 (你需要先后执行`npm install`和`npm run build`，以把它构建出来)，并在HTML中加入:
+使用已安装 npm 包中的 `dist/kuroshiro.min.js`，并在 HTML 中加入：
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
 ```
@@ -144,14 +146,14 @@ __示例__
 
 ```js
 // normal (标准模式)
-kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
+kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"normal", to:"hiragana"});
 // 结果：かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！
 ```
 
 ```js
 // spaced (空格分组)
-kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
-// 结果：かんじとれ たら て を つなご う 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
+kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"spaced", to:"hiragana"});
+// 结果：かんじとれ たら て を つなごう 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
 ```
 
 ```js
@@ -169,7 +171,7 @@ kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生の�
 ### 实用工具
 __示例__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 判断输入字符是否是平假名。
@@ -201,7 +203,7 @@ const result = Kuroshiro.Util.isHiragana("あ"));
 #### hasJapanese(str)
 检查输入字符串中是否含有日文。
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 转换输入假名字符串至平假名。
 
 #### kanaToKatakana(str)

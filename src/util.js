@@ -1820,8 +1820,8 @@ const toRawRomaji = function (str, system) {
 
     result = result.replace(reg_xtsu, "tsu");
 
-    // [PASSPORT|HEPBURN] 撥音の特殊表記 b、m、p
-    if (system === ROMANIZATION_SYSTEM.PASSPORT || system === ROMANIZATION_SYSTEM.HEPBURN) {
+    // [PASSPORT] 撥音の特殊表記 b、m、p
+    if (system === ROMANIZATION_SYSTEM.PASSPORT) {
         result = result.replace(/nm/gm, "mm");
         result = result.replace(/nb/gm, "mb");
         result = result.replace(/np/gm, "mp");
@@ -1927,7 +1927,7 @@ const patchTokens = function (tokens) {
             if (j + 1 < tokens.length) {
                 tokens[j].surface_form += tokens[j + 1].surface_form;
                 if (tokens[j].pronunciation) {
-                    tokens[j].pronunciation += tokens[j + 1].pronunciation;
+                    tokens[j].pronunciation += tokens[j + 1].pronunciation || tokens[j + 1].reading;
                 }
                 else {
                     tokens[j].pronunciation = `${tokens[j].reading}${tokens[j + 1].reading}`;
@@ -1948,7 +1948,7 @@ const patchTokens = function (tokens) {
  * @param {string} str Given string
  * @return {string} Hiragana string
  */
-const kanaToHiragna = function (str) {
+const kanaToHiragana = function (str) {
     return toRawHiragana(str);
 };
 
@@ -1991,7 +1991,7 @@ export {
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,
-    kanaToHiragna,
+    kanaToHiragana,
     kanaToKatakana,
     kanaToRomaji
 };

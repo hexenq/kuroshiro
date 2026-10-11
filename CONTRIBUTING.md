@@ -19,24 +19,48 @@ All kinds of contributions are welcome, whether it's:
 
 ## Setting up development environment
 
-To contribute, fork the library and install dependencies. You need
-[git](http://git-scm.com/) and
-[node](http://nodejs.org/); you might use
-[nvm](https://github.com/creationix/nvm)
+To contribute, fork the repository and install its dependencies. Use Node.js
+22.13+ (22.x) or 24+ for development. The published library requires
+Node.js 22+; development tools require a newer minimum version. Browser bundles
+target ES2015.
 
 ```bash
 git clone https://github.com/<your-username>/kuroshiro
-npm install
-npm run test
+cd kuroshiro
+npm ci
+npm test
 ```
+
+`npm test` also packs the built library and checks its TypeScript declarations in
+CommonJS, native Node ESM, bundler, and browser-global consumers. It includes
+negative type checks and runs the compiled Node consumers. The compiler is pinned
+to TypeScript 5.9.3 as a development test dependency, not a runtime requirement.
+The root `tsconfig.json` provides editor checking without emitting files; it works
+from a standalone checkout with any directory name. `npm run test:types` checks
+this configuration as well as the independently configured packed consumers.
+
+The `test/integration` consumers use the published Kuromoji analyzer installed as
+a development dependency. They are included in `npm test` and `npm run test:types`
+and check CommonJS and native ESM types and conversion with a real dictionary.
+
+## Commit Messages
+
+Write commit messages in English and follow the Conventional Commits format:
+
+```text
+<type>(optional scope): <description>
+```
+
+Common types include `feat`, `fix`, `docs`, `test`, `refactor`, `build`, `ci`,
+and `chore`.
 
 ## Pull Request Process
 
 ### Before Submitting
 
- * **Pull requests to the `master` branch will be closed.** Please submit all pull requests to the `dev` branch.
- * **DO NOT** submit changes to the generated files. Instead only change
-`src/*.js` and run the tests.
+ * Submit pull requests to the `master` branch.
+ * **DO NOT** submit changes to generated files in `lib/` or `dist/`.
+   Change the source, tests, documentation, or build configuration instead.
 
 ### Pull request - Submission
 
@@ -55,11 +79,11 @@ npm run test
 2. If you cloned a while ago, get the latest changes from upstream:
 
    ```bash
-   git checkout <your-dev-branch>
-   git pull upstream dev
+   git checkout master
+   git pull upstream master
    ```
 
-3. Create a new topic branch (off the main project development branch) to
+3. Create a new topic branch (off the default branch) to
    contain your feature, change, or fix:
 
    ```bash
@@ -67,14 +91,15 @@ npm run test
    ```
 4. Make sure the tests are robust and passed. And refine the documents if needed.
 
-5. Commit your changes in logical chunks.      Use Git's
+5. Commit your changes in logical chunks using the commit message convention
+   above. Use Git's
    [interactive rebase](https://help.github.com/articles/interactive-rebase)
    feature to tidy up your commits before making them public.
 
-6. Locally merge (or rebase) the upstream development branch into your topic branch:
+6. Locally merge (or rebase) the upstream default branch into your topic branch:
 
    ```bash
-   git pull [--rebase] upstream dev
+   git pull [--rebase] upstream master
    ```
 
 7. Push your topic branch up to your fork:
@@ -83,11 +108,11 @@ npm run test
    git push origin <topic-branch-name>
    ```
 
-8. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) to `dev` branch with a clear title and description.
+8. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) to the `master` branch with a clear title and description.
 
 ## Code Style
 
-This repository uses `eslint` to maintain code style and consistency. `airbnb-base` and some additional rules are used as a guideline.
+This repository uses `eslint` to maintain code style and consistency.
 
 ## How to submit new analyzer plugins
 

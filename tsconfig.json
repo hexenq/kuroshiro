@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "target": "ES2015",
+    "lib": ["ES2015"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "moduleDetection": "legacy",
+    "types": [],
+    "paths": {
+      "kuroshiro": ["./index.d.ts"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.cts", "**/*.mts"],
+  "exclude": ["node_modules", "lib", "dist", "coverage", "tmp"]
+}

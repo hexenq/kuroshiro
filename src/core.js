@@ -15,10 +15,50 @@ import {
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,
-    kanaToHiragna,
+    kanaToHiragana,
     kanaToKatakana,
     kanaToRomaji
 } from "./util";
+
+/**
+ * Keep a lone sokuon with the following Japanese mora for romaji output.
+ * For example: 座[suwa] って[tte], 真[ma] っ赤[kka], 買[ka] っちゃ[tcha].
+ * Do not cross non-Japanese boundaries or invent a reading for a stranded
+ * sokuon. Normal/spaced modes and hiragana/katakana output are unaffected.
+ *
+ * @param {Array} notations [basic, basic_type, notation, pronunciation]
+ * @param {string} system Romanization system
+ * @returns {Array} Notations with eligible sokuon merged forward
+ */
+const mergeSokuonForward = function (notations, system) {
+    const merged = [];
+    for (let i = 0; i < notations.length; i++) {
+        const current = notations[i];
+        const next = notations[i + 1];
+        if (current[1] !== 2 || !/^[っッ]$/.test(current[3])
+            || !next || next[1] === 3 || !next[3]
+            || ![...next[3]].every(isKana) || /^[っッ]/.test(next[3])
+            || !/^[bcdfghjklmnpqrstvwxyz]/.test(toRawRomaji(next[3], system))) {
+            merged.push(current);
+            continue;
+        }
+
+        const group = [current[0] + next[0], next[1], current[2] + next[2], current[3] + next[3]];
+        i++;
+        // Kana notations are split by character. Include the small kana in
+        // っちゃ / っしょ / ッティ instead of producing tchi + ya, etc.
+        const small = notations[i + 1];
+        if (next[1] === 2 && next[3].length === 1 && small && small[1] === 2
+            && /^[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]$/.test(small[3])) {
+            group[0] += small[0];
+            group[2] += small[2];
+            group[3] += small[3];
+            i++;
+        }
+        merged.push(group);
+    }
+    return merged;
+};
 
 /**
  * Kuroshiro Class
@@ -212,6 +252,13 @@ class Kuroshiro {
                         }
                         break;
                     case 2:
+                        // Readings may omit punctuation or expand kana. Keep the token
+                        // whole when its reading or pronunciation cannot align by length.
+                        if (tokens[i].reading.length !== tokens[i].surface_form.length
+                            || (tokens[i].pronunciation && tokens[i].pronunciation.length !== tokens[i].surface_form.length)) {
+                            notations.push([tokens[i].surface_form, 2, toRawHiragana(tokens[i].reading), tokens[i].pronunciation || tokens[i].reading]);
+                            break;
+                        }
                         for (let c2 = 0; c2 < tokens[i].surface_form.length; c2++) {
                             notations.push([tokens[i].surface_form[c2], 2, toRawHiragana(tokens[i].reading[c2]), (tokens[i].pronunciation && tokens[i].pronunciation[c2]) || tokens[i].reading[c2]]);
                         }
@@ -249,24 +296,28 @@ class Kuroshiro {
                         }
                     }
                     return result;
-                case "romaji":
+                case "romaji": {
+                    // A lone sokuon has no reading of its own; romanising
+                    // it in isolation yields "tsu". See mergeSokuonForward.
+                    const romajiNotations = mergeSokuonForward(notations, options.romajiSystem);
                     if (options.mode === "okurigana") {
-                        for (let n2 = 0; n2 < notations.length; n2++) {
-                            if (notations[n2][1] !== 1) {
-                                result += notations[n2][0];
+                        for (let n2 = 0; n2 < romajiNotations.length; n2++) {
+                            if (romajiNotations[n2][1] !== 1) {
+                                result += romajiNotations[n2][0];
                             }
                             else {
-                                result += notations[n2][0] + options.delimiter_start + toRawRomaji(notations[n2][3], options.romajiSystem) + options.delimiter_end;
+                                result += romajiNotations[n2][0] + options.delimiter_start + toRawRomaji(romajiNotations[n2][3], options.romajiSystem) + options.delimiter_end;
                             }
                         }
                     }
                     else { // furigana
                         result += "<ruby>";
-                        for (let n3 = 0; n3 < notations.length; n3++) {
-                            result += `${notations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(notations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
+                        for (let n3 = 0; n3 < romajiNotations.length; n3++) {
+                            result += `${romajiNotations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(romajiNotations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
                         }
                         result += "</ruby>";
                     }
+                }
                     return result;
                 case "hiragana":
                     if (options.mode === "okurigana") {
@@ -308,7 +359,7 @@ const Util = {
     hasKana,
     hasKanji,
     hasJapanese,
-    kanaToHiragna,
+    kanaToHiragana,
     kanaToKatakana,
     kanaToRomaji
 };

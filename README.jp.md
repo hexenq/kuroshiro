@@ -2,15 +2,13 @@
 
 # kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
-[![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
-[![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
-[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
+[![CI](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml/badge.svg)](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/kuroshiro.svg)](https://www.npmjs.com/package/kuroshiro)
+[![License](https://img.shields.io/github/license/hexenq/kuroshiro.svg)](LICENSE)
 
 kuroshiroは日本語文をローマ字や仮名なとに変換できるライブラリです。フリガナ・送り仮名の機能も搭載します。
 
-*ほかの言語：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md)。*
+*ほかの言語：[English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md)。*
 
 ## デモ
 オンラインデモは[こちら](https://kuroshiro.org/#demo)です。
@@ -22,11 +20,13 @@ kuroshiroは日本語文をローマ字や仮名なとに変換できるライ�
 - 🆕複数のローマ字表記法をサポート
 - 実用ツール付き
 
-## バッジョン1.xでの重大な変更
-- 形態素解析器がルビロジックから分離される。それゆえ、様々な形態素解析器（[レディーメイド](#形態素解析器プラグイン)も[カスタマイズ](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins)も）を利用できることになります。
-- ES2017の新機能「async/await」を利用します
-- CommonJSからES Modulesへ移行します
-    
+## 1.x からの移行
+
+- 2.x には Node.js 22+、または Promise を含む ES2015 をネイティブにサポートするブラウザが必要です。Internet Explorer はサポートしません。解析器の動作環境も別途確認してください。
+- `Kuroshiro.Util.kanaToHiragna(...)` を `Kuroshiro.Util.kanaToHiragana(...)` に置き換えてください。旧名は削除されています。
+- CommonJS の `require`、ESM のデフォルトインポート、ブラウザのグローバル変数 `Kuroshiro`、非同期の `init()` / `convert()` API は引き続き利用できます。
+- TypeScript 型定義を同梱しています。[TypeScript の使い方](README.md#typescript)も参照してください。以下の例では、型定義を同梱する Kuromoji 2.0 beta を使用します。
+
 ## 形態素解析器プラグイン
 *始まる前にプラグインの適合性をチェックしてください*
 
@@ -34,13 +34,15 @@ kuroshiroは日本語文をローマ字や仮名なとに変換できるライ�
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
 |Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+|Yahoo Web API (メンテナンス休止中)|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+
+Yahoo Web API 解析器の API 移行は未完了で、現在メンテナンスを休止しています。新規プロジェクトでの利用は推奨しません。詳しくは[メンテナンス状況](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi#maintenance-status)をご覧ください。
 
 ## 使い方
 ### Node.js (又はWebpackなどのモジュールバンドラを使ってる時)
 npmでインストール:
 ```sh
-$ npm install kuroshiro
+$ npm install kuroshiro@beta kuroshiro-analyzer-kuromoji@beta
 ```
 
 kuroshiroをロードします:
@@ -73,7 +75,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
 
 ### ブラウザ
-`dist/kuroshiro.min.js`を導入し (その前に`npm install`と`npm run build`を通じて`kuroshiro.min.js`を生成します)、そしてHTMLに:
+インストールした npm パッケージ内の `dist/kuroshiro.min.js` を使用し、HTML に追加します：
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
 ```
@@ -143,14 +145,14 @@ __例__
 
 ```js
 // normal (一般)
-kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
+kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"normal", to:"hiragana"});
 // 結果：かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！
 ```
 
 ```js
 // spaced (スペースで組み分け)
-kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
-// 結果：かんじとれ たら て を つなご う 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
+kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"spaced", to:"hiragana"});
+// 結果：かんじとれ たら て を つなごう 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
 ```
 
 ```js
@@ -168,7 +170,7 @@ kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生の�
 ### 実用ツール
 __例__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 入力文字はひらがなかどうかを判断します。
@@ -200,7 +202,7 @@ const result = Kuroshiro.Util.isHiragana("あ"));
 #### hasJapanese(str)
 入力文字列に日本語があるかどうかを確認する。
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 入力仮名文字列をひらがなへ変換します。
 
 #### kanaToKatakana(str)

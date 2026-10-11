@@ -2,15 +2,13 @@
 
 # Kuroshiro
 
-[![Build Status](https://travis-ci.org/hexenq/kuroshiro.svg?branch=master)](https://travis-ci.org/hexenq/kuroshiro)
-[![Coverage Status](https://coveralls.io/repos/hexenq/kuroshiro/badge.svg)](https://coveralls.io/r/hexenq/kuroshiro)
-[![npm version](https://badge.fury.io/js/kuroshiro.svg)](http://badge.fury.io/js/kuroshiro)
-[![Join the chat at https://gitter.im/hexenq/kuroshiro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hexenq/kuroshiro)
-[![License](https://img.shields.io/github/license/lassjs/lass.svg)](LICENSE)
+[![CI](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml/badge.svg)](https://github.com/hexenq/kuroshiro/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/kuroshiro.svg)](https://www.npmjs.com/package/kuroshiro)
+[![License](https://img.shields.io/github/license/hexenq/kuroshiro.svg)](LICENSE)
 
 la Kuroshiro estas Japanalingvo kodlibrejo por konverti Japanajn frazojn al Hiraganao, Katakanao aŭ Romaĝio, kaj ankaŭ subtenas furiganaon kaj okuriganaon.
 
-*Legi ĉi tion per aliaj lingvoj: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md).*
+*Legi ĉi tion per aliaj lingvoj: [English](README.md), [日本語](README.jp.md), [简体中文](README.zh-cn.md), [繁體中文](README.zh-tw.md), [Esperanto](README.eo-eo.md), [한국어](README.ko-kr.md).*
 
 ## Ekzempla Paĝo
 Vidi la ekzemplan paĝon [ĉi tie](https://kuroshiro.org/#demo).
@@ -22,24 +20,28 @@ Vidi la ekzemplan paĝon [ĉi tie](https://kuroshiro.org/#demo).
 - 🆕Multaj romanaskriptkonvertaj sistemoj
 - Utilaj Japanalingvaj iloj
 
-## Gravaj Ŝanĝoj je 1.x
-- Aparta lingvasttrukturametoda ilo kaj fonetika notacia logiko por eblegi la uzaton de multaj lingvastrukturaj metodoj. ([finitaj iloj](#ready-made-analyzer-plugins) or [personigitaj iloj](CONTRIBUTING.md#how-to-submit-new-analyzer-plugins))
-- ES8/ES2017 por uzi "async/await" funkciojn
-- Uzu la modulon ES6 anstataŭ CommonJS
-    
+## Migrado de 1.x
+
+- Versio 2 postulas Node.js 22+ aŭ retumilon kun denaska subteno por ES2015, inkluzive de Promise. Internet Explorer ne estas subtenata. Kontrolu ankaŭ la postulojn de la analizilo.
+- Anstataŭigu `Kuroshiro.Util.kanaToHiragna(...)` per `Kuroshiro.Util.kanaToHiragana(...)`; la malnova nomo estas forigita.
+- CommonJS `require`, defaŭltaj ESM-importoj, la retumila tutmonda variablo `Kuroshiro` kaj la nesinkronaj API-metodoj `init()` / `convert()` restas subtenataj.
+- La pakaĵo inkluzivas TypeScript-tipdeklarojn; vidu [uzadon kun TypeScript](README.md#typescript). La sekvaj ekzemploj uzas Kuromoji 2.0 beta, kiu ankaŭ inkluzivas tipdeklarojn.
+
 ## Finitaj Analizilaj (Lingvastrukturaj) Iloj
 *Antaŭ uzi ilon, bonvolu certiĝi pri mediakongrueco*
 | Analizilo | Node.js Uzadeblo | Retumilo Uzadeblo | Plugin Repo | Programisto |
 |---|---|---|---|---|
 |Kuromoji|✓|✓|[kuroshiro-analyzer-kuromoji](https://github.com/hexenq/kuroshiro-analyzer-kuromoji)|[Hexen Qi](https://github.com/hexenq)|
 |Mecab|✓|✗|[kuroshiro-analyzer-mecab](https://github.com/hexenq/kuroshiro-analyzer-mecab)|[Hexen Qi](https://github.com/hexenq)|
-|Yahoo Web API|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+|Yahoo Web API (prizorgado paŭzita)|✓|✗|[kuroshiro-analyzer-yahoo-webapi](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi)|[Hexen Qi](https://github.com/hexenq)|
+
+La migrado de la analizilo Yahoo Web API al la nova API ankoraŭ ne finiĝis, kaj ĝia prizorgado estas paŭzita. Ĝi ne estas rekomendata por novaj projektoj. Vidu la [staton de prizorgado](https://github.com/hexenq/kuroshiro-analyzer-yahoo-webapi#maintenance-status).
 
 ## Uzado
 ### Node.js (aŭ per "module bundler"-ilo (kiel Webpack))
 Instali per npm pako-administrilo:
 ```sh
-$ npm install kuroshiro
+$ npm install kuroshiro@beta kuroshiro-analyzer-kuromoji@beta
 ```
     
 Ŝargi la kodotekon:
@@ -72,7 +74,7 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 ```
     
 ### Retumilo
-Aldoni `dist/kuroshiro.min.js` al via "frontend-a projekto" (vi povas antaŭe kompili la originalan kodon per `npm run build` post `npm install`), kaj en via HTML:
+Uzu `dist/kuroshiro.min.js` el la instalita npm-pakaĵo kaj aldonu ĝin al via HTML:
 ```html
 <script src="url/to/kuroshiro.min.js"></script>
 ```
@@ -142,14 +144,14 @@ __Ekzemploj__
 
 ```js
 // normal
-await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
+await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"normal", to:"hiragana"});
 // rezulto：かんじとれたらてをつなごう、かさなるのはじんせいのライン and レミリアさいこう！
 ```
 
 ```js
 // spaced
-await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"okurigana", to:"hiragana"});
-// rezulto：かんじとれ たら て を つなご う 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
+await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", {mode:"spaced", to:"hiragana"});
+// rezulto：かんじとれ たら て を つなごう 、 かさなる の は じんせい の ライン   and   レミ リア さいこう ！
 ```
 
 ```js
@@ -168,7 +170,7 @@ await kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人�
 
 __Ekzemploj__
 ```js
-const result = Kuroshiro.Util.isHiragana("あ"));
+const result = Kuroshiro.Util.isHiragana("あ");
 ```
 #### isHiragana(char)
 Determini se enigita litero estas hiragana.
@@ -200,7 +202,7 @@ Determini se enigita frazo enhavas kanĵion.
 #### hasJapanese(str)
 Determini se enigita frazo enhavas Japanolingvajn Frazojn.
 
-#### kanaToHiragna(str)
+#### kanaToHiragana(str)
 Konverti enigitan kanan frazon al hiragana
 
 #### kanaToKatakana(str)

@@ -12,7 +12,7 @@ declare class Kuroshiro {
 declare namespace Kuroshiro {
     type Target = "hiragana" | "katakana" | "romaji";
     type Mode = "normal" | "spaced" | "okurigana" | "furigana";
-    type RomajiSystem = "hepburn" | "nippon" | "passport";
+    type RomajiSystem = "hepburn" | "nippon" | "passport" | "jis";
 
     interface ConvertOptions {
         to?: Target;

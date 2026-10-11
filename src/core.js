@@ -99,7 +99,7 @@ class Kuroshiro {
      * @param {Object} [options] Settings Object
      * @param {string} [options.to="hiragana"] Target syllabary ["hiragana"|"katakana"|"romaji"]
      * @param {string} [options.mode="normal"] Convert mode ["normal"|"spaced"|"okurigana"|"furigana"]
-     * @param {string} [options.romajiSystem="hepburn"] Romanization System ["nippon"|"passport"|"hepburn"]
+     * @param {string} [options.romajiSystem="hepburn"] Romanization System ["nippon"|"passport"|"hepburn"|"jis"]
      * @param {string} [options.delimiter_start="("] Delimiter(Start)
      * @param {string} [options.delimiter_end=")"] Delimiter(End)
      * @returns {Promise} Promise object represents the result of conversion
@@ -140,7 +140,12 @@ class Kuroshiro {
                     const romajiConv = (token) => {
                         let preToken;
                         if (hasJapanese(token.surface_form)) {
-                            preToken = token.pronunciation || token.reading;
+                            if (options.romajiSystem === ROMANIZATION_SYSTEM.JIS) {
+                                preToken = token.reading || token.pronunciation;
+                            }
+                            else {
+                                preToken = token.pronunciation || token.reading;
+                            }
                         }
                         else {
                             preToken = token.surface_form;
@@ -295,20 +300,28 @@ class Kuroshiro {
                     // A lone sokuon has no reading of its own; romanising
                     // it in isolation yields "tsu". See mergeSokuonForward.
                     const romajiNotations = mergeSokuonForward(notations, options.romajiSystem);
+                    // JIS needs to romanize the reading field, 
+                    // other methods romanize the pronunciation field
+                    let romanizationTargets;                    
+                    if (options.romajiSystem === ROMANIZATION_SYSTEM.JIS) {
+                        romanizationTargets = romajiNotations.map(notation => notation[2]);
+                    } else {
+                        romanizationTargets = romajiNotations.map(notation => notation[3]);
+                    }
                     if (options.mode === "okurigana") {
                         for (let n2 = 0; n2 < romajiNotations.length; n2++) {
                             if (romajiNotations[n2][1] !== 1) {
                                 result += romajiNotations[n2][0];
                             }
                             else {
-                                result += romajiNotations[n2][0] + options.delimiter_start + toRawRomaji(romajiNotations[n2][3], options.romajiSystem) + options.delimiter_end;
+                                result += romajiNotations[n2][0] + options.delimiter_start + toRawRomaji(romanizationTargets[n2], options.romajiSystem) + options.delimiter_end;
                             }
                         }
                     }
                     else { // furigana
                         result += "<ruby>";
                         for (let n3 = 0; n3 < romajiNotations.length; n3++) {
-                            result += `${romajiNotations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(romajiNotations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
+                            result += `${romajiNotations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(romanizationTargets[n3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
                         }
                         result += "</ruby>";
                     }

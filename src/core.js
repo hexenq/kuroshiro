@@ -32,17 +32,21 @@ import {
  */
 const mergeKanaNotations = function (notations, system) {
     const kana = [];
+    // Callers ensure current is kana and next is kana or kanji.
+    // Inherit next's type so a group containing kanji still receives okurigana annotations.
     const join = (current, next) => [current[0] + next[0], next[1], current[2] + next[2], current[3] + next[3]];
     for (let i = 0; i < notations.length; i++) {
         let current = notations[i];
         let next = notations[i + 1];
         while (current[1] === 2 && next && next[1] === 2) {
-            const combination = current[0].length === current[2].length && current[0].length === current[3].length
-                && next[0].length === next[2].length && next[0].length === next[3].length
-                && isKana(current[0].slice(-1)) && isKana(next[0].slice(0, 1))
+            const aligned = current[0].length === current[2].length && current[0].length === current[3].length
+                && next[0].length === next[2].length && next[0].length === next[3].length;
+            const combination = aligned && isKana(current[0].slice(-1)) && isKana(next[0].slice(0, 1))
                 && isKanaCombination(current[3].slice(-1) + next[3].slice(0, 1));
+            // In words such as ありがとう, the written vowel kana is pronounced ー.
             const longVowel = !/[っッ]$/.test(current[3])
-                && next[0][0] === "ー" && next[3][0] === "ー"
+                && next[3][0] === "ー"
+                && (next[0][0] === "ー" || (aligned && /[ぁ-ゖァ-ヺ]$/.test(current[0]) && /^[ぁ-おァ-オ]/.test(next[0])))
                 && /[aeiou]$/.test(toRawRomaji(current[3], system));
             if (!combination && !longVowel) break;
             current = join(current, next);

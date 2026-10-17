@@ -349,6 +349,19 @@ describe("Romaji annotation context", () => {
         });
 
         it.each([
+            ["ありがとう", "あ<rt>a</rt>り<rt>ri</rt>が<rt>ga</rt>", "とう", "ariga", "tō", "to", "tô"],
+            ["おはよう", "お<rt>o</rt>は<rt>ha</rt>", "よう", "oha", "yō", "yo", "yô"],
+            ["おこう", "お<rt>o</rt>", "こう", "o", "kō", "ko", "kô"]
+        ])("groups vowel kana pronounced as a long vowel in %s", async (text, prefix, kana, romajiPrefix, hepburn, passport, nippon) => {
+            const reading = { hepburn, passport, nippon }[romajiSystem];
+            const options = { to: "romaji", romajiSystem };
+            expect(plain(await kuroshiro.convert(text, { ...options, mode: "furigana" }))).toBe(`${prefix}${kana}<rt>${reading}</rt>`);
+            expect(await kuroshiro.convert(text, options)).toBe(romajiPrefix + reading);
+            expect(await kuroshiro.convert(text, { ...options, mode: "spaced" })).toBe(romajiPrefix + reading);
+            expect(await kuroshiro.convert(text, { ...options, mode: "okurigana" })).toBe(text);
+        });
+
+        it.each([
             ["ふぁ", "fa", "fua", "hwa"],
             ["ふぁん", "fan", "fuan", "hwan"],
             ["てぃー", "tī", "tei", "teî"],
@@ -454,6 +467,18 @@ describe("Romaji annotation context", () => {
         expect(await instance.convert("ふぁ", { to: "romaji" })).toBe("fūa");
         expect(await instance.convert("ふぁ", { to: "romaji", mode: "spaced" })).toBe("fū a");
         expect(plain(await instance.convert("ふぁ", { to: "romaji", mode: "furigana" }))).toBe("ふ<rt>fū</rt>ぁ<rt>a</rt>");
+    });
+
+    it.each([
+        ["せい", "セー", "せい<rt>sē</rt>"],
+        ["ねぇ", "ネー", "ねぇ<rt>nē</rt>"],
+        ["コウ", "コー", "コウ<rt>kō</rt>"],
+        ["こう", undefined, "こ<rt>ko</rt>う<rt>u</rt>"],
+        ["こaう", "コaー", "こ<rt>ko</rt>a<rt>a</rt>う<rt>ー</rt>"]
+    ])("uses supplied pronunciation for long vowels in %s", async (surface_form, pronunciation, expected) => {
+        const instance = new Kuroshiro();
+        await instance.init({ init: async () => {}, parse: async () => [{ surface_form, pronunciation }] });
+        expect(plain(await instance.convert(surface_form, { to: "romaji", mode: "furigana" }))).toBe(expected);
     });
 });
 

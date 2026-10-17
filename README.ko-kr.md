@@ -99,15 +99,20 @@ HTML에서 script 태그로 불러옵니다.
 var kuroshiro = new Kuroshiro();
 ```
 
+`node_modules/kuromoji/dict/`의 사전 파일을 `public/dict/` 같은 공개 디렉터리에 복사하고, `dictPath`를 해당 파일의 URL(이 예제에서는 `/dict/`)로 설정하세요. 자세한 내용은 [브라우저 사전 배포 안내](https://github.com/hexenq/kuroshiro-analyzer-kuromoji#browser-dictionary-setup)를 참고하세요.
+
 kuroshiro를 객체화한 분석기로 초기화하고, 변환합니다.
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict/" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
     .then(function(result){
         console.log(result);
     })
+    .catch(function (error) {
+        console.error(error);
+    });
 ```
 
 ## API 설명

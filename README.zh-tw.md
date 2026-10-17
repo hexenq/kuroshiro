@@ -91,15 +91,20 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 var kuroshiro = new Kuroshiro();
 ```
 
+將 `node_modules/kuromoji/dict/` 中的字典檔案複製到 `public/dict/` 等公開目錄，`dictPath` 填寫對應的存取路徑（本例為 `/dict/`）。詳見[瀏覽器字典部署說明](https://github.com/hexenq/kuroshiro-analyzer-kuromoji#browser-dictionary-setup)。
+
 使用一個解析器實例來初始化kuroshiro，然後進行轉換操作:
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict/" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
     .then(function(result){
         console.log(result);
     })
+    .catch(function (error) {
+        console.error(error);
+    });
 ```
 
 ## API說明

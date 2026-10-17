@@ -95,15 +95,20 @@ Instantiate:
 var kuroshiro = new Kuroshiro();
 ```
 
+Copy the dictionary files from `node_modules/kuromoji/dict/` to a public directory such as `public/dict/`. Set `dictPath` to their URL (`/dict/` in this example); see the [browser dictionary guide](https://github.com/hexenq/kuroshiro-analyzer-kuromoji#browser-dictionary-setup).
+
 Initialize kuroshiro with an instance of analyzer, then convert what you want:
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict/" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
     .then(function(result){
         console.log(result);
     })
+    .catch(function (error) {
+        console.error(error);
+    });
 ```
 
 ### TypeScript

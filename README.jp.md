@@ -90,15 +90,20 @@ const result = await kuroshiro.convert("感じ取れたら手を繋ごう、重�
 var kuroshiro = new Kuroshiro();
 ```
 
+`node_modules/kuromoji/dict/` の辞書ファイルを `public/dict/` などの公開ディレクトリにコピーし、`dictPath` に配信先のURL（この例では `/dict/`）を指定してください。詳細は[ブラウザー向けの辞書配置ガイド](https://github.com/hexenq/kuroshiro-analyzer-kuromoji#browser-dictionary-setup)を参照してください。
+
 形態素解析器のインスタンスを引数にしてkuroshiroを初期化するから，変換を実行します:
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict/" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
     .then(function(result){
         console.log(result);
     })
+    .catch(function (error) {
+        console.error(error);
+    });
 ```
 
 ## APIの説明

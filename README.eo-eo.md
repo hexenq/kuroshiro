@@ -89,15 +89,20 @@ Por fari kiel en ĉi ekzemplo, vi devas ankaŭ inkluzivi `kuroshiro-analyzer-kur
 var kuroshiro = new Kuroshiro();
 ```
 
+Kopiu la vortardosierojn el `node_modules/kuromoji/dict/` al publike servata dosierujo, ekzemple `public/dict/`. Agordu `dictPath` al ilia URL (`/dict/` en ĉi tiu ekzemplo); vidu la [gvidilon pri retumila vortaro](https://github.com/hexenq/kuroshiro-analyzer-kuromoji#browser-dictionary-setup).
+
 Iniciati kuroshiro per ŝargo de analizilo, poste konverti:
 ```js
-kuroshiro.init(new KuromojiAnalyzer({ dictPath: "url/to/dictFiles" }))
+kuroshiro.init(new KuromojiAnalyzer({ dictPath: "/dict/" }))
     .then(function () {
         return kuroshiro.convert("感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！", { to: "hiragana" });
     })
     .then(function(result){
         console.log(result);
     })
+    .catch(function (error) {
+        console.error(error);
+    });
 ```
 
 ## API

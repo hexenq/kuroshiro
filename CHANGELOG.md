@@ -1,3 +1,19 @@
+<a name="2.0.0-beta.3"></a>
+## [2.0.0-beta.3](https://github.com/hexenq/kuroshiro/compare/2.0.0-beta.2...2.0.0-beta.3) (2026-10-17)
+
+### Bug Fixes
+
+* Preserve kana tokens when their written form and reading have different lengths, avoiding broken annotations.
+* Keep kana combinations, sokuon, and pronounced long vowels together when romanizing tokens and annotations.
+* Preserve pronunciation information and syllabic `n` context across conversion modes, including mixed kanji and kana annotations.
+* Use an apostrophe for sokuon that cannot double a following consonant, instead of adding a `tsu` syllable or repeating a vowel.
+
+### Security
+
+* Update source-map-js in development dependencies to address a denial-of-service vulnerability ([#132](https://github.com/hexenq/kuroshiro/pull/132)).
+
+Note: Romanization output and annotation grouping change in this release. Unmatched sokuon use an apostrophe in all three systems, for example `あっ` → `a'` and `っい` → `'i`.
+
 <a name="2.0.0-beta.2"></a>
 ## [2.0.0-beta.2](https://github.com/hexenq/kuroshiro/compare/2.0.0-beta.1...2.0.0-beta.2) (2026-10-05)
 

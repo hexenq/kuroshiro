@@ -7,10 +7,10 @@ self.onmessage = async function ({data}) {
         if (type === 'init') {
             if (!ready) {
                 ready = (async () => {
-                    importScripts('vendor/kuroshiro.min.js?v=2.0.0-beta.2', 'vendor/kuroshiro-analyzer-kuromoji.min.js?v=2.0.0-beta.2');
+                    importScripts('vendor/kuroshiro.min.js?v=2.0.0-beta.3', 'vendor/kuroshiro-analyzer-kuromoji.min.js?v=2.0.0-beta.3');
                     const Kuroshiro = self.Kuroshiro.default || self.Kuroshiro;
                     kuroshiro = new Kuroshiro();
-                    // A pathname avoids kuromoji's path.join corruption of absolute URLs.
+                    // Resolve the same-origin dictionary relative to this worker.
                     const dictPath = new URL('vendor/dict/', self.location.href).pathname;
                     await kuroshiro.init(new self.KuromojiAnalyzer({dictPath}));
                 })();

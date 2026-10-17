@@ -8,6 +8,10 @@ for (const name of ['kuroshiro', 'kuroshiro-analyzer-kuromoji']) {
     fs.copyFileSync(path.join(source, 'dist', name + '.min.js'), path.join(target, name + '.min.js'));
     fs.copyFileSync(path.join(source, 'LICENSE'), path.join(target, name + '-LICENSE'));
 }
+fs.copyFileSync(
+    path.join(root, 'node_modules/kuroshiro-analyzer-kuromoji/dist/THIRD_PARTY_LICENSES.md'),
+    path.join(target, 'THIRD_PARTY_LICENSES.md')
+);
 const kuromoji = path.join(root, 'node_modules/kuromoji');
 fs.cpSync(path.join(kuromoji, 'dict'), path.join(target, 'dict'), {recursive:true});
 fs.copyFileSync(path.join(kuromoji, 'LICENSE-2.0.txt'), path.join(target, 'kuromoji-LICENSE'));

@@ -5,10 +5,18 @@ const path = require('node:path');
 const vm = require('node:vm');
 const root = path.resolve(__dirname,'..');
 
+test('build retains the browser bundle third-party license notice', () => {
+    const notice = 'THIRD_PARTY_LICENSES.md';
+    const source = fs.readFileSync(path.join(root, 'node_modules/kuroshiro-analyzer-kuromoji/dist', notice));
+    const built = fs.readFileSync(path.join(root, 'assets/vendor', notice));
+    assert.ok(source.length > 0);
+    assert.ok(built.equals(source));
+});
+
 test('worker uses real published bundles and dictionaries for all output modes', async () => {
     for (const name of ['kuroshiro', 'kuroshiro-analyzer-kuromoji']) {
         const installed = require(path.join(root, 'node_modules', name, 'package.json'));
-        assert.equal(installed.version, '2.0.0-beta.2');
+        assert.equal(installed.version, '2.0.0-beta.3');
         const bundle = name + '.min.js';
         assert.ok(fs.readFileSync(path.join(root, 'assets/vendor', bundle)).equals(fs.readFileSync(path.join(root, 'node_modules', name, 'dist', bundle))));
     }
@@ -19,7 +27,7 @@ test('worker uses real published bundles and dictionaries for all output modes',
     context.postMessage = message => messages.push(message);
     context.importScripts = (...names) => {
         for (const name of names) {
-            assert.equal(new URL(name, context.location.href).searchParams.get('v'), '2.0.0-beta.2');
+            assert.equal(new URL(name, context.location.href).searchParams.get('v'), '2.0.0-beta.3');
             vm.runInContext(fs.readFileSync(path.join(root,'assets',name.split('?')[0]),'utf8'),context);
         }
     };

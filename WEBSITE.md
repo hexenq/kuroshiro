@@ -10,7 +10,7 @@ Run `npm ci`, `npm run build`, and `npm test` on Node.js 22 or newer. `npm run p
 
 The playground and homepage quick-start use this default sample: `感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！`. Use the same full sentence for initial manual page tests, leaving it in the input after testing. Focused unit tests may use shorter strings or adversarial input.
 
-`npm run build` copies the pinned published UMD libraries, Kuromoji dictionary and license notices to ignored `assets/vendor/`. These are generated assets, not hand-edited source. The worker library URLs include the pinned package versions; the homepage scripts, styles and worker URL use the deployment revision to refresh browser caches. The compressed dictionary is approximately 17 MiB. HTTP caching is controlled by the eventual static host; no permanent/offline cache guarantee is made.
+`npm run build` copies the pinned published UMD libraries, Kuromoji dictionary and license notices (including the analyzer bundle's `THIRD_PARTY_LICENSES.md`) to ignored `assets/vendor/`. These are generated assets, not hand-edited source. The worker library URLs include the pinned package versions; the homepage scripts, styles and worker URL use the deployment revision to refresh browser caches. The compressed dictionary is approximately 17 MiB. HTTP caching is controlled by the eventual static host; no permanent/offline cache guarantee is made.
 
 The worker handles dictionary loading and conversion off the UI thread. Loading can be cancelled or retried; a 180-second initialization deadline and 30-second conversion deadline terminate stalled workers. Text is limited to 5,000 UTF-16 code units. Plain results use textContent; furigana output permits only new ruby/rt/rp elements without attributes.
 
@@ -20,7 +20,7 @@ Before the first production merge, obtain explicit approval to go live, set repo
 
 After merging, verify the successful deployment and test dictionary loading, conversion and documentation links on the real domain. If rollback is necessary, revert the relevant website commits through a reviewed PR; the same workflow rebuilds and deploys the reverted source. A rollback to the former deployment mechanism also requires restoring its Pages settings, not merely reverting source.
 
-Dependencies pin the published `kuroshiro@2.0.0-beta.2` and `kuroshiro-analyzer-kuromoji@2.0.0-beta.2`. The quick-start uses the npm beta tags; the built demo uses the exact locked versions.
+Dependencies pin the published `kuroshiro@2.0.0-beta.3` and `kuroshiro-analyzer-kuromoji@2.0.0-beta.3`. The quick-start uses the npm beta tags; the built demo uses the exact locked versions.
 
 ## Interface languages
 

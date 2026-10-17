@@ -254,20 +254,26 @@ class Kuroshiro {
                         }
                         const reg = new RegExp(`^${pattern}$`);
                         const matches = reg.exec(toRawHiragana(tokens[i].reading));
-                        if (matches) {
+                        const pronunciation = tokens[i].pronunciation || tokens[i].reading;
+                        const parts = [];
+                        // Split by the written reading, then reuse those offsets for pronunciation.
+                        if (matches && (options.to !== "romaji" || pronunciation.length === tokens[i].reading.length)) {
                             let pickKanji = 1;
+                            let offset = 0;
                             for (let c1 = 0; c1 < subs.length; c1++) {
-                                if (isKanji(subs[c1][0])) {
-                                    notations.push([subs[c1], 1, matches[pickKanji], toRawKatakana(matches[pickKanji])]);
-                                    pickKanji += 1;
-                                }
-                                else {
-                                    notations.push([subs[c1], 2, toRawHiragana(subs[c1]), toRawKatakana(subs[c1])]);
-                                }
+                                const type = isKanji(subs[c1][0]) ? 1 : 2;
+                                const reading = type === 1 ? matches[pickKanji++] : toRawHiragana(subs[c1]);
+                                parts.push([subs[c1], type, reading, pronunciation.slice(offset, offset + reading.length)]);
+                                offset += reading.length;
                             }
                         }
+                        // A long vowel crossing a kanji boundary cannot be annotated separately.
+                        if (parts.length && (options.to !== "romaji" || !parts.some((part, index) =>
+                            part[3][0] === "ー" && (part[1] === 1 || (index > 0 && parts[index - 1][1] === 1))))) {
+                            for (const part of parts) notations.push(part);
+                        }
                         else {
-                            notations.push([tokens[i].surface_form, 1, toRawHiragana(tokens[i].reading), tokens[i].pronunciation || tokens[i].reading]);
+                            notations.push([tokens[i].surface_form, 1, toRawHiragana(tokens[i].reading), pronunciation]);
                         }
                         break;
                     case 2:

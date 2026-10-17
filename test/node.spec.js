@@ -607,16 +607,64 @@ describe("Sokuon romanization", () => {
         });
     });
 
-    describe("known limitation", () => {
-        it("a trailing sokuon has nothing to geminate and is left alone", async () => {
-            // 「あっ」 has no following mora. There is no agreed romanisation
-            // for a stranded sokuon, so this is deliberately not changed.
-            const result = await kuroshiro.convert("あっ", { to: "romaji", mode: "furigana" });
-            expect(plain(result)).toContain("っ<rt>tsu</rt>");
-        });
-    });
-
     describe.each(["hepburn", "passport", "nippon"])("%s boundary regressions", (romajiSystem) => {
+        it.each([["あぁアァ", "a"], ["いぃイィ", "i"], ["うぅウゥ", "u"], ["えぇエェ", "e"], ["おぉオォ", "o"]])("uses an apostrophe before vowels %s", async (kana, vowel) => {
+            const expected = "'" + vowel;
+            for (const suffix of kana + vowel) {
+                expect(Kuroshiro.Util.kanaToRomaji("っ" + suffix, romajiSystem)).toBe(expected);
+                expect(Kuroshiro.Util.kanaToRomaji("ッ" + suffix, romajiSystem)).toBe(expected);
+            }
+            const text = "っ" + kana[0];
+            const instance = new Kuroshiro();
+            await instance.init({ init: async () => {}, parse: async () => [{ surface_form: text }] });
+            const options = { to: "romaji", romajiSystem };
+            expect(await instance.convert(text, options)).toBe(expected);
+            expect(await instance.convert(text, { ...options, mode: "spaced" })).toBe(expected);
+            expect(plain(await instance.convert(text, { ...options, mode: "furigana" }))).toBe(`っ<rt>'</rt>${kana[0]}<rt>${vowel}</rt>`);
+            expect(await instance.convert(text, { ...options, mode: "okurigana" })).toBe(text);
+        });
+
+        it.each([
+            ["ッィー", "'ī", "'i", "'î"],
+            ["ッウィ", "wwi", "'ui", "'ui"],
+            ["ッイェ", "yye", "'ie", "yye"]
+        ])("uses the romanized sound after a sokuon in %s", async (text, hepburn, passport, nippon) => {
+            const expected = { hepburn, passport, nippon }[romajiSystem];
+            const instance = new Kuroshiro();
+            await instance.init({ init: async () => {}, parse: async () => [{ surface_form: text }] });
+            const options = { to: "romaji", romajiSystem };
+            expect(Kuroshiro.Util.kanaToRomaji(text, romajiSystem)).toBe(expected);
+            expect(await instance.convert(text, options)).toBe(expected);
+            const result = await instance.convert(text, { ...options, mode: "furigana" });
+            expect([...result.matchAll(/<rt>(.*?)<\/rt>/g)].map(match => match[1]).join("")).toBe(expected);
+        });
+
+        it.each([
+            ["っ", "'"], ["ッ", "'"], ["あっ", "a'"], ["えっ！", "e'!"],
+            ["あっあ", "a'a"], ["っっい", "''i"], ["っっか", "'kka"]
+        ])("uses the fallback consistently for %s with a real analyzer", async (text, expected) => {
+            const options = { to: "romaji", romajiSystem };
+            expect(Kuroshiro.Util.kanaToRomaji(text, romajiSystem)).toBe(expected);
+            expect(await kuroshiro.convert(text, options)).toBe(expected);
+            expect((await kuroshiro.convert(text, { ...options, mode: "spaced" })).replace(/ /g, "")).toBe(expected);
+            const result = await kuroshiro.convert(text, { ...options, mode: "furigana" });
+            expect([...result.matchAll(/<rt>(.*?)<\/rt>/g)].map(match => match[1]).join("")).toBe(expected);
+            expect(result.replace(/<rp>.*?<\/rp>|<rt>.*?<\/rt>|<\/?ruby>/g, "")).toBe(text);
+            expect(await kuroshiro.convert(text, { ...options, mode: "okurigana" })).toBe(text);
+        });
+
+        it("uses the fallback in kanji annotations without changing kana output", async () => {
+            const instance = new Kuroshiro();
+            // A fixed token isolates a custom analyzer's nonstandard reading.
+            await instance.init({ init: async () => {}, parse: async () => [{ surface_form: "驚", reading: "アッ", pronunciation: "アッ" }] });
+            const options = { to: "romaji", romajiSystem };
+            expect(await instance.convert("驚", options)).toBe("a'");
+            expect(await instance.convert("驚", { ...options, mode: "okurigana" })).toBe("驚(a')");
+            expect(plain(await instance.convert("驚", { ...options, mode: "furigana" }))).toBe("驚<rt>a'</rt>");
+            expect(await instance.convert("驚", { to: "hiragana" })).toBe("あっ");
+            expect(await instance.convert("驚", { to: "katakana" })).toBe("アッ");
+        });
+
         it.each([
             ["座って", "suwatte", "suwatte"],
             ["真っ赤", "makka", "makka"],
@@ -642,8 +690,8 @@ describe("Sokuon romanization", () => {
                 ]
             });
             const result = await instance.convert("っ" + suffix, { to: "romaji", mode: "furigana", romajiSystem });
-            expect(plain(result)).toMatch(/^っ<rt>tsu<\/rt>/);
-            if (suffix === "cat") expect(plain(result)).toBe("っ<rt>tsu</rt>c<rt>c</rt>a<rt>a</rt>t<rt>t</rt>");
+            expect(plain(result)).toMatch(/^っ<rt>'<\/rt>/);
+            if (suffix === "cat") expect(plain(result)).toBe("っ<rt>'</rt>c<rt>c</rt>a<rt>a</rt>t<rt>t</rt>");
         });
 
         it("preserves non-romaji output and kanji-only okurigana annotations", async () => {
@@ -652,7 +700,7 @@ describe("Sokuon romanization", () => {
             expect(plain(await kuroshiro.convert("座って", { ...options, to: "katakana" }))).toBe("座<rt>スワ</rt>って");
             expect(await kuroshiro.convert("真っ赤", { to: "romaji", mode: "okurigana", romajiSystem })).toBe("真(ma)っ赤(kka)");
             expect(await kuroshiro.convert("買っちゃった", { to: "romaji", mode: "okurigana", romajiSystem })).toBe("買(ka)っちゃった");
-            expect(await kuroshiro.convert("あっcat", { to: "romaji", mode: "normal", romajiSystem })).toBe("atsucat");
+            expect(await kuroshiro.convert("あっcat", { to: "romaji", mode: "normal", romajiSystem })).toBe("a'cat");
             expect(await kuroshiro.convert("座って", { to: "romaji", mode: "spaced", romajiSystem })).toBe("suwatte");
         });
     });

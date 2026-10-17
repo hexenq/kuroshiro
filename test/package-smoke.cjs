@@ -39,7 +39,7 @@ async function checkConstructor(Constructor, label) {
     const grouped = await instance.convert("ティッシュ", { to: "romaji", mode: "furigana" });
     assert.ok(grouped.includes("ティ<rp>(</rp><rt>ti</rt>"), `${label}: grouped kana reading`);
     const mixed = await instance.convert("っcat", { to: "romaji", mode: "furigana" });
-    assert.ok(mixed.includes("っ<rp>(</rp><rt>tsu</rt>"), `${label}: preserve Latin boundary`);
+    assert.ok(mixed.includes("っ<rp>(</rp><rt>'</rt>"), `${label}: preserve Latin boundary`);
 }
 
 function globalContext(...aliases) {

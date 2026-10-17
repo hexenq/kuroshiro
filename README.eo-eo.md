@@ -223,12 +223,20 @@ kuroshiro povas uzi tri da Romanaskriptkonvertajn Sistemojn.
 Por vidi la malsamecoj de la tri sistemoj, rigardu [webpage](http://jgrammar.life.coocan.jp/ja/data/rohmaji2.htm).
 
 ### Informo pri Romaĝia Konvertado
-Ne eblas tute konverti __furigana__ precize al __romaĝio__ ĉar furigana ne enhavas kompletan prononcan informon, (Rigardu [なぜ フリガナでは ダメなのか？](https://green.adam.ne.jp/roomazi/onamae.html#naze)) do kuroshiro ne konvertas chōon dum konvertado el furigana (kana) -> romaĝio je ĉiom da sistemoj (Sed, Chōonpu ĉiam konvertas) 
 
-*Ekzemple, vi vidos "kousi", "koushi", "koushi" dum kana konvertado de "こうし" al romaĝio 
-kiam vi uzas `nippon`, `passport`, `hepburn` sistemojn respektive*
+#### Longaj vokaloj
 
-Kanĝip -> romaĝio konvertado __ne estas afektita__.
+Furigano (kana-literumado) ne ĉiam enhavas sufiĉajn prononcajn informojn por distingi longajn vokalojn. Tial rekta konvertado de kana-literumado al romaĝio ne povas fidinde reprodukti la efektivan prononcon. Por pliaj klarigoj, vidu [なぜ フリガナでは ダメなのか？](https://green.adam.ne.jp/roomazi/onamae.html#naze).
+
+Pro tio, `kanaToRomaji()` ne deduktas longajn vokalojn el kana-literumado en iu ajn el la tri sistemoj. La longvokala signo `ー` tamen estas traktata laŭ la elektita sistemo.
+
+Ekzemple, konvertante `こうし` per `kanaToRomaji()`, oni ricevas respektive `kousi`, `koushi` kaj `koushi` en la sistemoj `nippon`, `passport` kaj `hepburn`.
+
+Ĉi tiu limigo de rekta kana-konvertado ne malhelpas `convert()` trakti longajn vokalojn: ĝi uzas prononcajn informojn de la analizilo, se ili disponeblas, ankaŭ dum konvertado de kanĵioj kun aŭ sen prononcaj indikoj. La rezulto do dependas de la prononcaj informoj liveritaj de la analizilo.
+
+#### Sokuon (`っ/ッ`)
+
+Kiam ne eblas duobligi sekvan konsonanton, ĉiuj tri sistemoj uzas `'`, ekzemple `っい` → `'i` kaj `あっ` → `a'`. Tio estas konvencio de kuroshiro, ne aldona prononcata silabo.
 
 ## Kontribui
 Rigardu [CONTRIBUTING](CONTRIBUTING.md).

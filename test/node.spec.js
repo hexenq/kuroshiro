@@ -324,6 +324,139 @@ describe("Kana annotations with unequal reading lengths", () => {
     });
 });
 
+describe("Romaji annotation context", () => {
+    const plain = str => str.replace(/<rp>.*?<\/rp>/g, "").replace(/<\/?ruby>/g, "");
+    let kuroshiro;
+
+    beforeAll(async () => {
+        kuroshiro = new Kuroshiro();
+        await kuroshiro.init(new KuromojiAnalyzer());
+    });
+
+    describe.each(["hepburn", "passport", "nippon"])("%s", (romajiSystem) => {
+        it.each([
+            ["ティッシュ", "ティ<rt>ti</rt>ッシュ<rt>sshu</rt>", "ティ<rt>tei</rt>ッシュ<rt>sshu</rt>", "ティ<rt>tei</rt>ッシュ<rt>ssyu</rt>"],
+            ["ッティー", "ッティー<rt>ttī</rt>", "ッティー<rt>ttei</rt>", "ッティー<rt>tteî</rt>"],
+            ["キャ", "キャ<rt>kya</rt>", "キャ<rt>kya</rt>", "キャ<rt>kya</rt>"],
+            ["ファ", "ファ<rt>fa</rt>", "ファ<rt>fua</rt>", "ファ<rt>hwa</rt>"],
+            ["ふぁ", "ふぁ<rt>fa</rt>", "ふぁ<rt>fua</rt>", "ふぁ<rt>hwa</rt>"],
+            ["ギョーザ", "ギョー<rt>gyō</rt>ザ<rt>za</rt>", "ギョー<rt>gyo</rt>ザ<rt>za</rt>", "ギョー<rt>gyô</rt>ザ<rt>za</rt>"],
+            ["コーヒー", "コー<rt>kō</rt>ヒー<rt>hī</rt>", "コー<rt>ko</rt>ヒー<rt>hi</rt>", "コー<rt>kô</rt>ヒー<rt>hî</rt>"],
+            ["ィ", "ィ<rt>i</rt>", "ィ<rt>i</rt>", "ィ<rt>i</rt>"]
+        ])("groups kana in %s without splitting the reading", async (text, hepburn, passport, nippon) => {
+            const result = await kuroshiro.convert(text, { to: "romaji", mode: "furigana", romajiSystem });
+            expect(plain(result)).toBe({ hepburn, passport, nippon }[romajiSystem]);
+        });
+
+        it.each([
+            ["ふぁ", "fa", "fua", "hwa"],
+            ["ふぁん", "fan", "fuan", "hwan"],
+            ["てぃー", "tī", "tei", "teî"],
+            ["まっちゃ", "matcha", "matcha", "mattya"]
+        ])("keeps kana sounds together across tokenizer boundaries in %s", async (text, hepburn, passport, nippon) => {
+            const expected = { hepburn, passport, nippon }[romajiSystem];
+            const options = { to: "romaji", romajiSystem };
+            expect(await kuroshiro.convert(text, options)).toBe(expected);
+            expect(await kuroshiro.convert(text, { ...options, mode: "spaced" })).toBe(expected);
+            const ruby = await kuroshiro.convert(text, { ...options, mode: "furigana" });
+            expect([...ruby.matchAll(/<rt>(.*?)<\/rt>/g)].map(match => match[1]).join("")).toBe(expected);
+        });
+
+        it.each([
+            ["こんばんは", "konbanwa", "kombanwa", "konbanwa"],
+            ["しんぶん", "shinbun", "shimbun", "sinbun"],
+            ["んあ", "n'a", "na", "n'a"]
+        ])("keeps syllabic n context in %s", async (text, hepburn, passport, nippon) => {
+            const result = await kuroshiro.convert(text, { to: "romaji", mode: "furigana", romajiSystem });
+            const readings = [...result.matchAll(/<rt>(.*?)<\/rt>/g)].map(match => match[1]).join("");
+            expect(readings).toBe({ hepburn, passport, nippon }[romajiSystem]);
+        });
+
+        it.each([
+            ["本も読む", "hon", "hom", "hon", "mo yomu", "も読(yo)む"],
+            ["日本へ行く", "nippon'", "nippon", "nippon'", "e iku", "へ行(i)く"]
+        ])("shares syllabic n context across modes in %s", async (text, hepburn, passport, nippon, spacedSuffix, annotatedSuffix) => {
+            const reading = { hepburn, passport, nippon }[romajiSystem];
+            const romaji = reading + spacedSuffix.replace(/ /g, "");
+            const options = { to: "romaji", romajiSystem };
+            expect(await kuroshiro.convert(text, options)).toBe(romaji);
+            expect(await kuroshiro.convert(text, { ...options, mode: "spaced" })).toBe(`${reading} ${spacedSuffix}`);
+            const ruby = await kuroshiro.convert(text, { ...options, mode: "furigana" });
+            expect([...ruby.matchAll(/<rt>(.*?)<\/rt>/g)].map(match => match[1]).join("")).toBe(romaji);
+            const kanji = text === "本も読む" ? "本" : "日本";
+            expect(await kuroshiro.convert(text, { ...options, mode: "okurigana" })).toBe(`${kanji}(${reading})${annotatedSuffix}`);
+        });
+
+        it.each(["・", " ", "cat"])("does not combine kana across %s", async (separator) => {
+            const instance = new Kuroshiro();
+            await instance.init({
+                init: async () => {},
+                parse: async () => [
+                    { surface_form: "テ", reading: "テ" },
+                    { surface_form: separator },
+                    { surface_form: "ィ", reading: "ィ" }
+                ]
+            });
+            const result = await instance.convert(`テ${separator}ィ`, { to: "romaji", mode: "furigana", romajiSystem });
+            expect(plain(result)).toMatch(/^テ<rt>te<\/rt>/);
+            expect(plain(result)).toMatch(/ィ<rt>i<\/rt>$/);
+            const romajiSeparator = separator === "・" ? "･" : separator;
+            expect(await instance.convert(`テ${separator}ィ`, { to: "romaji", romajiSystem })).toBe(`te${romajiSeparator}i`);
+            expect(await instance.convert(`テ${separator}ィ`, { to: "romaji", mode: "spaced", romajiSystem })).toBe(`te ${romajiSeparator} i`);
+        });
+
+        it.each([["b", "b"], [" ", " "], ["・", "･"]])("does not apply n rules across %s", async (separator, romajiSeparator) => {
+            const instance = new Kuroshiro();
+            await instance.init({
+                init: async () => {},
+                parse: async () => [
+                    { surface_form: "ん", reading: "ン" },
+                    { surface_form: separator },
+                    { surface_form: "ば", reading: "バ" }
+                ]
+            });
+            const text = `ん${separator}ば`;
+            const options = { to: "romaji", romajiSystem };
+            expect(await instance.convert(text, options)).toBe(`n${romajiSeparator}ba`);
+            expect(await instance.convert(text, { ...options, mode: "spaced" })).toBe(`n ${romajiSeparator} ba`);
+            const result = await instance.convert(text, { ...options, mode: "furigana" });
+            expect(plain(result)).toBe(`ん<rt>n</rt>${separator}<rt>${romajiSeparator}</rt>ば<rt>ba</rt>`);
+        });
+    });
+
+    it.each([["ッウィ", "wwi"], ["ッイェ", "yye"]])("recognizes the complete kana combination after a sokuon in %s", async (text, reading) => {
+        const options = { to: "romaji", romajiSystem: "hepburn" };
+        expect(await kuroshiro.convert(text, options)).toBe(reading);
+        expect(plain(await kuroshiro.convert(text, { ...options, mode: "furigana" }))).toBe(`${text}<rt>${reading}</rt>`);
+    });
+
+    it.each([
+        [["ふ", "ぁて", "ぃ"], "fati"],
+        [["こ", "ーと"], "kōto"],
+        [["まっ", "ちゃっ", "た"], "matchatta"]
+    ])("handles successive sound boundaries in %j", async (parts, expected) => {
+        const instance = new Kuroshiro();
+        await instance.init({ init: async () => {}, parse: async () => parts.map(surface_form => ({ surface_form })) });
+        const text = parts.join("");
+        const options = { to: "romaji" };
+        expect(await instance.convert(text, options)).toBe(expected);
+        expect(await instance.convert(text, { ...options, mode: "spaced" })).toBe(expected);
+        const ruby = await instance.convert(text, { ...options, mode: "furigana" });
+        expect([...ruby.matchAll(/<rt>(.*?)<\/rt>/g)].map(match => match[1]).join("")).toBe(expected);
+    });
+
+    it("keeps unaligned token readings whole at a possible kana combination", async () => {
+        const instance = new Kuroshiro();
+        await instance.init({
+            init: async () => {},
+            parse: async () => [{ surface_form: "ふ", reading: "フー" }, { surface_form: "ぁ", reading: "ァ" }]
+        });
+        expect(await instance.convert("ふぁ", { to: "romaji" })).toBe("fūa");
+        expect(await instance.convert("ふぁ", { to: "romaji", mode: "spaced" })).toBe("fū a");
+        expect(plain(await instance.convert("ふぁ", { to: "romaji", mode: "furigana" }))).toBe("ふ<rt>fū</rt>ぁ<rt>a</rt>");
+    });
+});
+
 /**
  * Regression tests for lone-sokuon romanisation.
  *
@@ -368,7 +501,7 @@ describe("Sokuon romanization", () => {
 
         it("カッター (katakana sokuon)", async () => {
             const result = await kuroshiro.convert("カッター", { to: "romaji", mode: "furigana" });
-            expect(plain(result)).toContain("ッタ<rt>tta</rt>");
+            expect(plain(result)).toBe("カ<rt>ka</rt>ッター<rt>ttā</rt>");
         });
     });
 

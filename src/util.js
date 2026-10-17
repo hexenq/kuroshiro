@@ -156,16 +156,9 @@ const toRawKatakana = function (str) {
     }).join("");
 };
 
-/**
- * Convert kana to romaji
- *
- * @param {string} str Given string
- * @param {string} system To which romanization system the given string is converted
- * @return {string} Romaji string
- */
-const toRawRomaji = function (str, system) {
-    system = system || ROMANIZATION_SYSTEM.HEPBURN;
-
+// Keep the existing tables together so conversion and annotation grouping
+// recognize the same combinations, without maintaining another kana list.
+const createRomajiTables = function () {
     const romajiSystem = {
         nippon: {
             // 数字と記号
@@ -1360,6 +1353,26 @@ const toRawRomaji = function (str, system) {
         }
     };
 
+    return romajiSystem;
+};
+
+const ROMAJI_TABLES = createRomajiTables();
+
+const isKanaCombination = function (str) {
+    return str.length === 2 && [...str].every(isKana)
+        && Object.keys(ROMAJI_TABLES).some(system => Object.prototype.hasOwnProperty.call(ROMAJI_TABLES[system], str));
+};
+
+/**
+ * Convert kana to romaji
+ *
+ * @param {string} str Given string
+ * @param {string} system To which romanization system the given string is converted
+ * @return {string} Romaji string
+ */
+const toRawRomaji = function (str, system) {
+    system = system || ROMANIZATION_SYSTEM.HEPBURN;
+    const romajiSystem = ROMAJI_TABLES;
     const reg_tsu = /(っ|ッ)([bcdfghijklmnopqrstuvwyz])/gm;
     const reg_xtsu = /っ|ッ/gm;
 
@@ -1582,6 +1595,7 @@ export {
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,
+    isKanaCombination,
     kanaToHiragana,
     kanaToKatakana,
     kanaToRomaji

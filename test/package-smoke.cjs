@@ -21,6 +21,9 @@ async function checkConstructor(Constructor, label) {
             if (text === "買っちゃった") {
                 return [{ surface_form: text, reading: "カッチャッタ", pronunciation: "カッチャッタ" }];
             }
+            if (text === "ティッシュ") {
+                return [{ surface_form: text, reading: "ティッシュ", pronunciation: "ティッシュ" }];
+            }
             if (text === "っcat") {
                 return [
                     { surface_form: "っ", reading: "ッ", pronunciation: "ッ" },
@@ -33,6 +36,8 @@ async function checkConstructor(Constructor, label) {
     assert.equal(await instance.convert("漢字"), "かんじ", label);
     const ruby = await instance.convert("買っちゃった", { to: "romaji", mode: "furigana" });
     assert.ok(ruby.includes("っちゃ<rp>(</rp><rt>tcha</rt>"), `${label}: sokuon with contracted kana`);
+    const grouped = await instance.convert("ティッシュ", { to: "romaji", mode: "furigana" });
+    assert.ok(grouped.includes("ティ<rp>(</rp><rt>ti</rt>"), `${label}: grouped kana reading`);
     const mixed = await instance.convert("っcat", { to: "romaji", mode: "furigana" });
     assert.ok(mixed.includes("っ<rp>(</rp><rt>tsu</rt>"), `${label}: preserve Latin boundary`);
 }

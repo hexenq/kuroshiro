@@ -15,49 +15,74 @@ import {
     toRawHiragana,
     toRawKatakana,
     toRawRomaji,
+    isKanaCombination,
     kanaToHiragana,
     kanaToKatakana,
     kanaToRomaji
 } from "./util";
 
 /**
- * Keep a lone sokuon with the following Japanese mora for romaji output.
- * For example: 座[suwa] って[tte], 真[ma] っ赤[kka], 買[ka] っちゃ[tcha].
- * Do not cross non-Japanese boundaries or invent a reading for a stranded
- * sokuon. Normal/spaced modes and hiragana/katakana output are unaffected.
+ * Keep kana combinations, sokuon and long vowels together for romanization.
+ * Token readings and per-character annotations use the same grouping rules.
  *
  * @param {Array} notations [basic, basic_type, notation, pronunciation]
+ *     basic_type: 1 = kanji, 2 = kana, 3 = others.
  * @param {string} system Romanization system
- * @returns {Array} Notations with eligible sokuon merged forward
+ * @returns {Array} Notations grouped without crossing non-Japanese boundaries
  */
-const mergeSokuonForward = function (notations, system) {
-    const merged = [];
+const mergeKanaNotations = function (notations, system) {
+    const kana = [];
+    const join = (current, next) => [current[0] + next[0], next[1], current[2] + next[2], current[3] + next[3]];
     for (let i = 0; i < notations.length; i++) {
-        const current = notations[i];
-        const next = notations[i + 1];
-        if (current[1] !== 2 || !/^[っッ]$/.test(current[3])
-            || !next || next[1] === 3 || !next[3]
-            || ![...next[3]].every(isKana) || /^[っッ]/.test(next[3])
-            || !/^[bcdfghjklmnpqrstvwxyz]/.test(toRawRomaji(next[3], system))) {
-            merged.push(current);
-            continue;
-        }
-
-        const group = [current[0] + next[0], next[1], current[2] + next[2], current[3] + next[3]];
-        i++;
-        // Kana notations are split by character. Include the small kana in
-        // っちゃ / っしょ / ッティ instead of producing tchi + ya, etc.
-        const small = notations[i + 1];
-        if (next[1] === 2 && next[3].length === 1 && small && small[1] === 2
-            && /^[ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ]$/.test(small[3])) {
-            group[0] += small[0];
-            group[2] += small[2];
-            group[3] += small[3];
+        let current = notations[i];
+        let next = notations[i + 1];
+        while (current[1] === 2 && next && next[1] === 2) {
+            const combination = current[0].length === current[2].length && current[0].length === current[3].length
+                && next[0].length === next[2].length && next[0].length === next[3].length
+                && isKana(current[0].slice(-1)) && isKana(next[0].slice(0, 1))
+                && isKanaCombination(current[3].slice(-1) + next[3].slice(0, 1));
+            const longVowel = !/[っッ]$/.test(current[3])
+                && next[0][0] === "ー" && next[3][0] === "ー"
+                && /[aeiou]$/.test(toRawRomaji(current[3], system));
+            if (!combination && !longVowel) break;
+            current = join(current, next);
             i++;
+            next = notations[i + 1];
         }
-        merged.push(group);
+        kana.push(current);
+    }
+
+    // Resolve the whole following sound before deciding whether a sokuon can join it.
+    const merged = [];
+    for (let i = 0; i < kana.length; i++) {
+        let current = kana[i];
+        let next = kana[i + 1];
+        while (current[1] === 2 && /[っッ]$/.test(current[3])
+            && next && next[1] !== 3 && next[3]
+            && [...next[3]].every(isKana) && !/^[っッ]/.test(next[3])
+            && /^[bcdfghjklmnpqrstvwxyz]/.test(toRawRomaji(next[3], system))) {
+            current = join(current, next);
+            i++;
+            next = kana[i + 1];
+        }
+        merged.push(current);
     }
     return merged;
+};
+
+// Apply the same syllabic n context to token readings and annotation readings.
+const romanizeReadings = function (readings, system) {
+    const romaji = readings.map(reading => toRawRomaji(reading, system));
+    for (let i = 0; i + 1 < readings.length; i++) {
+        if (/[んン]$/.test(readings[i])
+            && readings[i + 1] && isKana(readings[i + 1][0]) && romaji[i + 1]) {
+            const combined = toRawRomaji(readings[i] + readings[i + 1], system);
+            if (combined.endsWith(romaji[i + 1])) {
+                romaji[i] = combined.slice(0, -romaji[i + 1].length);
+            }
+        }
+    }
+    return romaji;
 };
 
 /**
@@ -136,21 +161,16 @@ class Kuroshiro {
                         return tokens.map(token => token.reading).join("");
                     }
                     return tokens.map(token => token.reading).join(" ");
-                case "romaji":
-                    const romajiConv = (token) => {
-                        let preToken;
-                        if (hasJapanese(token.surface_form)) {
-                            preToken = token.pronunciation || token.reading;
-                        }
-                        else {
-                            preToken = token.surface_form;
-                        }
-                        return toRawRomaji(preToken, options.romajiSystem);
-                    };
-                    if (options.mode === "normal") {
-                        return tokens.map(romajiConv).join("");
-                    }
-                    return tokens.map(romajiConv).join(" ");
+                case "romaji": {
+                    const notations = tokens.map((token) => {
+                        const type = getStrType(token.surface_form);
+                        const reading = type === 3 ? token.surface_form : token.pronunciation || token.reading;
+                        return [token.surface_form, type === 0 ? 1 : type, token.reading, reading];
+                    });
+                    const grouped = mergeKanaNotations(notations, options.romajiSystem);
+                    const readings = romanizeReadings(grouped.map(notation => notation[3]), options.romajiSystem);
+                    return readings.join(options.mode === "spaced" ? " " : "");
+                }
                 case "hiragana":
                     for (let hi = 0; hi < tokens.length; hi++) {
                         if (hasKanji(tokens[hi].surface_form)) {
@@ -292,23 +312,22 @@ class Kuroshiro {
                     }
                     return result;
                 case "romaji": {
-                    // A lone sokuon has no reading of its own; romanising
-                    // it in isolation yields "tsu". See mergeSokuonForward.
-                    const romajiNotations = mergeSokuonForward(notations, options.romajiSystem);
+                    const romajiNotations = mergeKanaNotations(notations, options.romajiSystem);
+                    const readings = romanizeReadings(romajiNotations.map(notation => notation[3]), options.romajiSystem);
                     if (options.mode === "okurigana") {
                         for (let n2 = 0; n2 < romajiNotations.length; n2++) {
                             if (romajiNotations[n2][1] !== 1) {
                                 result += romajiNotations[n2][0];
                             }
                             else {
-                                result += romajiNotations[n2][0] + options.delimiter_start + toRawRomaji(romajiNotations[n2][3], options.romajiSystem) + options.delimiter_end;
+                                result += romajiNotations[n2][0] + options.delimiter_start + readings[n2] + options.delimiter_end;
                             }
                         }
                     }
                     else { // furigana
                         result += "<ruby>";
                         for (let n3 = 0; n3 < romajiNotations.length; n3++) {
-                            result += `${romajiNotations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${toRawRomaji(romajiNotations[n3][3], options.romajiSystem)}</rt><rp>${options.delimiter_end}</rp>`;
+                            result += `${romajiNotations[n3][0]}<rp>${options.delimiter_start}</rp><rt>${readings[n3]}</rt><rp>${options.delimiter_end}</rp>`;
                         }
                         result += "</ruby>";
                     }
